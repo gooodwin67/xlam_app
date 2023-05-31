@@ -1,12 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/loginScreenProvider.dart';
 
 class LoginPassEnterScreen extends StatelessWidget {
   const LoginPassEnterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool loginingNow = context.watch<LoginScreenProvider>().isLogining;
+    bool isLoginCorrect = context.watch<LoginScreenProvider>().isLoginCorrect;
+    int isLoginError = context.watch<LoginScreenProvider>().isLoginError;
+
     return Scaffold(
       backgroundColor: mainColor,
       body: SafeArea(
@@ -104,6 +111,19 @@ class LoginPassEnterScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    isLoginError == 1
+                        ? Text(
+                            'Пользователя с таким Email не существует',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          )
+                        : SizedBox(),
+                    isLoginError == 2
+                        ? Text(
+                            'Не верный пароль',
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          )
+                        : SizedBox(),
                     SizedBox(height: 15),
                     const InkWell(
                         child: Text(
@@ -114,20 +134,33 @@ class LoginPassEnterScreen extends StatelessWidget {
                     )),
                     SizedBox(height: 15),
                     ElevatedButton(
-                      onPressed: () => context.go('/main'),
+                      onPressed: loginingNow == false
+                          ? () async {
+                              await context.read<LoginScreenProvider>().login();
+                              context.read<LoginScreenProvider>().isLoginCorrect
+                                  ? context.go('/main')
+                                  : null;
+                            }
+                          : () {},
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(mainColor),
                           shape:
                               MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ))),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Отправить',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: loginingNow == false
+                              ? const Text(
+                                  'Войти',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              : const Text(
+                                  'Войти',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                )),
                     ),
                     SizedBox(height: 10),
                     InkWell(

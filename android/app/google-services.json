@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "896167967018",
+    "project_id": "xlam-app",
+    "storage_bucket": "xlam-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896167967018:android:eebd73d6be264db7a70653",
+        "android_client_info": {
+          "package_name": "com.example.xlam_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACJ59eKQaJbTVUQPoIiVN0oGdvw4DnpEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
