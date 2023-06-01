@@ -45,7 +45,7 @@ Future<bool> showExitPopup(context) async {
                         },
                         child: Text("Да"),
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.red.shade800),
+                            backgroundColor: Colors.red.shade800),
                       ),
                     ),
                     SizedBox(width: 15),

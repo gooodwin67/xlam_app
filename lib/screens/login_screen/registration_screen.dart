@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
-import 'package:xlam_app/provider/loginScreenProvider.dart';
+import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
 
-class LoginPassEnterScreen extends StatelessWidget {
-  const LoginPassEnterScreen({super.key});
+class RegistrationScreen extends StatelessWidget {
+  const RegistrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool loginingNow = context.watch<LoginScreenProvider>().isLogining;
-    bool isLoginCorrect = context.watch<LoginScreenProvider>().isLoginCorrect;
-    int isLoginError = context.watch<LoginScreenProvider>().isLoginError;
+    bool RegisteringNow =
+        context.watch<RegistrationScreenProvider>().isRegistering;
+    bool passCorrect = context.watch<RegistrationScreenProvider>().passCorrect;
 
     return Scaffold(
       backgroundColor: mainColor,
@@ -56,12 +56,17 @@ class LoginPassEnterScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text(
+                      'Регистрация',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(height: 15),
                     Container(
                       height: 43,
                       child: TextField(
                         onChanged: ((value) => context
-                            .read<LoginScreenProvider>()
-                            .editLogin(value)),
+                            .read<RegistrationScreenProvider>()
+                            .editLoginReg(value)),
                         style: Theme.of(context).textTheme.bodyText1,
                         decoration: InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -86,81 +91,83 @@ class LoginPassEnterScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    TextField(
-                      onChanged: ((value) => context
-                          .read<LoginScreenProvider>()
-                          .editPassword(value)),
-                      obscureText: true,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        contentPadding: EdgeInsets.zero,
-                        filled: true,
-                        fillColor: Color(0xffF2F0F7),
-                        prefixIcon: Icon(Icons.lock_outlined),
-                        suffixIcon: Icon(Icons.remove_red_eye_outlined),
-                        label: Text(
-                          'Пароль',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide:
-                              BorderSide(color: Colors.transparent, width: 0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide:
-                              BorderSide(color: Colors.transparent, width: 0),
+                    SizedBox(height: 15),
+                    Container(
+                      height: 43,
+                      child: TextField(
+                        onChanged: ((value) => context
+                            .read<RegistrationScreenProvider>()
+                            .editPasswordReg(value)),
+                        style: Theme.of(context).textTheme.bodyText1,
+                        decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          contentPadding: EdgeInsets.zero,
+                          filled: true,
+                          fillColor: Color(0xffF2F0F7),
+                          prefixIcon: Icon(Icons.lock_outlined),
+                          suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                          label: Text(
+                            'Пароль',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            borderSide:
+                                BorderSide(color: Colors.transparent, width: 0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            borderSide:
+                                BorderSide(color: Colors.transparent, width: 0),
+                          ),
                         ),
                       ),
                     ),
-                    isLoginError == 1
-                        ? const Text(
-                            'Пользователя с таким Email не существует',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          )
-                        : SizedBox(),
-                    isLoginError == 2
-                        ? const Text(
-                            'Неверный пароль',
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          )
-                        : SizedBox(),
-                    isLoginError == 3
-                        ? const Text(
-                            'Неверный формат Email',
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          )
-                        : SizedBox(),
-                    isLoginError == 4
-                        ? const Text(
-                            'Введите данные',
-                            style: TextStyle(color: Colors.red, fontSize: 13),
-                          )
-                        : SizedBox(),
                     SizedBox(height: 15),
-                    const InkWell(
-                        child: Text(
-                      'Забыли пароль?',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          decoration: TextDecoration.underline),
-                    )),
+                    Container(
+                      height: 43,
+                      child: TextField(
+                        onChanged: ((value) => context
+                            .read<RegistrationScreenProvider>()
+                            .editPasswordReg2(value)),
+                        style: Theme.of(context).textTheme.bodyText1,
+                        decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          contentPadding: EdgeInsets.zero,
+                          filled: true,
+                          fillColor: Color(0xffF2F0F7),
+                          prefixIcon: Icon(Icons.lock_outlined),
+                          suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                          label: Text(
+                            'Пароль еще раз',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            borderSide:
+                                BorderSide(color: Colors.transparent, width: 0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            borderSide:
+                                BorderSide(color: Colors.transparent, width: 0),
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 15),
                     ElevatedButton(
-                      onPressed: loginingNow == false
+                      onPressed: RegisteringNow == false && passCorrect == true
                           ? () async {
                               await context
-                                  .read<LoginScreenProvider>()
-                                  .tryLogin();
-                              context.read<LoginScreenProvider>().isLoginCorrect
-                                  ? context.go('/main')
-                                  : null;
+                                  .read<RegistrationScreenProvider>()
+                                  .tryRegister();
+                              // context.read<RegistrationScreenProvider>().isLoginCorrect
+                              //     ? context.go('/main')
+                              //     : null;
                             }
                           : () {},
+                      //onPressed: () {},
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(mainColor),
                           shape:
@@ -169,26 +176,18 @@ class LoginPassEnterScreen extends StatelessWidget {
                           ))),
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: loginingNow == false
+                          child: RegisteringNow == false && passCorrect == true
                               ? const Text(
-                                  'Войти',
+                                  'Зарегистрироваться',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               : const Text(
-                                  'Войти',
+                                  'Зарегистрироваться',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.grey),
                                 )),
                     ),
-                    SizedBox(height: 10),
-                    InkWell(
-                        child: Text(
-                      'Зарегистрироваться?',
-                      style: TextStyle(
-                          color: mainColor,
-                          decoration: TextDecoration.underline),
-                    )),
                   ],
                 ),
               ),

@@ -70,7 +70,7 @@ class MainLoginScreen extends StatelessWidget {
                   height: 40,
                   padding: EdgeInsets.symmetric(horizontal: mainPadding * 1.5),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => context.go('/registration'),
                     child: Text(
                       'Зарегистрироваться',
                       style: TextStyle(

@@ -5,14 +5,18 @@ class LoginScreenProvider extends ChangeNotifier {
   bool isLogining = false;
   bool isLoginCorrect = false;
   int isLoginError = 0;
-  login() async {
+  String login = '';
+  String password = '';
+
+  tryLogin() async {
     try {
       isLogining = true;
       notifyListeners();
       final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: '11111', password: '2222');
+          .signInWithEmailAndPassword(email: login, password: password);
       isLoginCorrect = true;
     } on FirebaseAuthException catch (e) {
+      print(e.code);
       if (e.code == 'user-not-found') {
         isLoginError = 1;
         isLogining = false;
@@ -23,7 +27,27 @@ class LoginScreenProvider extends ChangeNotifier {
         isLogining = false;
         notifyListeners();
         print('Wrong password provided for that user.');
+      } else if (e.code == 'invalid-email') {
+        isLoginError = 3;
+        isLogining = false;
+        notifyListeners();
+        print('invalid-email.');
+      } else if (e.code == 'unknown') {
+        isLoginError = 4;
+        isLogining = false;
+        notifyListeners();
+        print('unknown.');
       }
     }
+  }
+
+  editLogin(value) {
+    login = value;
+    notifyListeners();
+  }
+
+  editPassword(value) {
+    password = value;
+    notifyListeners();
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
 import 'package:xlam_app/screens/login_screen/login_pass_enter_screen.dart';
 import 'package:xlam_app/screens/login_screen/login_screen.dart';
+import 'package:xlam_app/screens/login_screen/registration_screen.dart';
 import 'package:xlam_app/screens/main_screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -16,6 +18,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoginScreenProvider()),
+      ChangeNotifierProvider(create: (_) => RegistrationScreenProvider()),
     ],
     child: const MyApp(),
   ));
@@ -52,6 +55,12 @@ final _router = GoRouter(
           path: 'login',
           builder: (BuildContext context, GoRouterState state) {
             return const LoginPassEnterScreen();
+          },
+        ),
+        GoRoute(
+          path: 'registration',
+          builder: (BuildContext context, GoRouterState state) {
+            return const RegistrationScreen();
           },
         ),
       ],
