@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
-import 'package:xlam_app/provider/loginScreenProvider.dart';
 
 class LoginScreenWidget extends StatelessWidget {
   const LoginScreenWidget({super.key});

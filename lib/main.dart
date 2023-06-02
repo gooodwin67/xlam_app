@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
+import 'package:xlam_app/provider/mainScreenProvider.dart';
 import 'package:xlam_app/screens/login_screen/login_pass_enter_screen.dart';
 import 'package:xlam_app/screens/login_screen/login_screen.dart';
 import 'package:xlam_app/screens/login_screen/registration_screen.dart';
@@ -19,6 +21,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => LoginScreenProvider()),
       ChangeNotifierProvider(create: (_) => RegistrationScreenProvider()),
+      ChangeNotifierProvider(create: (_) => MainScreenProvider()),
     ],
     child: const MyApp(),
   ));
@@ -49,7 +52,20 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => LoginScreenWidget(),
+      builder: (context, state) {
+        return const LoginScreenWidget();
+      },
+      redirect: (context, state) async {
+        bool isLogin = false;
+        await context.read<MainScreenProvider>().isLogining();
+        if (context.read<MainScreenProvider>().isLogin == true) {
+          print('userIsLogged');
+          return '/main';
+        } else {
+          print('notLogged');
+          return null;
+        }
+      },
       routes: <RouteBase>[
         GoRoute(
           path: 'login',

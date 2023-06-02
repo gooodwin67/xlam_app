@@ -183,12 +183,13 @@ class LoginPassEnterScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     InkWell(
+                        onTap: () => context.go('/registration'),
                         child: Text(
-                      'Зарегистрироваться?',
-                      style: TextStyle(
-                          color: mainColor,
-                          decoration: TextDecoration.underline),
-                    )),
+                          'Зарегистрироваться?',
+                          style: TextStyle(
+                              color: mainColor,
+                              decoration: TextDecoration.underline),
+                        )),
                   ],
                 ),
               ),

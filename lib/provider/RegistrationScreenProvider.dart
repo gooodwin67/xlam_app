@@ -6,11 +6,12 @@ class RegistrationScreenProvider extends ChangeNotifier {
   String password = '';
   String password2 = '';
   bool passCorrect = false;
-
   bool isRegistering = false;
+  bool registerDone = false;
+  int isRegisterError = 0;
 
   tryRegister() async {
-    print(login);
+    isRegisterError = 0;
     try {
       isRegistering = true;
       final credential =
@@ -19,11 +20,20 @@ class RegistrationScreenProvider extends ChangeNotifier {
         password: password2,
       );
       isRegistering = false;
+      registerDone = true;
+      isRegisterError = 0;
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
+        isRegisterError = 1;
+        isRegistering = false;
+        notifyListeners();
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        isRegisterError = 2;
+        isRegistering = false;
+        notifyListeners();
       }
     } catch (e) {
       print(e);
@@ -32,7 +42,7 @@ class RegistrationScreenProvider extends ChangeNotifier {
 
   editLoginReg(value) {
     login = value;
-
+    isRegisterError = 0;
     password2 != '' && password2 == password && login != ''
         ? passCorrect = true
         : passCorrect = false;
@@ -41,7 +51,7 @@ class RegistrationScreenProvider extends ChangeNotifier {
 
   editPasswordReg(value) {
     password = value;
-
+    isRegisterError = 0;
     password2 != '' && password2 == password && login != ''
         ? passCorrect = true
         : passCorrect = false;
@@ -50,12 +60,11 @@ class RegistrationScreenProvider extends ChangeNotifier {
 
   editPasswordReg2(value) {
     password2 = value;
-
+    isRegisterError = 0;
     password2 != '' && password2 == password && login != ''
         ? passCorrect = true
         : passCorrect = false;
 
-    print(passCorrect);
     notifyListeners();
   }
 }

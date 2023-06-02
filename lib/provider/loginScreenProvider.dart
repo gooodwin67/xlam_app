@@ -15,6 +15,9 @@ class LoginScreenProvider extends ChangeNotifier {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: login, password: password);
       isLoginCorrect = true;
+      login = '';
+      password = '';
+      isLogining = false;
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'user-not-found') {
@@ -42,12 +45,14 @@ class LoginScreenProvider extends ChangeNotifier {
   }
 
   editLogin(value) {
-    login = value;
+    login = value.toString().trim();
+    isLoginError = 0;
     notifyListeners();
   }
 
   editPassword(value) {
-    password = value;
+    password = value.toString().trim();
+    isLoginError = 0;
     notifyListeners();
   }
 }

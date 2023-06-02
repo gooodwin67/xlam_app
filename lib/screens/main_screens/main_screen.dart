@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:go_router/go_router.dart';
 
 class MainScreenWidget extends StatelessWidget {
   const MainScreenWidget({super.key});
@@ -11,11 +13,28 @@ class MainScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () => showExitPopup(context),
-        child: Container(
-          child: Center(
-            child: Text('MainScreen'),
+      body: SafeArea(
+        child: WillPopScope(
+          onWillPop: () => showExitPopup(context),
+          child: Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('MainScreen'),
+                  InkWell(
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        print('вышли');
+                        context.go('/');
+                      });
+                    },
+                    child: Text('Выйти'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -57,7 +76,7 @@ Future<bool> showExitPopup(context) async {
                       },
                       child: Text("Нет", style: TextStyle(color: Colors.black)),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
+                        backgroundColor: Colors.white,
                       ),
                     ))
                   ],
