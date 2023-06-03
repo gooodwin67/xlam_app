@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
+import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
+import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
 import 'package:xlam_app/screens/login_screen/login_pass_enter_screen.dart';
 import 'package:xlam_app/screens/login_screen/login_screen.dart';
 import 'package:xlam_app/screens/login_screen/registration_screen.dart';
+import 'package:xlam_app/screens/main_screens/account_screen/account_screen.dart';
 import 'package:xlam_app/screens/main_screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -21,7 +24,9 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => LoginScreenProvider()),
       ChangeNotifierProvider(create: (_) => RegistrationScreenProvider()),
+      ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MainScreenProvider()),
+      ChangeNotifierProvider(create: (_) => AccountProvider()),
     ],
     child: const MyApp(),
   ));
@@ -57,8 +62,8 @@ final _router = GoRouter(
       },
       redirect: (context, state) async {
         bool isLogin = false;
-        await context.read<MainScreenProvider>().isLogining();
-        if (context.read<MainScreenProvider>().isLogin == true) {
+        await context.read<MainProvider>().isLogining();
+        if (context.read<MainProvider>().isLogin == true) {
           print('userIsLogged');
           return '/main';
         } else {
@@ -82,8 +87,15 @@ final _router = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/main',
-      builder: (context, state) => MainScreenWidget(),
-    ),
+        path: '/main',
+        builder: (context, state) => MainScreenWidget(),
+        routes: [
+          GoRoute(
+            path: 'account',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AccountScreenWidget();
+            },
+          ),
+        ]),
   ],
 );
