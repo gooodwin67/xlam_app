@@ -15,8 +15,8 @@ class LoginPassEnterScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: mainColor,
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(mainPadding),
             child: Column(

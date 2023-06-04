@@ -8,11 +8,24 @@ import 'package:provider/provider.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 
-class AccountScreenWidget extends StatelessWidget {
+class AccountScreenWidget extends StatefulWidget {
   const AccountScreenWidget({super.key});
 
   @override
+  State<AccountScreenWidget> createState() => _AccountScreenWidgetState();
+}
+
+class _AccountScreenWidgetState extends State<AccountScreenWidget> {
+  @override
+  void initState() {
+    context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    String userName = context.watch<AccountProvider>().userName;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -25,6 +38,7 @@ class AccountScreenWidget extends StatelessWidget {
                 child: Text('back'),
               ),
               Text(context.read<MainProvider>().userId),
+              Text(userName),
               InkWell(
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
@@ -38,7 +52,9 @@ class AccountScreenWidget extends StatelessWidget {
               Text('data'),
               SizedBox(height: 50),
               InkWell(
-                onTap: (() => context.read<AccountProvider>().getDb()),
+                onTap: (() => context
+                    .read<AccountProvider>()
+                    .getDb(context.read<MainProvider>().userId)),
                 child: Text('getData'),
               )
             ],
