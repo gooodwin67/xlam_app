@@ -47,11 +47,6 @@ class MainLoginScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: mainPadding * 1.5),
                   child: ElevatedButton(
                     onPressed: () => context.go('/login'),
-                    child: Text(
-                      'Войти',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(mainColor),
                       shape: MaterialStateProperty.all(
@@ -59,6 +54,11 @@ class MainLoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(50),
                         ),
                       ),
+                    ),
+                    child: const Text(
+                      'Войти',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
