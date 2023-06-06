@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MainScreenProvider extends ChangeNotifier {
@@ -8,6 +9,31 @@ class MainScreenProvider extends ChangeNotifier {
     Category(nameCategory: 'Для дома', iconCategory: Icons.settings),
     Category(nameCategory: 'Для детей', iconCategory: Icons.settings),
   ];
+
+  List listIds = [];
+  List listProds = [];
+  Future getAllDb() async {
+    var db = FirebaseFirestore.instance;
+    await db.collection("users").get().then((value) {
+      for (var doc in value.docs) {
+        listIds.add(doc['id']);
+      }
+    });
+    //print(listIds);
+    for (var prod in listIds) {
+      await db
+          .collection("users")
+          .doc(prod)
+          .collection('Products')
+          .get()
+          .then((value) {
+        //print(value.docs.length);
+        for (var doc in value.docs) {
+          print(doc.data());
+        }
+      });
+    }
+  }
 
   List Products = [
     Prod(

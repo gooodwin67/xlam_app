@@ -13,8 +13,19 @@ import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
 
-class MainScreenWidget extends StatelessWidget {
+class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
+
+  @override
+  State<MainScreenWidget> createState() => _MainScreenWidgetState();
+}
+
+class _MainScreenWidgetState extends State<MainScreenWidget> {
+  @override
+  void initState() {
+    context.read<MainScreenProvider>().getAllDb();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
