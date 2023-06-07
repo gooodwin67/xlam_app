@@ -19,7 +19,7 @@ class MainScreenProvider extends ChangeNotifier {
         listIds.add(doc['id']);
       }
     });
-    //print(listIds);
+
     for (var prod in listIds) {
       await db
           .collection("users")
@@ -29,6 +29,7 @@ class MainScreenProvider extends ChangeNotifier {
           .then((value) {
         //print(value.docs.length);
         for (var doc in value.docs) {
+          //listProds.add(doc.data());
           print(doc.data());
         }
       });

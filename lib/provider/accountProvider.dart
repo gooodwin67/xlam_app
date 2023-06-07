@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AccountProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
@@ -47,6 +48,19 @@ class AccountProvider extends ChangeNotifier {
     dataIsLoaded = true;
     notifyListeners();
   }
+
+  XFile? image;
+
+  final ImagePicker picker = ImagePicker();
+
+  Future getImage(ImageSource media) async {
+    var img = await picker.pickImage(source: ImageSource.gallery);
+    image = img;
+    print(image!.path);
+    notifyListeners();
+  }
+
+  notifyListeners();
 }
 
 class Product {

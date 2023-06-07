@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
@@ -27,6 +30,8 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> {
   @override
   Widget build(BuildContext context) {
     String userName = context.watch<AccountProvider>().userName;
+    XFile? image = context.watch<AccountProvider>().image;
+
     List productList = context.read<AccountProvider>().productsList;
     bool dataIsLoaded = false;
     dataIsLoaded = context.read<AccountProvider>().dataIsLoaded;
@@ -114,7 +119,90 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> {
                               ),
                             ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(mainPadding),
+                                    child: Column(
+                                      children: [
+                                        TextField(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                          decoration: InputDecoration(
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.never,
+                                            contentPadding: EdgeInsets.zero,
+                                            filled: true,
+                                            fillColor: Color(0xffF2F0F7),
+                                            prefixIcon: Icon(Icons.add),
+                                            label: Text(
+                                              'Название товара',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 0),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 0),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        TextButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<AccountProvider>()
+                                                  .getImage(ImageSource.camera);
+                                            },
+                                            child: Text('Добавить фото')),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          child: image == null
+                                              ? Image.asset(
+                                                  'assets/images/login-img.jpg')
+                                              : Image.asset(image.path),
+                                        ),
+                                        SizedBox(height: 20),
+                                        ElevatedButton(
+                                          onPressed: () {},
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    mainColor),
+                                            shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Добавить товар',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(mainColor),
                           shape: MaterialStateProperty.all(
