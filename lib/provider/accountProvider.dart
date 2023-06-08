@@ -7,9 +7,9 @@ class AccountProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
   String userName = '';
   List productsList = <Product>[];
+  bool imageLoaded = false;
 
   Future getDb(userId) async {
-    dataIsLoaded = false;
     var db = FirebaseFirestore.instance;
     // var aa = await db.collection('users').get();
     // print(aa.toString());
@@ -22,8 +22,11 @@ class AccountProvider extends ChangeNotifier {
         if (doc.id == userId) {
           //print(doc.data()['name']);
           userName = doc.data()['name'];
+          notifyListeners();
         }
+        notifyListeners();
       }
+      notifyListeners();
     });
 
     await db
@@ -45,18 +48,17 @@ class AccountProvider extends ChangeNotifier {
       }
       notifyListeners();
     });
+
     dataIsLoaded = true;
     notifyListeners();
   }
 
   XFile? image;
 
-  final ImagePicker picker = ImagePicker();
-
   Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: ImageSource.gallery);
-    image = img;
-    print(image!.path);
+    final ImagePicker picker = ImagePicker();
+    image = await picker.pickImage(source: ImageSource.gallery);
+    imageLoaded = true;
     notifyListeners();
   }
 

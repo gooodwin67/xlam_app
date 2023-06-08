@@ -13,28 +13,19 @@ import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 
-class AccountScreenWidget extends StatefulWidget {
+class AccountScreenWidget extends StatelessWidget {
   const AccountScreenWidget({super.key});
 
   @override
-  State<AccountScreenWidget> createState() => _AccountScreenWidgetState();
-}
-
-class _AccountScreenWidgetState extends State<AccountScreenWidget> {
-  @override
-  void initState() {
-    context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String userName = context.watch<AccountProvider>().userName;
-    XFile? image = context.watch<AccountProvider>().image;
+    context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
+    String userName = context.read<AccountProvider>().userName;
+    XFile? image = context.read<AccountProvider>().image;
+    print(image);
 
     List productList = context.read<AccountProvider>().productsList;
-    bool dataIsLoaded = false;
-    dataIsLoaded = context.read<AccountProvider>().dataIsLoaded;
+
+    bool dataIsLoaded = context.watch<AccountProvider>().dataIsLoaded;
 
     return Scaffold(
       body: SafeArea(
@@ -173,10 +164,16 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> {
                                         Container(
                                           width: 50,
                                           height: 50,
-                                          child: image == null
+                                          child: context
+                                                      .watch<AccountProvider>()
+                                                      .image ==
+                                                  null
                                               ? Image.asset(
                                                   'assets/images/login-img.jpg')
-                                              : Image.asset(image.path),
+                                              : Image.file(File(context
+                                                  .read<AccountProvider>()
+                                                  .image!
+                                                  .path)),
                                         ),
                                         SizedBox(height: 20),
                                         ElevatedButton(
