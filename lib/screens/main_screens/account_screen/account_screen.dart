@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
+import 'package:xlam_app/provider/mainScreenProvider.dart';
 
 class AccountScreenWidget extends StatelessWidget {
   const AccountScreenWidget({super.key});
@@ -21,7 +22,6 @@ class AccountScreenWidget extends StatelessWidget {
     context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
     String userName = context.read<AccountProvider>().userName;
     XFile? image = context.read<AccountProvider>().image;
-    print(image);
 
     List productList = context.read<AccountProvider>().productsList;
 
@@ -47,6 +47,7 @@ class AccountScreenWidget extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+                        context.read<MainScreenProvider>().getAllDb();
                         context.go('/main');
                       },
                       child: Icon(
@@ -120,6 +121,11 @@ class AccountScreenWidget extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         TextField(
+                                          onChanged: (value) {
+                                            context
+                                                .read<AccountProvider>()
+                                                .getName(value);
+                                          },
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText1,
@@ -177,7 +183,11 @@ class AccountScreenWidget extends StatelessWidget {
                                         ),
                                         SizedBox(height: 20),
                                         ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: (() => context
+                                              .read<AccountProvider>()
+                                              .setDb(context
+                                                  .read<MainProvider>()
+                                                  .userId)),
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all(

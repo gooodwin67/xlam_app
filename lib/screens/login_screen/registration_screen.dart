@@ -38,7 +38,7 @@ class RegistrationScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Жалко выкинуть',
+                        Text('',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge

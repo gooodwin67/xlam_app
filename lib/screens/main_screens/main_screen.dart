@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
@@ -29,6 +30,8 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List productList = context.read<MainScreenProvider>().products;
+    bool dataIsLoaded = context.watch<MainScreenProvider>().dataIsLoaded;
     return Scaffold(
       body: SafeArea(
         child: WillPopScope(
@@ -113,8 +116,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
-                    childCount:
-                        context.read<MainScreenProvider>().Products.length,
+                    childCount: !dataIsLoaded ? 4 : productList.length,
                     (context, index) {
                       return Container(
                         child: Column(
@@ -123,25 +125,27 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                               borderRadius: BorderRadius.circular(6),
                               child: Container(
                                 height: 180,
+                                color: Color.fromARGB(255, 214, 214, 214),
                                 width: double.infinity,
-                                child: Image.asset(
-                                  context
-                                      .read<MainScreenProvider>()
-                                      .Products[index]
-                                      .photoProd,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: !dataIsLoaded
+                                    ? SpinKitWave(
+                                        color: mainColor.withAlpha(50),
+                                        size: 50.0)
+                                    : Image.asset(
+                                        productList[index].photoProd,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                             SizedBox(height: 5),
-                            Text(
-                              context
-                                  .read<MainScreenProvider>()
-                                  .Products[index]
-                                  .nameProd,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            !dataIsLoaded
+                                ? SpinKitWave(
+                                    color: mainColor.withAlpha(50), size: 20.0)
+                                : Text(
+                                    productList[index].nameProd,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                           ],
                         ),
                       );

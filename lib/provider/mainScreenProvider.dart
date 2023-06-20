@@ -2,17 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MainScreenProvider extends ChangeNotifier {
-  List Categories = [
-    Category(nameCategory: 'Последние', iconCategory: Icons.star),
-    Category(nameCategory: 'Одежда и обувь', iconCategory: Icons.settings),
-    Category(nameCategory: 'Электроника', iconCategory: Icons.settings),
-    Category(nameCategory: 'Для дома', iconCategory: Icons.settings),
-    Category(nameCategory: 'Для детей', iconCategory: Icons.settings),
-  ];
-
+  bool dataIsLoaded = false;
+  List products = [];
   List listIds = [];
-  List listProds = [];
+
   Future getAllDb() async {
+    dataIsLoaded = false;
+    listIds = [];
+    products = [];
     var db = FirebaseFirestore.instance;
     await db.collection("users").get().then((value) {
       for (var doc in value.docs) {
@@ -21,44 +18,30 @@ class MainScreenProvider extends ChangeNotifier {
     });
 
     for (var prod in listIds) {
-      await db
-          .collection("users")
-          .doc(prod)
-          .collection('Products')
-          .get()
-          .then((value) {
-        //print(value.docs.length);
-        for (var doc in value.docs) {
-          //listProds.add(doc.data());
-          print(doc.data());
-        }
-      });
+      await db.collection("users").doc(prod).collection('Products').get().then(
+        (value) {
+          for (var doc in value.docs) {
+            if (doc.data()['active'] == true) {
+              products.add(
+                Prod(
+                    nameProd: doc.data()['name'],
+                    photoProd: 'assets/images/prod1.jpg'),
+              );
+            }
+          }
+        },
+      );
     }
+    dataIsLoaded = true;
+    notifyListeners();
   }
 
-  List Products = [
-    Prod(
-        nameProd: 'Диван-кровать в отличном состоянии',
-        photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Ноутубк MSI X500', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Компьютерный стол', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
-    Prod(nameProd: 'Термокружка', photoProd: 'assets/images/prod1.jpg'),
+  List Categories = [
+    Category(nameCategory: 'Последние', iconCategory: Icons.star),
+    Category(nameCategory: 'Одежда и обувь', iconCategory: Icons.settings),
+    Category(nameCategory: 'Электроника', iconCategory: Icons.settings),
+    Category(nameCategory: 'Для дома', iconCategory: Icons.settings),
+    Category(nameCategory: 'Для детей', iconCategory: Icons.settings),
   ];
 }
 
