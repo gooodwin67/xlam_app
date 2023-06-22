@@ -25,7 +25,7 @@ class MainScreenProvider extends ChangeNotifier {
               products.add(
                 Prod(
                     nameProd: doc.data()['name'],
-                    photoProd: 'assets/images/prod1.jpg'),
+                    photoProd: doc.data()['photo']),
               );
             }
           }

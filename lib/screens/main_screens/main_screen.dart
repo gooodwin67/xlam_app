@@ -131,7 +131,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                                     ? SpinKitWave(
                                         color: mainColor.withAlpha(50),
                                         size: 50.0)
-                                    : Image.asset(
+                                    : Image.network(
                                         productList[index].photoProd,
                                         fit: BoxFit.cover,
                                       ),

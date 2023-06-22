@@ -26,7 +26,6 @@ class AccountScreenWidget extends StatelessWidget {
     List productList = context.read<AccountProvider>().productsList;
 
     bool dataIsLoaded = context.watch<AccountProvider>().dataIsLoaded;
-
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -115,96 +114,147 @@ class AccountScreenWidget extends StatelessWidget {
                           showModalBottomSheet(
                               context: context,
                               builder: (BuildContext context) {
-                                return SingleChildScrollView(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(mainPadding),
-                                    child: Column(
-                                      children: [
-                                        TextField(
-                                          onChanged: (value) {
-                                            context
-                                                .read<AccountProvider>()
-                                                .getName(value);
-                                          },
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                          decoration: InputDecoration(
-                                            floatingLabelBehavior:
-                                                FloatingLabelBehavior.never,
-                                            contentPadding: EdgeInsets.zero,
-                                            filled: true,
-                                            fillColor: Color(0xffF2F0F7),
-                                            prefixIcon: Icon(Icons.add),
-                                            label: Text(
-                                              'Название товара',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1,
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 0),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 0),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        TextButton(
-                                            onPressed: () {
+                                return Container(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(mainPadding),
+                                      child: Column(
+                                        children: [
+                                          TextField(
+                                            onChanged: (value) {
                                               context
                                                   .read<AccountProvider>()
-                                                  .getImage(ImageSource.camera);
+                                                  .getName(value);
                                             },
-                                            child: Text('Добавить фото')),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          child: context
-                                                      .watch<AccountProvider>()
-                                                      .image ==
-                                                  null
-                                              ? Image.asset(
-                                                  'assets/images/login-img.jpg')
-                                              : Image.file(File(context
-                                                  .read<AccountProvider>()
-                                                  .image!
-                                                  .path)),
-                                        ),
-                                        SizedBox(height: 20),
-                                        ElevatedButton(
-                                          onPressed: (() => context
-                                              .read<AccountProvider>()
-                                              .setDb(context
-                                                  .read<MainProvider>()
-                                                  .userId)),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    mainColor),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                            decoration: InputDecoration(
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.never,
+                                              contentPadding: EdgeInsets.zero,
+                                              filled: true,
+                                              fillColor: Color(0xffF2F0F7),
+                                              prefixIcon: Icon(Icons.add),
+                                              label: Text(
+                                                'Название товара',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(50),
+                                                borderSide: BorderSide(
+                                                    color: context
+                                                            .read<
+                                                                AccountProvider>()
+                                                            .nameIsLegal
+                                                        ? Colors.transparent
+                                                        : Colors.red,
+                                                    width: 0),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 0),
                                               ),
                                             ),
                                           ),
-                                          child: const Text(
-                                            'Добавить товар',
-                                            style: TextStyle(fontSize: 14),
+                                          SizedBox(height: 10),
+                                          TextButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<AccountProvider>()
+                                                    .getImage(
+                                                        ImageSource.camera);
+                                              },
+                                              child: Text('Добавить фото')),
+                                          SizedBox(height: 10),
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            child: context
+                                                        .watch<
+                                                            AccountProvider>()
+                                                        .image ==
+                                                    null
+                                                ? Image.asset(
+                                                    'assets/images/login-img.jpg')
+                                                : Image.file(File(context
+                                                    .read<AccountProvider>()
+                                                    .image!
+                                                    .path)),
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(height: 20),
+                                          context
+                                                      .read<AccountProvider>()
+                                                      .nameIsLegal &&
+                                                  context
+                                                      .read<AccountProvider>()
+                                                      .imageLoaded
+                                              ? ElevatedButton(
+                                                  onPressed: (() {
+                                                    context
+                                                        .read<AccountProvider>()
+                                                        .setDb(context
+                                                            .read<
+                                                                MainProvider>()
+                                                            .userId);
+                                                    Navigator.pop(context);
+                                                  }),
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(mainColor),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Добавить товар',
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                  ),
+                                                )
+                                              : ElevatedButton(
+                                                  onPressed: () {},
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Color.fromARGB(
+                                                                255,
+                                                                226,
+                                                                226,
+                                                                226)),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Добавить товар',
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ))
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
@@ -246,7 +296,7 @@ class AccountScreenWidget extends StatelessWidget {
                             child: !dataIsLoaded
                                 ? SpinKitWave(
                                     color: mainColor.withAlpha(50), size: 50.0)
-                                : Image.asset(
+                                : Image.network(
                                     productList[index].photo,
                                     fit: BoxFit.cover,
                                   ),

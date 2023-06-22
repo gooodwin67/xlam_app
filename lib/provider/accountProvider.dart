@@ -11,14 +11,14 @@ import 'package:xlam_app/provider/mainScreenProvider.dart';
 
 class AccountProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
+  bool nameIsLegal = false;
   String userName = '';
   List productsList = <Product>[];
   bool imageLoaded = false;
+  var linkProd = '';
 
   Product newProduct = Product(
       active: false, id: '', name: '', photo: 'assets/images/prod1.jpg');
-
-  addPhoto() async {}
 
   Future setDb(userId) async {
     num increment = 0;
@@ -28,12 +28,30 @@ class AccountProvider extends ChangeNotifier {
       increment = value.data()!['userProdInc'] + 1;
     });
     await db.collection("users").doc(userId).update({'userProdInc': increment});
+
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('products')
+        .child('/${newProduct.name}-${increment}jpg');
+
+    try {
+      await ref.putFile(File(image!.path));
+      linkProd = await ref.getDownloadURL();
+    } catch (e) {
+      print(e);
+    }
+
     await db
         .collection("users")
         .doc(userId)
         .collection('Products')
         .doc(increment.toString())
-        .set({'active': true, 'idProd': increment, 'name': newProduct.name});
+        .set({
+      'active': true,
+      'idProd': increment,
+      'name': newProduct.name,
+      'photo': linkProd
+    });
   }
 
   Future getDb(userId) async {
@@ -58,10 +76,11 @@ class AccountProvider extends ChangeNotifier {
         if (doc.data()['active']) {
           productsList.add(
             Product(
-                id: doc.data()['id'],
-                name: doc.data()['name'],
-                active: doc.data()['active'],
-                photo: 'assets/images/prod1.jpg'),
+              id: doc.data()['id'],
+              name: doc.data()['name'],
+              active: doc.data()['active'],
+              photo: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
+            ),
           );
         }
       }
@@ -74,28 +93,29 @@ class AccountProvider extends ChangeNotifier {
 
   getName(text) {
     newProduct.name = text;
+    if (text != '') {
+      nameIsLegal = true;
+      notifyListeners();
+    } else {
+      nameIsLegal = false;
+      notifyListeners();
+    }
   }
 
   XFile? image;
 
   Future getImage(ImageSource media) async {
     final ImagePicker picker = ImagePicker();
-    image = await picker.pickImage(source: ImageSource.gallery);
+    image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 600,
+        maxHeight: 600,
+        imageQuality: 95);
+
     imageLoaded = true;
     newProduct.photo = image!.path;
+
     notifyListeners();
-
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child('flutter-tests')
-        .child('/some-image.jpg');
-
-    try {
-      ref.putFile(File(image!.path));
-      //ref.putFile(io.File(image!.path));
-    } catch (e) {
-      print(e);
-    }
   }
 
   notifyListeners();
