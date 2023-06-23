@@ -7,10 +7,12 @@ import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/provider/prodScreenProvider.dart';
 import 'package:xlam_app/screens/login_screen/login_pass_enter_screen.dart';
 import 'package:xlam_app/screens/login_screen/login_screen.dart';
 import 'package:xlam_app/screens/login_screen/registration_screen.dart';
 import 'package:xlam_app/screens/main_screens/account_screen/account_screen.dart';
+import 'package:xlam_app/screens/main_screens/account_screen/prod_screen/prod_screen.dart';
 import 'package:xlam_app/screens/main_screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -27,6 +29,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MainScreenProvider()),
       ChangeNotifierProvider(create: (_) => AccountProvider()),
+      ChangeNotifierProvider(create: (_) => ProdScreenProvider()),
     ],
     child: const MyApp(),
   ));
@@ -94,6 +97,14 @@ final _router = GoRouter(
             path: 'account',
             builder: (BuildContext context, GoRouterState state) {
               return const AccountScreenWidget();
+            },
+          ),
+          GoRoute(
+            path: ':prodId',
+            builder: (BuildContext context, GoRouterState state) {
+              return ProdScreenWidget(
+                prodId: state.pathParameters['prodId'],
+              );
             },
           ),
         ]),
