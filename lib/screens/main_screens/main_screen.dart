@@ -25,6 +25,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   void initState() {
     context.read<MainScreenProvider>().getAllDb();
+
     super.initState();
   }
 
@@ -32,6 +33,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     List productList = context.read<MainScreenProvider>().products;
     bool dataIsLoaded = context.watch<MainScreenProvider>().dataIsLoaded;
+
     return Scaffold(
       body: SafeArea(
         child: WillPopScope(

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/mainScreenProvider.dart';
 import 'package:xlam_app/provider/prodScreenProvider.dart';
 
 class ProdScreenWidget extends StatefulWidget {
@@ -23,7 +27,12 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
     List prod = context.read<ProdScreenProvider>().products;
 
     return !dataIsLoaded
-        ? Container(color: Colors.black)
+        ? Container(
+            color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.9),
+            child: Center(
+              child: SpinKitWave(color: mainColor.withAlpha(150), size: 50.0),
+            ),
+          )
         : Scaffold(
             body: SafeArea(
               child: Column(
@@ -37,6 +46,24 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                   Container(
                     color: Colors.green,
                     child: Text(prod[0].nameProd.toString()),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<ProdScreenProvider>()
+                          .deleteProduct(widget.prodId)
+                          .then((value) {
+                        context.pop();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Product Deleted'),
+                          duration: Duration(seconds: 2),
+                        ));
+                        context.read<MainScreenProvider>().getAllDb();
+                      });
+                    },
+                    child: Text('Delete'),
                   ),
                 ],
               ),

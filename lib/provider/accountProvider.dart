@@ -17,8 +17,8 @@ class AccountProvider extends ChangeNotifier {
   bool imageLoaded = false;
   var linkProd = '';
 
-  Product newProduct = Product(
-      active: false, id: '', name: '', photo: 'assets/images/prod1.jpg');
+  Product newProduct =
+      Product(active: false, id: 0, name: '', photo: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
     num increment = 0;
@@ -52,6 +52,11 @@ class AccountProvider extends ChangeNotifier {
       'name': newProduct.name,
       'photo': linkProd
     });
+
+    newProduct.name = '';
+    nameIsLegal = false;
+    image = null;
+    imageLoaded = false;
   }
 
   Future getDb(userId) async {
@@ -76,7 +81,7 @@ class AccountProvider extends ChangeNotifier {
         if (doc.data()['active']) {
           productsList.add(
             Product(
-              id: doc.data()['id'],
+              id: doc.data()['idProd'],
               name: doc.data()['name'],
               active: doc.data()['active'],
               photo: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
@@ -122,7 +127,7 @@ class AccountProvider extends ChangeNotifier {
 }
 
 class Product {
-  String id;
+  num id;
   String name;
   String photo;
   bool active;

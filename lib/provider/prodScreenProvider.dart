@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class ProdScreenProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
   List products = [];
   List listIds = [];
+  String docId = '';
+  String docPhoto = '';
+  String docName = '';
 
   Future getAllProds(prodId) async {
     dataIsLoaded = false;
@@ -22,6 +26,9 @@ class ProdScreenProvider extends ChangeNotifier {
         (value) {
           for (var doc in value.docs) {
             if (doc.data()['idProd'].toString() == prodId.toString()) {
+              docId = doc.data()['idProd'].toString();
+              docPhoto = doc.data()['photo'].toString();
+              docName = doc.data()['name'].toString();
               products.add(
                 Prod(
                     id: doc.data()['idProd'],
@@ -35,6 +42,37 @@ class ProdScreenProvider extends ChangeNotifier {
     }
     dataIsLoaded = true;
     notifyListeners();
+  }
+
+  Future deleteProduct(prodId) async {
+    dataIsLoaded = false;
+    notifyListeners();
+    var db = FirebaseFirestore.instance;
+    await db.collection("users").get().then((value) {
+      for (var doc in value.docs) {
+        listIds.add(doc['id']);
+      }
+    });
+
+    for (var prod in listIds) {
+      await db
+          .collection("users")
+          .doc(prod)
+          .collection('Products')
+          .doc(docId)
+          .delete()
+          .then(
+        (doc) {
+          print("Document deleted");
+        },
+        onError: (e) => print("Error updating document $e"),
+      );
+    }
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('products')
+        .child('/${docName}-${docId}jpg');
+    await ref.delete();
   }
 }
 

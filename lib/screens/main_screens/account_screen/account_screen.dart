@@ -284,34 +284,40 @@ class AccountScreenWidget extends StatelessWidget {
                 delegate: SliverChildBuilderDelegate(
                     childCount: !dataIsLoaded ? 4 : productList.length,
                     (context, index) {
-                  return Container(
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Container(
-                            height: 180,
-                            color: Color.fromARGB(255, 214, 214, 214),
-                            width: double.infinity,
-                            child: !dataIsLoaded
-                                ? SpinKitWave(
-                                    color: mainColor.withAlpha(50), size: 50.0)
-                                : Image.network(
-                                    productList[index].photo,
-                                    fit: BoxFit.cover,
-                                  ),
+                  return InkWell(
+                    onTap: () {
+                      context.go('/main/${productList[index].id}');
+                    },
+                    child: Container(
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              height: 180,
+                              color: Color.fromARGB(255, 214, 214, 214),
+                              width: double.infinity,
+                              child: !dataIsLoaded
+                                  ? SpinKitWave(
+                                      color: mainColor.withAlpha(50),
+                                      size: 50.0)
+                                  : Image.network(
+                                      productList[index].photo,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 5),
-                        !dataIsLoaded
-                            ? SpinKitWave(
-                                color: mainColor.withAlpha(50), size: 20.0)
-                            : Text(
-                                productList[index].name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                      ],
+                          SizedBox(height: 5),
+                          !dataIsLoaded
+                              ? SpinKitWave(
+                                  color: mainColor.withAlpha(50), size: 20.0)
+                              : Text(
+                                  productList[index].name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                        ],
+                      ),
                     ),
                   );
                 }),

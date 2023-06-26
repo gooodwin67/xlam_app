@@ -22,6 +22,7 @@ class MainScreenProvider extends ChangeNotifier {
         (value) {
           for (var doc in value.docs) {
             if (doc.data()['active'] == true) {
+              print(1);
               products.add(
                 Prod(
                     id: doc.data()['idProd'],
