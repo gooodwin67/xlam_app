@@ -60,7 +60,8 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                           content: Text('Product Deleted'),
                           duration: Duration(seconds: 2),
                         ));
-                        context.read<MainScreenProvider>().getAllDb();
+                        context.read<MainScreenProvider>().getAllDb(
+                            context.read<MainScreenProvider>().activeCategory);
                       });
                     },
                     child: Text('Delete'),

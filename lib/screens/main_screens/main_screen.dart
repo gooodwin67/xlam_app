@@ -24,7 +24,9 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   void initState() {
-    context.read<MainScreenProvider>().getAllDb();
+    context
+        .read<MainScreenProvider>()
+        .getAllDb(context.read<MainScreenProvider>().activeCategory);
 
     super.initState();
   }
@@ -33,6 +35,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     List productList = context.read<MainScreenProvider>().products;
     bool dataIsLoaded = context.watch<MainScreenProvider>().dataIsLoaded;
+    String nameCategory = context.read<MainScreenProvider>().nameCategory;
 
     return Scaffold(
       body: SafeArea(
@@ -99,18 +102,54 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                       itemCount:
                           context.read<MainScreenProvider>().Categories.length,
                       itemBuilder: (context, index) {
-                        return CategoryBlock(
-                          name: context
-                              .read<MainScreenProvider>()
-                              .Categories[index]
-                              .nameCategory,
-                          icon: context
-                              .read<MainScreenProvider>()
-                              .Categories[index]
-                              .iconCategory,
+                        return InkWell(
+                          onTap: () {
+                            context.read<MainScreenProvider>().getAllDb(context
+                                .read<MainScreenProvider>()
+                                .Categories[index]
+                                .numCategory);
+
+                            context
+                                .read<MainScreenProvider>()
+                                .changeName(index);
+                            setState(() {});
+                          },
+                          child: CategoryBlock(
+                            index: context
+                                .read<MainScreenProvider>()
+                                .activeCategory,
+                            numCat: context
+                                .read<MainScreenProvider>()
+                                .Categories[index]
+                                .numCategory,
+                            name: context
+                                .read<MainScreenProvider>()
+                                .Categories[index]
+                                .nameCategory,
+                            icon: context
+                                .read<MainScreenProvider>()
+                                .Categories[index]
+                                .iconCategory,
+                          ),
                         );
                       },
                     ),
+                  ),
+                ),
+              ),
+              SliverAppBar(
+                elevation: 0,
+                floating: true,
+                pinned: false,
+                snap: false,
+                titleSpacing: 0,
+                backgroundColor: Colors.white,
+                automaticallyImplyLeading: false,
+                expandedHeight: 20,
+                title: Center(
+                  child: Text(
+                    nameCategory,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -176,8 +215,15 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
 class CategoryBlock extends StatelessWidget {
   String name;
+  num index;
+  num numCat;
   IconData icon;
-  CategoryBlock({Key? key, required this.name, required this.icon})
+  CategoryBlock(
+      {Key? key,
+      required this.name,
+      required this.icon,
+      required this.index,
+      required this.numCat})
       : super(key: key);
 
   @override
@@ -192,7 +238,9 @@ class CategoryBlock extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(11),
                 child: Container(
-                  color: Color(0xffF5F5F5),
+                  color: index == numCat
+                      ? mainColor.withAlpha(120)
+                      : Color(0xffF5F5F5),
                   width: 65,
                   height: 65,
                   child: Icon(

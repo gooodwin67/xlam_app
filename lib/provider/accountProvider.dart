@@ -12,19 +12,23 @@ import 'package:xlam_app/provider/mainScreenProvider.dart';
 class AccountProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
   bool nameIsLegal = false;
+  bool categoryIsLegal = false;
   String userName = '';
   List productsList = <Product>[];
   bool imageLoaded = false;
   var linkProd = '';
 
-  Product newProduct =
-      Product(active: false, id: 0, name: '', photo: 'assets/images/prod1.jpg');
+  Product newProduct = Product(
+      active: false,
+      id: 0,
+      category: 0,
+      name: '',
+      photo: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
     num increment = 0;
     var db = FirebaseFirestore.instance;
     await db.collection("users").doc(userId).get().then((value) {
-      print(value.data()!['userProdInc'].toString());
       increment = value.data()!['userProdInc'] + 1;
     });
     await db.collection("users").doc(userId).update({'userProdInc': increment});
@@ -50,6 +54,7 @@ class AccountProvider extends ChangeNotifier {
       'active': true,
       'idProd': increment,
       'name': newProduct.name,
+      'category': newProduct.category,
       'photo': linkProd
     });
 
@@ -57,6 +62,7 @@ class AccountProvider extends ChangeNotifier {
     nameIsLegal = false;
     image = null;
     imageLoaded = false;
+    categoryIsLegal = false;
   }
 
   Future getDb(userId) async {
@@ -82,6 +88,7 @@ class AccountProvider extends ChangeNotifier {
           productsList.add(
             Product(
               id: doc.data()['idProd'],
+              category: doc.data()['category'],
               name: doc.data()['name'],
               active: doc.data()['active'],
               photo: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
@@ -107,6 +114,12 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
+  changeCategory(value) {
+    categoryIsLegal = true;
+    newProduct.category = value;
+    notifyListeners();
+  }
+
   XFile? image;
 
   Future getImage(ImageSource media) async {
@@ -128,11 +141,13 @@ class AccountProvider extends ChangeNotifier {
 
 class Product {
   num id;
+  num category;
   String name;
   String photo;
   bool active;
   Product({
     required this.id,
+    required this.category,
     required this.name,
     required this.photo,
     required this.active,

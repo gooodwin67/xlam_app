@@ -24,7 +24,6 @@ class AccountScreenWidget extends StatelessWidget {
     XFile? image = context.read<AccountProvider>().image;
 
     List productList = context.read<AccountProvider>().productsList;
-
     bool dataIsLoaded = context.watch<AccountProvider>().dataIsLoaded;
     return Scaffold(
       body: SafeArea(
@@ -46,7 +45,8 @@ class AccountScreenWidget extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        context.read<MainScreenProvider>().getAllDb();
+                        context.read<MainScreenProvider>().getAllDb(
+                            context.read<MainScreenProvider>().activeCategory);
                         context.go('/main');
                       },
                       child: Icon(
@@ -169,6 +169,57 @@ class AccountScreenWidget extends StatelessWidget {
                                             ),
                                           ),
                                           SizedBox(height: 10),
+                                          DropdownButtonFormField(
+                                            hint: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: Text('Выберите категорию',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1),
+                                            ),
+                                            items: context
+                                                .read<MainScreenProvider>()
+                                                .Categories
+                                                .where((element) =>
+                                                    element.numCategory != 0)
+                                                .map((e) => DropdownMenuItem(
+                                                    value: e.numCategory,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: Text(
+                                                          e.nameCategory,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1),
+                                                    )))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              context
+                                                  .read<AccountProvider>()
+                                                  .changeCategory(value);
+                                            },
+                                            decoration: InputDecoration(
+                                              contentPadding: EdgeInsets.zero,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              filled: true,
+                                              fillColor: context
+                                                          .watch<
+                                                              AccountProvider>()
+                                                          .categoryIsLegal ==
+                                                      true
+                                                  ? Colors.transparent
+                                                  : Color.fromARGB(
+                                                      255, 255, 190, 186),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
                                           TextButton(
                                               onPressed: () {
                                                 context
@@ -199,7 +250,10 @@ class AccountScreenWidget extends StatelessWidget {
                                                       .nameIsLegal &&
                                                   context
                                                       .read<AccountProvider>()
-                                                      .imageLoaded
+                                                      .imageLoaded &&
+                                                  context
+                                                      .read<AccountProvider>()
+                                                      .categoryIsLegal
                                               ? ElevatedButton(
                                                   onPressed: (() {
                                                     context
