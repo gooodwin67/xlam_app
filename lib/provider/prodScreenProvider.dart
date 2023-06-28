@@ -9,8 +9,9 @@ class ProdScreenProvider extends ChangeNotifier {
   String docId = '';
   String docPhoto = '';
   String docName = '';
+  bool myProd = false;
 
-  Future getAllProds(prodId) async {
+  Future getAllProds(userId, prodId) async {
     dataIsLoaded = false;
     listIds = [];
     products = [];
@@ -26,6 +27,13 @@ class ProdScreenProvider extends ChangeNotifier {
         (value) {
           for (var doc in value.docs) {
             if (doc.data()['idProd'].toString() == prodId.toString()) {
+              if (prod == userId) {
+                myProd = true;
+                print('мое');
+              } else {
+                print(userId);
+                myProd = false;
+              }
               docId = doc.data()['idProd'].toString();
               docPhoto = doc.data()['photo'].toString();
               docName = doc.data()['name'].toString();
@@ -71,13 +79,13 @@ class ProdScreenProvider extends ChangeNotifier {
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('products')
-        .child('/${docName}-${docId}jpg');
+        .child('/${docName}-${docId}');
     await ref.delete();
   }
 }
 
 class Prod {
-  num id;
+  String id;
   String nameProd;
   String photoProd;
   Prod({

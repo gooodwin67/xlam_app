@@ -78,7 +78,7 @@ class Category {
 }
 
 class Prod {
-  num id;
+  String id;
   num category;
   String nameProd;
   String photoProd;

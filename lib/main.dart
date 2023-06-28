@@ -56,6 +56,7 @@ class MyApp extends StatelessWidget {
 }
 
 // GoRouter configuration
+
 final _router = GoRouter(
   routes: [
     GoRoute(

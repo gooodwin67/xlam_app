@@ -12,6 +12,8 @@ class RegistrationScreen extends StatelessWidget {
     bool RegisteringNow =
         context.watch<RegistrationScreenProvider>().isRegistering;
     bool passCorrect = context.watch<RegistrationScreenProvider>().passCorrect;
+    bool isNameCorrect =
+        context.watch<RegistrationScreenProvider>().isNameCorrect;
     int isRegisterError =
         context.watch<RegistrationScreenProvider>().isRegisterError;
 
@@ -62,6 +64,37 @@ class RegistrationScreen extends StatelessWidget {
                       Text(
                         'Регистрация',
                         style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        height: 43,
+                        child: TextField(
+                          onChanged: ((value) => context
+                              .read<RegistrationScreenProvider>()
+                              .editNameReg(value)),
+                          style: Theme.of(context).textTheme.bodyText1,
+                          decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Color(0xffF2F0F7),
+                            prefixIcon: Icon(Icons.account_circle_outlined),
+                            label: Text(
+                              'Имя',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 0),
+                            ),
+                          ),
+                        ),
                       ),
                       SizedBox(height: 15),
                       Container(
@@ -175,7 +208,8 @@ class RegistrationScreen extends StatelessWidget {
                           : SizedBox(),
                       ElevatedButton(
                         onPressed: RegisteringNow == false &&
-                                passCorrect == true
+                                passCorrect == true &&
+                                isNameCorrect == true
                             ? () async {
                                 await context
                                     .read<RegistrationScreenProvider>()
@@ -219,7 +253,8 @@ class RegistrationScreen extends StatelessWidget {
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: RegisteringNow == false &&
-                                    passCorrect == true
+                                    passCorrect == true &&
+                                    isNameCorrect == true
                                 ? const Text(
                                     'Зарегистрироваться',
                                     style:

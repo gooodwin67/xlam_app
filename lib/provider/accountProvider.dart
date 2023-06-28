@@ -20,23 +20,29 @@ class AccountProvider extends ChangeNotifier {
 
   Product newProduct = Product(
       active: false,
-      id: 0,
+      id: '0',
       category: 0,
       name: '',
       photo: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
     num increment = 0;
+    num incrementAll = 0;
     var db = FirebaseFirestore.instance;
     await db.collection("users").doc(userId).get().then((value) {
       increment = value.data()!['userProdInc'] + 1;
     });
     await db.collection("users").doc(userId).update({'userProdInc': increment});
 
+    await db.collection("ids").doc('increment').get().then((value) {
+      incrementAll = value.data()!['inc'] + 1;
+    });
+    await db.collection("ids").doc('increment').update({'inc': incrementAll});
+
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('products')
-        .child('/${newProduct.name}-${increment}jpg');
+        .child('/${newProduct.name}-${incrementAll}-${increment}');
 
     try {
       await ref.putFile(File(image!.path));
@@ -49,10 +55,10 @@ class AccountProvider extends ChangeNotifier {
         .collection("users")
         .doc(userId)
         .collection('Products')
-        .doc(increment.toString())
+        .doc('${incrementAll}-${increment}')
         .set({
       'active': true,
-      'idProd': increment,
+      'idProd': '${incrementAll}-${increment}',
       'name': newProduct.name,
       'category': newProduct.category,
       'photo': linkProd
@@ -63,6 +69,7 @@ class AccountProvider extends ChangeNotifier {
     image = null;
     imageLoaded = false;
     categoryIsLegal = false;
+    print('YESSSSS');
   }
 
   Future getDb(userId) async {
@@ -140,7 +147,7 @@ class AccountProvider extends ChangeNotifier {
 }
 
 class Product {
-  num id;
+  String id;
   num category;
   String name;
   String photo;
