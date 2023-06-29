@@ -104,8 +104,12 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                     .then((value) {
                                   context.pop();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text('Product Deleted'),
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: mainColor,
+                                    content: Text(
+                                      'Товар удален',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                     duration: Duration(seconds: 2),
                                   ));
                                   context.read<MainScreenProvider>().getAllDb(

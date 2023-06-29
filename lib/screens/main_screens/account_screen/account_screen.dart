@@ -111,6 +111,9 @@ class AccountScreenWidget extends StatelessWidget {
                             ),
                       ElevatedButton(
                         onPressed: () {
+                          context
+                              .read<AccountProvider>()
+                              .clearDataFromBottomSheet();
                           showModalBottomSheet(
                               context: context,
                               builder: (BuildContext context) {
@@ -220,18 +223,64 @@ class AccountScreenWidget extends StatelessWidget {
                                             ),
                                           ),
                                           SizedBox(height: 10),
-                                          TextButton(
-                                              onPressed: () {
-                                                context
-                                                    .read<AccountProvider>()
-                                                    .getImage(
-                                                        ImageSource.camera);
-                                              },
-                                              child: Text('Добавить фото')),
+                                          Text('Добавьте фотографию'),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  context
+                                                      .read<AccountProvider>()
+                                                      .getImage(
+                                                          ImageSource.camera);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: mainColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.camera_alt_outlined,
+                                                    color: Colors.white,
+                                                    size: 40,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              InkWell(
+                                                onTap: () {
+                                                  context
+                                                      .read<AccountProvider>()
+                                                      .getImage(
+                                                          ImageSource.gallery);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: mainColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons
+                                                        .photo_size_select_actual_outlined,
+                                                    color: Colors.white,
+                                                    size: 40,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           SizedBox(height: 10),
                                           Container(
-                                            width: 50,
-                                            height: 50,
+                                            width: 100,
+                                            height: 100,
                                             child: context
                                                         .watch<
                                                             AccountProvider>()
@@ -263,6 +312,20 @@ class AccountScreenWidget extends StatelessWidget {
                                                                 MainProvider>()
                                                             .userId);
                                                     Navigator.pop(context);
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      backgroundColor:
+                                                          mainColor,
+                                                      content: Text(
+                                                        'Товар добавлен',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                    ));
                                                   }),
                                                   style: ButtonStyle(
                                                     backgroundColor:

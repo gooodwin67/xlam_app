@@ -18,6 +18,14 @@ class AccountProvider extends ChangeNotifier {
   bool imageLoaded = false;
   var linkProd = '';
 
+  clearDataFromBottomSheet() {
+    dataIsLoaded = false;
+    nameIsLegal = false;
+    categoryIsLegal = false;
+    imageLoaded = false;
+    image = null;
+  }
+
   Product newProduct = Product(
       active: false,
       id: '0',
@@ -69,7 +77,6 @@ class AccountProvider extends ChangeNotifier {
     image = null;
     imageLoaded = false;
     categoryIsLegal = false;
-    print('YESSSSS');
   }
 
   Future getDb(userId) async {
@@ -132,10 +139,7 @@ class AccountProvider extends ChangeNotifier {
   Future getImage(ImageSource media) async {
     final ImagePicker picker = ImagePicker();
     image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 600,
-        maxHeight: 600,
-        imageQuality: 95);
+        source: media, maxWidth: 600, maxHeight: 600, imageQuality: 95);
 
     imageLoaded = true;
     newProduct.photo = image!.path;
