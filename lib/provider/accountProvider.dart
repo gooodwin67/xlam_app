@@ -141,8 +141,11 @@ class AccountProvider extends ChangeNotifier {
     image = await picker.pickImage(
         source: media, maxWidth: 600, maxHeight: 600, imageQuality: 95);
 
+    if (image != null) {
+      newProduct.photo = image!.path;
+    }
+
     imageLoaded = true;
-    newProduct.photo = image!.path;
 
     notifyListeners();
   }
