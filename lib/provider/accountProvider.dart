@@ -30,8 +30,8 @@ class AccountProvider extends ChangeNotifier {
       active: false,
       id: '0',
       category: 0,
-      name: '',
-      photo: 'assets/images/prod1.jpg');
+      nameProd: '',
+      photoProd: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
     num increment = 0;
@@ -50,7 +50,7 @@ class AccountProvider extends ChangeNotifier {
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('products')
-        .child('/${newProduct.name}-${incrementAll}-${increment}');
+        .child('/${newProduct.nameProd}-${incrementAll}-${increment}');
 
     try {
       await ref.putFile(File(image!.path));
@@ -67,12 +67,12 @@ class AccountProvider extends ChangeNotifier {
         .set({
       'active': true,
       'idProd': '${incrementAll}-${increment}',
-      'name': newProduct.name,
+      'name': newProduct.nameProd,
       'category': newProduct.category,
       'photo': linkProd
     });
 
-    newProduct.name = '';
+    newProduct.nameProd = '';
     nameIsLegal = false;
     image = null;
     imageLoaded = false;
@@ -103,9 +103,9 @@ class AccountProvider extends ChangeNotifier {
             Product(
               id: doc.data()['idProd'],
               category: doc.data()['category'],
-              name: doc.data()['name'],
+              nameProd: doc.data()['name'],
               active: doc.data()['active'],
-              photo: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
+              photoProd: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
             ),
           );
         }
@@ -118,7 +118,7 @@ class AccountProvider extends ChangeNotifier {
   }
 
   getName(text) {
-    newProduct.name = text;
+    newProduct.nameProd = text;
     if (text != '') {
       nameIsLegal = true;
       notifyListeners();
@@ -142,7 +142,7 @@ class AccountProvider extends ChangeNotifier {
         source: media, maxWidth: 600, maxHeight: 600, imageQuality: 95);
 
     if (image != null) {
-      newProduct.photo = image!.path;
+      newProduct.photoProd = image!.path;
     }
 
     imageLoaded = true;
@@ -156,14 +156,14 @@ class AccountProvider extends ChangeNotifier {
 class Product {
   String id;
   num category;
-  String name;
-  String photo;
+  String nameProd;
+  String photoProd;
   bool active;
   Product({
     required this.id,
     required this.category,
-    required this.name,
-    required this.photo,
+    required this.nameProd,
+    required this.photoProd,
     required this.active,
   });
 }

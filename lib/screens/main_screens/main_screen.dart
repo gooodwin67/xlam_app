@@ -1,22 +1,14 @@
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
-import 'package:xlam_app/provider/accountProvider.dart';
-import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/screens/main_screens/category_block.dart';
+import 'package:xlam_app/screens/main_screens/product_block.dart';
+import 'package:xlam_app/screens/main_screens/show_exit_poput.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
-
   @override
   State<MainScreenWidget> createState() => _MainScreenWidgetState();
 }
@@ -27,7 +19,6 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
     context
         .read<MainScreenProvider>()
         .getAllDb(context.read<MainScreenProvider>().activeCategory);
-
     super.initState();
   }
 
@@ -59,7 +50,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                     children: [
                       InkWell(
                         onTap: () {},
-                        child: Icon(
+                        child: const Icon(
                           Icons.search,
                           color: Colors.grey,
                         ),
@@ -75,7 +66,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                         onTap: () {
                           context.go('/main/account');
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.manage_accounts_outlined,
                           color: Colors.grey,
                         ),
@@ -85,7 +76,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 sliver: SliverAppBar(
                   toolbarHeight: 120,
                   elevation: 0,
@@ -149,52 +140,20 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                 title: Center(
                   child: Text(
                     nameCategory,
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     childCount: !dataIsLoaded ? 4 : productList.length,
                     (context, index) {
-                      return InkWell(
-                        onTap: () =>
-                            context.go('/main/${productList[index].id}'),
-                        child: Container(
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(6),
-                                child: Container(
-                                  height: 180,
-                                  color: Color.fromARGB(255, 214, 214, 214),
-                                  width: double.infinity,
-                                  child: !dataIsLoaded
-                                      ? SpinKitWave(
-                                          color: mainColor.withAlpha(50),
-                                          size: 50.0)
-                                      : Image.network(
-                                          productList[index].photoProd,
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              !dataIsLoaded
-                                  ? SpinKitWave(
-                                      color: mainColor.withAlpha(50),
-                                      size: 20.0)
-                                  : Text(
-                                      productList[index].nameProd,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return ProductBlock(
+                          productList: productList,
+                          dataIsLoaded: dataIsLoaded,
+                          index: index);
                     },
                   ),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -211,105 +170,4 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       ),
     );
   }
-}
-
-class CategoryBlock extends StatelessWidget {
-  String name;
-  num index;
-  num numCat;
-  IconData icon;
-  CategoryBlock(
-      {Key? key,
-      required this.name,
-      required this.icon,
-      required this.index,
-      required this.numCat})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 15),
-        Container(
-          width: 65,
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(11),
-                child: Container(
-                  color: index == numCat
-                      ? mainColor.withAlpha(120)
-                      : Color(0xffF5F5F5),
-                  width: 65,
-                  height: 65,
-                  child: Icon(
-                    icon,
-                    color: Color.fromARGB(255, 104, 104, 104),
-                    size: 30,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                name,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-Future<bool> showExitPopup(context) async {
-  return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            height: 100,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Вы хотите выйти?"),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print('yes selected');
-                          exit(0);
-                        },
-                        child: Text("Да"),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red.shade800),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                        child: ElevatedButton(
-                      onPressed: () {
-                        print('no selected');
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Нет", style: TextStyle(color: Colors.black)),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                    ))
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      });
 }

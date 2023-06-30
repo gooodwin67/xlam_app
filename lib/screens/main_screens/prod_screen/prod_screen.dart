@@ -33,7 +33,8 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
       body: SafeArea(
         child: !dataIsLoaded
             ? Container(
-                color: Color.fromARGB(255, 255, 255, 255).withOpacity(0.9),
+                color:
+                    const Color.fromARGB(255, 255, 255, 255).withOpacity(0.9),
                 child: Center(
                   child:
                       SpinKitWave(color: mainColor.withAlpha(150), size: 50.0),
@@ -58,7 +59,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                         child: Text(
                           prod[0].nameProd.toString(),
@@ -68,9 +69,9 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                               .copyWith(fontSize: 25),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       context.read<ProdScreenProvider>().myProd
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Container(
                               width: double.infinity,
                               height: 50,
@@ -93,9 +94,9 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                 ),
                               ),
                             ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       !context.read<ProdScreenProvider>().myProd
-                          ? SizedBox()
+                          ? const SizedBox()
                           : TextButton(
                               onPressed: () {
                                 context
@@ -106,11 +107,11 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     backgroundColor: mainColor,
-                                    content: Text(
+                                    content: const Text(
                                       'Товар удален',
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                   ));
                                   context.read<MainScreenProvider>().getAllDb(
                                       context
@@ -118,7 +119,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                           .activeCategory);
                                 });
                               },
-                              child: Text(
+                              child: const Text(
                                 'Удалить товар',
                                 style: TextStyle(
                                     color: Colors.red,
