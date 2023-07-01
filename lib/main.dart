@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
+import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
@@ -23,6 +24,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => MainScreenProvider()),
       ChangeNotifierProvider(create: (_) => AccountProvider()),
       ChangeNotifierProvider(create: (_) => ProdScreenProvider()),
+      ChangeNotifierProvider(create: (_) => BottomBarProvider()),
     ],
     child: const MyApp(),
   ));

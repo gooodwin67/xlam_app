@@ -14,6 +14,7 @@ class AccountProvider extends ChangeNotifier {
   bool nameIsLegal = false;
   bool categoryIsLegal = false;
   String userName = '';
+  String userId = '';
   List productsList = <Product>[];
   bool imageLoaded = false;
   var linkProd = '';
@@ -29,6 +30,8 @@ class AccountProvider extends ChangeNotifier {
   Product newProduct = Product(
       active: false,
       id: '0',
+      idUser: '0',
+      nameUser: 'nameUser',
       category: 0,
       nameProd: '',
       photoProd: 'assets/images/prod1.jpg');
@@ -67,6 +70,8 @@ class AccountProvider extends ChangeNotifier {
         .set({
       'active': true,
       'idProd': '${incrementAll}-${increment}',
+      'idUser': userId,
+      'nameUser': userName,
       'name': newProduct.nameProd,
       'category': newProduct.category,
       'photo': linkProd
@@ -86,6 +91,7 @@ class AccountProvider extends ChangeNotifier {
       for (var doc in event.docs) {
         if (doc.id == userId) {
           userName = doc.data()['name'];
+          userId = doc.data()['id'];
         }
       }
     });
@@ -102,6 +108,8 @@ class AccountProvider extends ChangeNotifier {
           productsList.add(
             Product(
               id: doc.data()['idProd'],
+              idUser: doc.data()['idUser'],
+              nameUser: doc.data()['nameUser'],
               category: doc.data()['category'],
               nameProd: doc.data()['name'],
               active: doc.data()['active'],
@@ -155,12 +163,16 @@ class AccountProvider extends ChangeNotifier {
 
 class Product {
   String id;
+  String idUser;
+  String nameUser;
   num category;
   String nameProd;
   String photoProd;
   bool active;
   Product({
     required this.id,
+    required this.idUser,
+    required this.nameUser,
     required this.category,
     required this.nameProd,
     required this.photoProd,

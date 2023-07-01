@@ -22,7 +22,8 @@ class ProductBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go('/main/${productList[index].id}'),
+      onTap: () =>
+          dataIsLoaded ? context.go('/main/${productList[index].id}') : null,
       child: Container(
         child: Column(
           children: [

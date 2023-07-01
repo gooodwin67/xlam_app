@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
 import 'package:xlam_app/screens/main_screens/category_block.dart';
 import 'package:xlam_app/screens/main_screens/product_block.dart';
 import 'package:xlam_app/screens/main_screens/show_exit_poput.dart';
@@ -29,13 +31,18 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
     String nameCategory = context.read<MainScreenProvider>().nameCategory;
 
     return Scaffold(
+      bottomNavigationBar: BottomNavBar(),
       body: SafeArea(
         child: WillPopScope(
           onWillPop: () => showExitPopup(context),
           child: RefreshIndicator(
-            onRefresh: () => context
-                .read<MainScreenProvider>()
-                .getAllDb(context.read<MainScreenProvider>().activeCategory),
+            onRefresh: () {
+              context
+                  .read<MainScreenProvider>()
+                  .getAllDb(context.read<MainScreenProvider>().activeCategory);
+              setState(() {});
+              return Future((() => true));
+            },
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -68,6 +75,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                         ),
                         InkWell(
                           onTap: () {
+                            context.read<BottomBarProvider>().onItemTapped(2);
                             context.go('/main/account');
                           },
                           child: const Icon(

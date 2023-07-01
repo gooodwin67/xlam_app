@@ -6,6 +6,7 @@ class ProdScreenProvider extends ChangeNotifier {
   bool dataIsLoaded = false;
   List products = [];
   List listIds = [];
+  String nameUser = 'name';
   String docId = '';
   String docPhoto = '';
   String docName = '';
@@ -34,11 +35,13 @@ class ProdScreenProvider extends ChangeNotifier {
                 print(userId);
                 myProd = false;
               }
+              // NameUser = doc.data()['nameUser'].toString();
               docId = doc.data()['idProd'].toString();
-              docPhoto = doc.data()['photo'].toString();
+              // docPhoto = doc.data()['photo'].toString();
               docName = doc.data()['name'].toString();
               products.add(
                 Prod(
+                    nameUser: doc.data()['nameUser'] ?? 'nameUser',
                     id: doc.data()['idProd'],
                     nameProd: doc.data()['name'],
                     photoProd: doc.data()['photo']),
@@ -85,10 +88,12 @@ class ProdScreenProvider extends ChangeNotifier {
 }
 
 class Prod {
+  String nameUser;
   String id;
   String nameProd;
   String photoProd;
   Prod({
+    required this.nameUser,
     required this.id,
     required this.nameProd,
     required this.photoProd,

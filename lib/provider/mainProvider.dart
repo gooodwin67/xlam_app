@@ -9,7 +9,6 @@ class MainProvider extends ChangeNotifier {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         userId = user.uid;
-        print(user.uid);
         isLogin = true;
       }
     });
