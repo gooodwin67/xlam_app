@@ -30,7 +30,6 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<ProdScreenProvider>().dataIsLoaded;
     List prod = context.read<ProdScreenProvider>().products;
-    print(widget.prodId);
 
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
@@ -98,7 +97,9 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                 width: double.infinity,
                                 height: 50,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    print(prod[0].idUser);
+                                  },
                                   style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all(mainColor),

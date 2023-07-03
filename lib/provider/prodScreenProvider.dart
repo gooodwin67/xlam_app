@@ -7,6 +7,7 @@ class ProdScreenProvider extends ChangeNotifier {
   List products = [];
   List listIds = [];
   String nameUser = 'name';
+  String idUser = 'idUser';
   String docId = '';
   String docPhoto = '';
   String docName = '';
@@ -41,6 +42,7 @@ class ProdScreenProvider extends ChangeNotifier {
               docName = doc.data()['name'].toString();
               products.add(
                 Prod(
+                    idUser: doc.data()['idUser'] ?? 'idUser',
                     nameUser: doc.data()['nameUser'] ?? 'nameUser',
                     id: doc.data()['idProd'],
                     nameProd: doc.data()['name'],
@@ -88,11 +90,13 @@ class ProdScreenProvider extends ChangeNotifier {
 }
 
 class Prod {
+  String idUser;
   String nameUser;
   String id;
   String nameProd;
   String photoProd;
   Prod({
+    required this.idUser,
     required this.nameUser,
     required this.id,
     required this.nameProd,
