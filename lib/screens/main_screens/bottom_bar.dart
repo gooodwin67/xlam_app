@@ -31,6 +31,12 @@ class BottomNavBar extends StatelessWidget {
               .getAllDb(context.read<MainScreenProvider>().activeCategory);
           context.go('/main');
         }
+        if (value == 1) {
+          // context
+          //     .read<AccountProvider>()
+          //     .getDb(context.read<MainProvider>().userId);
+          context.go('/main/messages');
+        }
         if (value == 2) {
           context
               .read<AccountProvider>()

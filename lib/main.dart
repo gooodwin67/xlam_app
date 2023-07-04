@@ -6,6 +6,8 @@ import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/loginScreenProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/provider/messageProvider.dart';
+import 'package:xlam_app/provider/messagesProvider.dart';
 import 'package:xlam_app/provider/prodScreenProvider.dart';
 import 'package:xlam_app/router/router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +27,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => AccountProvider()),
       ChangeNotifierProvider(create: (_) => ProdScreenProvider()),
       ChangeNotifierProvider(create: (_) => BottomBarProvider()),
+      ChangeNotifierProvider(create: (_) => MessagesProvider()),
+      ChangeNotifierProvider(create: (_) => MessageProvider()),
     ],
     child: const MyApp(),
   ));

@@ -8,6 +8,8 @@ import 'package:xlam_app/screens/login_screen/login_pass_enter_screen.dart';
 import 'package:xlam_app/screens/login_screen/login_screen.dart';
 import 'package:xlam_app/screens/login_screen/registration_screen.dart';
 import 'package:xlam_app/screens/main_screens/account_screen/account_screen.dart';
+import 'package:xlam_app/screens/main_screens/messages_screen/message_screen/message_screen.dart';
+import 'package:xlam_app/screens/main_screens/messages_screen/messages_screen.dart';
 import 'package:xlam_app/screens/main_screens/prod_screen/prod_screen.dart';
 import 'package:xlam_app/screens/main_screens/main_screen.dart';
 
@@ -53,6 +55,21 @@ final router = GoRouter(
               return const AccountScreenWidget();
             },
           ),
+          GoRoute(
+              path: 'messages',
+              builder: (BuildContext context, GoRouterState state) {
+                return const MessagesScreenWidget();
+              },
+              routes: [
+                GoRoute(
+                  path: ':chatId',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return MessageScreenWidget(
+                      chatId: state.pathParameters['chatId'],
+                    );
+                  },
+                ),
+              ]),
           GoRoute(
             path: ':prodId',
             builder: (BuildContext context, GoRouterState state) {

@@ -53,7 +53,7 @@ class AccountProvider extends ChangeNotifier {
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('products')
-        .child('/${newProduct.nameProd}-${incrementAll}-${increment}');
+        .child('/${newProduct.nameProd}-$incrementAll-$increment');
 
     try {
       await ref.putFile(File(image!.path));
@@ -66,10 +66,10 @@ class AccountProvider extends ChangeNotifier {
         .collection("users")
         .doc(userId)
         .collection('Products')
-        .doc('${incrementAll}-${increment}')
+        .doc('$incrementAll-$increment')
         .set({
       'active': true,
-      'idProd': '${incrementAll}-${increment}',
+      'idProd': '$incrementAll-$increment',
       'idUser': userId,
       'nameUser': userName,
       'name': newProduct.nameProd,
