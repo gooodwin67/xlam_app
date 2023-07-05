@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
@@ -63,66 +64,40 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
       ),
       bottomNavigationBar: BottomNavBar(),
       body: SafeArea(
-          child: !dataIsLoaded
-              ? SizedBox()
-              : Padding(
+          child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: !dataIsLoaded ? 2 : message.messages.length,
+              ((context, index) {
+                return Padding(
                   padding: EdgeInsets.all(mainPadding),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(mainPadding * 2),
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          color: mainColor.withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                              message.messages[0].myMessage == true
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.end,
-                          children: [
-                            Text(message.messages[0].text),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(mainPadding * 2),
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          color: mainColor.withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                              message.messages[1].myMessage == true
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.end,
-                          children: [
-                            Text(message.messages[1].text),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(mainPadding * 2),
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          color: mainColor.withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                              message.messages[2].myMessage == true
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.end,
-                          children: [
-                            Text(message.messages[2].text),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: Container(
+                    padding: EdgeInsets.all(mainPadding * 2),
+                    margin: EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                      color: mainColor.withAlpha(50),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: !dataIsLoaded
+                        ? SpinKitWave(
+                            color: mainColor.withAlpha(50), size: 20.0)
+                        : Row(
+                            mainAxisAlignment:
+                                message.messages[index].myMessage == true
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.end,
+                            children: [
+                              Text(message.messages[index].text),
+                            ],
+                          ),
                   ),
-                )),
+                );
+              }),
+            ),
+          )
+        ],
+      )),
     );
   }
 }
