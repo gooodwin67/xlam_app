@@ -10,6 +10,34 @@ class MessageProvider extends ChangeNotifier {
   bool messageDataIsLoaded = false;
   MessageWrapBlock message =
       MessageWrapBlock(name: 'name', id: 'id', messages: []);
+  String allChatId = '';
+  String messageText = '';
+  bool messageTextLegal = false;
+
+  changeMessageText(value) {
+    if (value != '') {
+      messageTextLegal = true;
+    } else {
+      messageTextLegal = false;
+    }
+    notifyListeners();
+    messageText = value;
+  }
+
+  Future setMessage() async {
+    DateTime currentPhoneDate = DateTime.now(); //DateTime
+    Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
+    DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime
+
+    var db = FirebaseFirestore.instance;
+    await db.collection("messages").doc(allChatId).update({
+      'myMessages': FieldValue.arrayUnion([
+        {'text': messageText, 'time': myTimeStamp}
+      ])
+    });
+    messageTextLegal = false;
+    notifyListeners();
+  }
 
   Future getMessagesDB(chatId) async {
     listAllMessages = [];
@@ -22,8 +50,10 @@ class MessageProvider extends ChangeNotifier {
     await db.collection("messages").get().then((value) async {
       for (var doc in value.docs) {
         if (doc.id.contains(chatId)) {
+          allChatId = doc.id;
           await db.collection('messages').doc(doc.id).get().then((value) {
             listMyMessages = value.data()!['myMessages'].map((e) {
+              print(e['time']);
               return MessageBlock(
                   text: e['text'], time: e['time'], myMessage: true);
             }).toList();
@@ -46,11 +76,10 @@ class MessageProvider extends ChangeNotifier {
         }
       }
 
-      var millis = listAllMessages[0].time.seconds * 1000;
-      var dt = DateTime.fromMillisecondsSinceEpoch(millis);
-      var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
+      // var millis = listAllMessages[0].time.seconds * 1000;
+      // var dt = DateTime.fromMillisecondsSinceEpoch(millis);
+      // var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
 
-      print(listAllMessages);
       messageDataIsLoaded = true;
       notifyListeners();
     });

@@ -21,6 +21,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     super.initState();
   }
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
@@ -66,39 +68,42 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
       body: SafeArea(
           child: Stack(
         children: [
-          CustomScrollView(
-            slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: !dataIsLoaded ? 2 : message.messages.length,
-                  ((context, index) {
-                    return Padding(
-                      padding: EdgeInsets.all(mainPadding),
-                      child: Container(
-                        padding: EdgeInsets.all(mainPadding * 2),
-                        margin: EdgeInsets.only(bottom: 5),
-                        decoration: BoxDecoration(
-                          color: mainColor.withAlpha(50),
-                          borderRadius: BorderRadius.circular(15),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 70),
+            child: CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: !dataIsLoaded ? 2 : message.messages.length,
+                    ((context, index) {
+                      return Padding(
+                        padding: EdgeInsets.all(mainPadding),
+                        child: Container(
+                          padding: EdgeInsets.all(mainPadding * 2),
+                          margin: EdgeInsets.only(bottom: 5),
+                          decoration: BoxDecoration(
+                            color: mainColor.withAlpha(50),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: !dataIsLoaded
+                              ? SpinKitWave(
+                                  color: mainColor.withAlpha(50), size: 20.0)
+                              : Row(
+                                  mainAxisAlignment:
+                                      message.messages[index].myMessage == true
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.end,
+                                  children: [
+                                    Text(message.messages[index].text),
+                                  ],
+                                ),
                         ),
-                        child: !dataIsLoaded
-                            ? SpinKitWave(
-                                color: mainColor.withAlpha(50), size: 20.0)
-                            : Row(
-                                mainAxisAlignment:
-                                    message.messages[index].myMessage == true
-                                        ? MainAxisAlignment.start
-                                        : MainAxisAlignment.end,
-                                children: [
-                                  Text(message.messages[index].text),
-                                ],
-                              ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -109,7 +114,10 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                 padding: EdgeInsets.all(mainPadding),
                 color: mainColor,
                 child: TextField(
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    context.read<MessageProvider>().changeMessageText(value);
+                  },
+                  controller: _controller,
                   style: Theme.of(context).textTheme.bodyText1,
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -118,10 +126,22 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                     fillColor: Color.fromARGB(255, 255, 255, 255),
                     prefixIcon: Icon(Icons.add),
                     suffixIcon: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        if (context.read<MessageProvider>().messageTextLegal) {
+                          FocusScope.of(context).unfocus();
+                          context.read<MessageProvider>().setMessage();
+                          _controller.clear();
+                          context
+                              .read<MessageProvider>()
+                              .getMessagesDB(widget.chatId);
+                        }
+                      },
                       child: Icon(
                         Icons.send_rounded,
-                        color: mainColor,
+                        color:
+                            !context.watch<MessageProvider>().messageTextLegal
+                                ? Colors.grey
+                                : mainColor,
                       ),
                     ),
                     label: Text(
