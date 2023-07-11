@@ -64,7 +64,7 @@ class MessageProvider extends ChangeNotifier {
             }).toList();
             listAllMessages = listMyMessages + listHimMessages;
             listAllMessages.sort(((a, b) {
-              return a.time.seconds - b.time.seconds;
+              return b.time.seconds - a.time.seconds;
             }));
 
             message = MessageWrapBlock(

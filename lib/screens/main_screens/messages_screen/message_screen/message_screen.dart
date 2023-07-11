@@ -71,6 +71,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
           Padding(
             padding: const EdgeInsets.only(bottom: 70),
             child: CustomScrollView(
+              reverse: true,
               slivers: [
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
