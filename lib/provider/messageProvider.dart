@@ -24,17 +24,26 @@ class MessageProvider extends ChangeNotifier {
     messageText = value;
   }
 
-  Future setMessage() async {
+  Future setMessage(myMessagesFirst) async {
+    print(myMessagesFirst);
     DateTime currentPhoneDate = DateTime.now(); //DateTime
     Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
     DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime
 
     var db = FirebaseFirestore.instance;
-    await db.collection("messages").doc(allChatId).update({
-      'myMessages': FieldValue.arrayUnion([
-        {'text': messageText, 'time': myTimeStamp}
-      ])
-    });
+    if (myMessagesFirst) {
+      await db.collection("messages").doc(allChatId).update({
+        'firstMessages': FieldValue.arrayUnion([
+          {'text': messageText, 'time': myTimeStamp}
+        ])
+      });
+    } else {
+      await db.collection("messages").doc(allChatId).update({
+        'secondMessages': FieldValue.arrayUnion([
+          {'text': messageText, 'time': myTimeStamp}
+        ])
+      });
+    }
     messageTextLegal = false;
     notifyListeners();
   }
@@ -51,25 +60,40 @@ class MessageProvider extends ChangeNotifier {
       for (var doc in value.docs) {
         if (doc.id.contains(chatId)) {
           allChatId = doc.id;
-          await db.collection('messages').doc(doc.id).get().then((value) {
-            listMyMessages = value.data()!['myMessages'].map((e) {
-              print(e['time']);
-              return MessageBlock(
-                  text: e['text'], time: e['time'], myMessage: true);
-            }).toList();
 
-            listHimMessages = value.data()!['secondMessages'].map((e) {
-              return MessageBlock(
-                  text: e['text'], time: e['time'], myMessage: false);
-            }).toList();
+          await db.collection('messages').doc(doc.id).get().then((value) {
+            if (!doc.id.contains(chatId, 5)) {
+              listMyMessages = value.data()!['secondMessages'].map((e) {
+                return MessageBlock(
+                    text: e['text'], time: e['time'], myMessage: true);
+              }).toList();
+              listHimMessages = value.data()!['firstMessages'].map((e) {
+                return MessageBlock(
+                    text: e['text'], time: e['time'], myMessage: false);
+              }).toList();
+            } else {
+              listMyMessages = value.data()!['firstMessages'].map((e) {
+                return MessageBlock(
+                    text: e['text'], time: e['time'], myMessage: true);
+              }).toList();
+              listHimMessages = value.data()!['secondMessages'].map((e) {
+                return MessageBlock(
+                    text: e['text'], time: e['time'], myMessage: false);
+              }).toList();
+            }
+
             listAllMessages = listMyMessages + listHimMessages;
             listAllMessages.sort(((a, b) {
               return b.time.seconds - a.time.seconds;
             }));
 
             message = MessageWrapBlock(
-              name: value.data()!['user']['name'],
-              id: value.data()!['user']['id'],
+              name: doc.id.contains(chatId, 5)
+                  ? value.data()!['user']['name2']
+                  : value.data()!['user']['name1'],
+              id: doc.id.contains(chatId, 5)
+                  ? value.data()!['user']['id2']
+                  : value.data()!['user']['id1'],
               messages: listAllMessages,
             );
           });

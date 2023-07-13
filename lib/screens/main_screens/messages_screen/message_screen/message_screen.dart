@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/messageProvider.dart';
+import 'package:xlam_app/provider/messagesProvider.dart';
 import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
 
 class MessageScreenWidget extends StatefulWidget {
@@ -27,6 +28,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
+    bool myMessagesFirst = context.read<MessagesProvider>().myMessagesFirst;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -65,112 +68,130 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(),
-      body: SafeArea(
-          child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 70),
-            child: CustomScrollView(
-              reverse: true,
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: !dataIsLoaded ? 2 : message.messages.length,
-                    ((context, index) {
-                      return Padding(
-                        padding: EdgeInsets.all(mainPadding),
-                        child: Container(
-                          padding: EdgeInsets.all(mainPadding * 2),
-                          margin: EdgeInsets.only(bottom: 5),
-                          decoration: BoxDecoration(
-                            color: mainColor.withAlpha(50),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: !dataIsLoaded
-                              ? SpinKitWave(
-                                  color: mainColor.withAlpha(50), size: 20.0)
-                              : Row(
-                                  mainAxisAlignment:
-                                      message.messages[index].myMessage == true
-                                          ? MainAxisAlignment.start
-                                          : MainAxisAlignment.end,
-                                  children: [
-                                    Text(message.messages[index].text),
-                                  ],
+      body: RefreshIndicator(
+        onRefresh: () {
+          context.read<MessageProvider>().getMessagesDB(widget.chatId);
+          setState(() {});
+          return Future((() => true));
+        },
+        child: SafeArea(
+            child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 70),
+              child: CustomScrollView(
+                reverse: true,
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: !dataIsLoaded ? 15 : message.messages.length,
+                      ((context, index) {
+                        return Padding(
+                          padding: EdgeInsets.all(mainPadding),
+                          child: Row(
+                            mainAxisAlignment: dataIsLoaded
+                                ? message.messages[index].myMessage == true
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start
+                                : MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(mainPadding * 2),
+                                margin: EdgeInsets.only(bottom: 5),
+                                decoration: BoxDecoration(
+                                  color: dataIsLoaded
+                                      ? message.messages[index].myMessage ==
+                                              true
+                                          ? mainColor.withAlpha(100)
+                                          : Color.fromARGB(255, 233, 233, 233)
+                                      : Color.fromARGB(255, 221, 221, 221),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                        ),
-                      );
-                    }),
+                                child: !dataIsLoaded
+                                    ? SpinKitWave(
+                                        color: mainColor.withAlpha(50),
+                                        size: 20.0)
+                                    : Text(message.messages[index].text),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(top: mainPadding),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(mainPadding),
-                color: mainColor,
-                child: TextField(
-                  onChanged: (value) {
-                    context.read<MessageProvider>().changeMessageText(value);
-                  },
-                  controller: _controller,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    contentPadding: EdgeInsets.zero,
-                    filled: true,
-                    fillColor: Color.fromARGB(255, 255, 255, 255),
-                    prefixIcon: Icon(Icons.add),
-                    suffixIcon: InkWell(
-                      onTap: () {
-                        if (context.read<MessageProvider>().messageTextLegal) {
-                          FocusScope.of(context).unfocus();
-                          context.read<MessageProvider>().setMessage();
-                          _controller.clear();
-                          context
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: mainPadding),
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(mainPadding),
+                  color: mainColor,
+                  child: TextField(
+                    onChanged: (value) {
+                      context.read<MessageProvider>().changeMessageText(value);
+                    },
+                    controller: _controller,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      contentPadding: EdgeInsets.zero,
+                      filled: true,
+                      fillColor: Color.fromARGB(255, 255, 255, 255),
+                      prefixIcon: Icon(Icons.add),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          if (context
                               .read<MessageProvider>()
-                              .getMessagesDB(widget.chatId);
-                        }
-                      },
-                      child: Icon(
-                        Icons.send_rounded,
-                        color:
-                            !context.watch<MessageProvider>().messageTextLegal
-                                ? Colors.grey
-                                : mainColor,
+                              .messageTextLegal) {
+                            FocusScope.of(context).unfocus();
+                            context
+                                .read<MessageProvider>()
+                                .setMessage(myMessagesFirst);
+                            _controller.clear();
+                            context
+                                .read<MessageProvider>()
+                                .getMessagesDB(widget.chatId);
+                          }
+                        },
+                        child: Icon(
+                          Icons.send_rounded,
+                          color:
+                              !context.watch<MessageProvider>().messageTextLegal
+                                  ? Colors.grey
+                                  : mainColor,
+                        ),
                       ),
-                    ),
-                    label: Text(
-                      'Написать сообщение',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide: BorderSide(
-                          // color: context
-                          //         .read<AccountProvider>()
-                          //         .nameIsLegal
-                          //     ? Colors.transparent
-                          //     : Colors.red,
-                          width: 0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide:
-                          BorderSide(color: Colors.transparent, width: 0),
+                      label: Text(
+                        'Написать сообщение',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                        borderSide: BorderSide(
+                            // color: context
+                            //         .read<AccountProvider>()
+                            //         .nameIsLegal
+                            //     ? Colors.transparent
+                            //     : Colors.red,
+                            width: 0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                        borderSide:
+                            BorderSide(color: Colors.transparent, width: 0),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 }

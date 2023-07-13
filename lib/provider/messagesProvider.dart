@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class MessagesProvider extends ChangeNotifier {
   List listChats = [];
   bool messagesDataIsLoaded = false;
+  bool myMessagesFirst = false;
 
   Future getChatsDB(userId) async {
     listChats = [];
@@ -13,10 +14,18 @@ class MessagesProvider extends ChangeNotifier {
     await db.collection("messages").get().then((value) async {
       for (var doc in value.docs) {
         if (doc.id.contains(userId)) {
+          doc.id.contains(userId, 5)
+              ? myMessagesFirst = false
+              : myMessagesFirst = true;
+
           await db.collection('messages').doc(doc.id).get().then((value) {
             listChats.add(MessageBlock(
-              name: value.data()!['user']['name'],
-              id: value.data()!['user']['id'],
+              name: doc.id.contains(userId, 5)
+                  ? value.data()!['user']['name1']
+                  : value.data()!['user']['name2'],
+              id: (doc.id.contains(userId, 5))
+                  ? value.data()!['user']['id1']
+                  : value.data()!['user']['id2'],
             ));
           });
         }
