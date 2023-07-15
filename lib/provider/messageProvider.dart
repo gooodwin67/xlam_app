@@ -20,7 +20,7 @@ class MessageProvider extends ChangeNotifier {
     } else {
       messageTextLegal = false;
     }
-    notifyListeners();
+
     messageText = value;
   }
 
