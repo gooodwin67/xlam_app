@@ -25,7 +25,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future setMessage(myMessagesFirst) async {
-    print(myMessagesFirst);
+    //print(myMessagesFirst);
     DateTime currentPhoneDate = DateTime.now(); //DateTime
     Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
     DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime

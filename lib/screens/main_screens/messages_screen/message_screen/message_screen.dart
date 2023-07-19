@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/messageProvider.dart';
@@ -33,7 +34,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
     bool myMessagesFirst = context.read<MessagesProvider>().myMessagesFirst;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -98,14 +98,17 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                 return const Text('Something went wrong');
                               }
 
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Text("Loading");
-                              }
-                              print(2);
-                              // context
-                              //     .read<MessageProvider>()
-                              //     .getMessagesDB(widget.chatId);
+                              // if (snapshot.connectionState ==
+                              //     ConnectionState.waiting) {
+                              //   return const Text("Loading");
+                              // }
+                              // snapshot.data!.docs.map((e) {
+                              //   print(111);
+                              //   print(e);
+                              // });
+                              context
+                                  .read<MessageProvider>()
+                                  .getMessagesDB(widget.chatId);
                               return Padding(
                                 padding: EdgeInsets.all(mainPadding),
                                 child: Row(
@@ -116,26 +119,53 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                           : MainAxisAlignment.start
                                       : MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.all(mainPadding * 2),
-                                      margin: EdgeInsets.only(bottom: 5),
-                                      decoration: BoxDecoration(
-                                        color: dataIsLoaded
-                                            ? message.messages[index]
-                                                        .myMessage ==
-                                                    true
-                                                ? mainColor.withAlpha(100)
+                                    Column(
+                                      crossAxisAlignment: dataIsLoaded
+                                          ? message.messages[index].myMessage ==
+                                                  true
+                                              ? CrossAxisAlignment.end
+                                              : CrossAxisAlignment.start
+                                          : CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.all(mainPadding * 2),
+                                          margin: EdgeInsets.only(bottom: 5),
+                                          decoration: BoxDecoration(
+                                            color: dataIsLoaded
+                                                ? message.messages[index]
+                                                            .myMessage ==
+                                                        true
+                                                    ? mainColor.withAlpha(100)
+                                                    : Color.fromARGB(
+                                                        255, 233, 233, 233)
                                                 : Color.fromARGB(
-                                                    255, 233, 233, 233)
-                                            : Color.fromARGB(
-                                                255, 221, 221, 221),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: !dataIsLoaded
-                                          ? SpinKitWave(
-                                              color: mainColor.withAlpha(50),
-                                              size: 20.0)
-                                          : Text(message.messages[index].text),
+                                                    255, 221, 221, 221),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: !dataIsLoaded
+                                              ? SpinKitWave(
+                                                  color:
+                                                      mainColor.withAlpha(50),
+                                                  size: 20.0)
+                                              : Text(
+                                                  message.messages[index].text),
+                                        ),
+                                        !dataIsLoaded
+                                            ? SpinKitWave(
+                                                color: mainColor.withAlpha(50),
+                                                size: 5.0)
+                                            : Text(
+                                                DateFormat(
+                                                        "dd. MM. yyyy HH:mm:ss")
+                                                    .format(message
+                                                        .messages[index].time
+                                                        .toDate())
+                                                    .toString(),
+                                                style: TextStyle(fontSize: 12),
+                                              )
+                                      ],
                                     ),
                                   ],
                                 ),
