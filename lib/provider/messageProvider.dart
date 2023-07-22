@@ -86,11 +86,11 @@ class MessageProvider extends ChangeNotifier {
 
             listAllMessages = listMyMessages + listHimMessages;
 
-            // if (listAllMessages.length > 0) {
-            //   listAllMessages.sort(((a, b) {
-            //     return b.time.seconds - a.time.seconds;
-            //   }));
-            // }
+            if (listAllMessages.length > 0) {
+              listAllMessages.sort(((a, b) {
+                return b.time.seconds - a.time.seconds;
+              }));
+            }
 
             message = MessageWrapBlock(
               name: doc.id.contains(chatId, 5)
