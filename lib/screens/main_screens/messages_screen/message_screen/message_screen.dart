@@ -34,6 +34,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
     bool myMessagesFirst = context.read<MessagesProvider>().myMessagesFirst;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

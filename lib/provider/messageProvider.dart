@@ -67,6 +67,7 @@ class MessageProvider extends ChangeNotifier {
                 return MessageBlock(
                     text: e['text'], time: e['time'], myMessage: true);
               }).toList();
+
               listHimMessages = value.data()!['firstMessages'].map((e) {
                 return MessageBlock(
                     text: e['text'], time: e['time'], myMessage: false);
@@ -76,6 +77,7 @@ class MessageProvider extends ChangeNotifier {
                 return MessageBlock(
                     text: e['text'], time: e['time'], myMessage: true);
               }).toList();
+
               listHimMessages = value.data()!['secondMessages'].map((e) {
                 return MessageBlock(
                     text: e['text'], time: e['time'], myMessage: false);
@@ -83,9 +85,12 @@ class MessageProvider extends ChangeNotifier {
             }
 
             listAllMessages = listMyMessages + listHimMessages;
-            listAllMessages.sort(((a, b) {
-              return b.time.seconds - a.time.seconds;
-            }));
+
+            // if (listAllMessages.length > 0) {
+            //   listAllMessages.sort(((a, b) {
+            //     return b.time.seconds - a.time.seconds;
+            //   }));
+            // }
 
             message = MessageWrapBlock(
               name: doc.id.contains(chatId, 5)

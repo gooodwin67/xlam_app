@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
@@ -99,6 +100,16 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     print(prod[0].idUser);
+                                    print(context.read<MainProvider>().userId);
+                                    print(context
+                                        .read<AccountProvider>()
+                                        .userName);
+                                    context
+                                        .read<ProdScreenProvider>()
+                                        .setDialog(
+                                            context.read<MainProvider>().userId,
+                                            prod[0].idUser,
+                                            prod[0].nameUser);
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:

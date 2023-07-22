@@ -12,6 +12,22 @@ class ProdScreenProvider extends ChangeNotifier {
   String docPhoto = '';
   String docName = '';
   bool myProd = false;
+  String myName = '';
+
+  Future setDialog(id1, id2, name2) async {
+    var db = FirebaseFirestore.instance;
+
+    await db.collection("users").doc(id1).get().then((value) {
+      myName = value.data()!['name'];
+    });
+    await db.collection("messages").doc('$id1-xl-$id2').set(
+      {
+        'user': {'id1': id1, 'id2': id2, 'name1': myName, 'name2': name2},
+        'firstMessages': {},
+        'secondMessages': {},
+      },
+    );
+  }
 
   Future getAllProds(userId, prodId) async {
     dataIsLoaded = false;
