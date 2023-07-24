@@ -13,20 +13,37 @@ class ProdScreenProvider extends ChangeNotifier {
   String docName = '';
   bool myProd = false;
   String myName = '';
+  int dialogIsEnabled = 0;
 
   Future setDialog(id1, id2, name2) async {
     var db = FirebaseFirestore.instance;
 
-    await db.collection("users").doc(id1).get().then((value) {
-      myName = value.data()!['name'];
+    await db.collection("messages").get().then((value) {
+      for (var doc in value.docs) {
+        if (doc.id.contains(id2)) {
+          print('----${doc.id}');
+          print('----${id2}');
+          if (doc.id.contains(id2, 5)) {
+            dialogIsEnabled = 2;
+          } else {
+            dialogIsEnabled = 1;
+          }
+        }
+      }
     });
-    await db.collection("messages").doc('$id1-xl-$id2').set(
-      {
-        'user': {'id1': id1, 'id2': id2, 'name1': myName, 'name2': name2},
-        'firstMessages': {},
-        'secondMessages': {},
-      },
-    );
+
+    if (dialogIsEnabled == 0) {
+      await db.collection("users").doc(id1).get().then((value) {
+        myName = value.data()!['name'];
+      });
+      await db.collection("messages").doc('$id1-xl-$id2').set(
+        {
+          'user': {'id1': id1, 'id2': id2, 'name1': myName, 'name2': name2},
+          'firstMessages': [],
+          'secondMessages': [],
+        },
+      );
+    } else {}
   }
 
   Future getAllProds(userId, prodId) async {

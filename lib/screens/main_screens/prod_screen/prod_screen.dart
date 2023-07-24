@@ -100,16 +100,31 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     print(prod[0].idUser);
-                                    print(context.read<MainProvider>().userId);
-                                    print(context
-                                        .read<AccountProvider>()
-                                        .userName);
+                                    //print(context.read<MainProvider>().userId);
                                     context
                                         .read<ProdScreenProvider>()
                                         .setDialog(
                                             context.read<MainProvider>().userId,
                                             prod[0].idUser,
-                                            prod[0].nameUser);
+                                            prod[0].nameUser)
+                                        .then((value) {
+                                      print(context
+                                          .read<ProdScreenProvider>()
+                                          .dialogIsEnabled);
+                                      if (context
+                                              .read<ProdScreenProvider>()
+                                              .dialogIsEnabled ==
+                                          2) {
+                                        context.go(
+                                            '/main/messages/${context.read<MainProvider>().userId}-xl-${prod[0].idUser}');
+                                      } else if (context
+                                              .read<ProdScreenProvider>()
+                                              .dialogIsEnabled ==
+                                          1) {
+                                        context.go(
+                                            '/main/messages/${prod[0].idUser}-xl-${context.read<MainProvider>().userId}');
+                                      }
+                                    });
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:
