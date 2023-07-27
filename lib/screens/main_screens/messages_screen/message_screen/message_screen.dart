@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/messageProvider.dart';
 import 'package:xlam_app/provider/messagesProvider.dart';
 import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
@@ -20,7 +21,9 @@ class MessageScreenWidget extends StatefulWidget {
 class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   @override
   void initState() {
-    context.read<MessageProvider>().getMessagesDB(widget.chatId);
+    context
+        .read<MessageProvider>()
+        .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
     super.initState();
   }
 
@@ -75,7 +78,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
       bottomNavigationBar: BottomNavBar(),
       body: RefreshIndicator(
         onRefresh: () {
-          context.read<MessageProvider>().getMessagesDB(widget.chatId);
+          context.read<MessageProvider>().getMessagesDB(
+              widget.chatId, context.read<MainProvider>().userId);
           setState(() {});
           return Future((() => true));
         },
@@ -107,9 +111,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                               //   print(111);
                               //   print(e);
                               // });
-                              context
-                                  .read<MessageProvider>()
-                                  .getMessagesDB(widget.chatId);
+                              context.read<MessageProvider>().getMessagesDB(
+                                  widget.chatId,
+                                  context.read<MainProvider>().userId);
                               return Padding(
                                 padding: EdgeInsets.all(mainPadding),
                                 child: Row(
@@ -204,13 +208,11 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                               .read<MessageProvider>()
                               .messageTextLegal) {
                             FocusScope.of(context).unfocus();
-                            context
-                                .read<MessageProvider>()
-                                .setMessage(myMessagesFirst);
+                            context.read<MessageProvider>().setMessage();
                             _controller.clear();
-                            context
-                                .read<MessageProvider>()
-                                .getMessagesDB(widget.chatId);
+                            context.read<MessageProvider>().getMessagesDB(
+                                widget.chatId,
+                                context.read<MainProvider>().userId);
                           }
                         },
                         child: Icon(

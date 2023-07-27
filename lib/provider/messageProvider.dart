@@ -13,6 +13,7 @@ class MessageProvider extends ChangeNotifier {
   String allChatId = '';
   String messageText = '';
   bool messageTextLegal = false;
+  bool myMessagesFirst = false;
 
   changeMessageText(value) {
     if (value != '') {
@@ -24,7 +25,7 @@ class MessageProvider extends ChangeNotifier {
     messageText = value;
   }
 
-  Future setMessage(myMessagesFirst) async {
+  Future setMessage() async {
     //print(myMessagesFirst);
     DateTime currentPhoneDate = DateTime.now(); //DateTime
     Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
@@ -48,7 +49,7 @@ class MessageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getMessagesDB(chatId) async {
+  Future getMessagesDB(chatId, myId) async {
     listAllMessages = [];
     listMyMessages = [];
     listHimMessages = [];
@@ -58,8 +59,12 @@ class MessageProvider extends ChangeNotifier {
 
     await db.collection("messages").get().then((value) async {
       for (var doc in value.docs) {
-        if (doc.id.contains(chatId)) {
+        if (doc.id.contains(chatId) && doc.id.contains(myId)) {
           allChatId = doc.id;
+          print(allChatId);
+          doc.id.contains(myId, 5)
+              ? myMessagesFirst = false
+              : myMessagesFirst = true;
 
           await db.collection('messages').doc(doc.id).get().then((value) {
             if (!doc.id.contains(chatId, 5)) {

@@ -15,14 +15,13 @@ class ProdScreenProvider extends ChangeNotifier {
   String myName = '';
   int dialogIsEnabled = 0;
 
-  Future setDialog(id1, id2, name2) async {
+  Future checkDialog(id1, id2, name2) async {
     var db = FirebaseFirestore.instance;
 
     await db.collection("messages").get().then((value) {
+      dialogIsEnabled = 0;
       for (var doc in value.docs) {
-        if (doc.id.contains(id2)) {
-          print('----${doc.id}');
-          print('----${id2}');
+        if (doc.id.contains(id2) && doc.id.contains(id1)) {
           if (doc.id.contains(id2, 5)) {
             dialogIsEnabled = 2;
           } else {
@@ -31,6 +30,10 @@ class ProdScreenProvider extends ChangeNotifier {
         }
       }
     });
+  }
+
+  Future setDialog(id1, id2, name2) async {
+    var db = FirebaseFirestore.instance;
 
     if (dialogIsEnabled == 0) {
       await db.collection("users").doc(id1).get().then((value) {
