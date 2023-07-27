@@ -99,9 +99,8 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                 color: mainColor.withAlpha(50), size: 20.0)
                             : InkWell(
                                 onTap: () {
-                                  print(messagesList[index].id);
                                   context.go(
-                                      '/main/messages/${messagesList[index].id}');
+                                      '/main/messages/${messagesList[index].id}-xl-${messagesList[index].id2}');
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(mainPadding),

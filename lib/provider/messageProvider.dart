@@ -54,20 +54,25 @@ class MessageProvider extends ChangeNotifier {
     listMyMessages = [];
     listHimMessages = [];
     messageDataIsLoaded = false;
+    String himId = '';
+    chatId.contains(myId, 5)
+        ? himId = chatId.split('-')[0]
+        : himId = chatId.split('-')[2];
+    print('3333 $chatId');
 
     var db = FirebaseFirestore.instance;
 
     await db.collection("messages").get().then((value) async {
       for (var doc in value.docs) {
-        if (doc.id.contains(chatId) && doc.id.contains(myId)) {
+        if (doc.id.contains(himId) && doc.id.contains(myId)) {
           allChatId = doc.id;
-          print(allChatId);
+
           doc.id.contains(myId, 5)
               ? myMessagesFirst = false
               : myMessagesFirst = true;
 
           await db.collection('messages').doc(doc.id).get().then((value) {
-            if (!doc.id.contains(chatId, 5)) {
+            if (!doc.id.contains(himId, 5)) {
               listMyMessages = value.data()!['secondMessages'].map((e) {
                 return MessageBlock(
                     text: e['text'], time: e['time'], myMessage: true);
@@ -98,10 +103,10 @@ class MessageProvider extends ChangeNotifier {
             }
 
             message = MessageWrapBlock(
-              name: doc.id.contains(chatId, 5)
+              name: doc.id.contains(himId, 5)
                   ? value.data()!['user']['name2']
                   : value.data()!['user']['name1'],
-              id: doc.id.contains(chatId, 5)
+              id: doc.id.contains(himId, 5)
                   ? value.data()!['user']['id2']
                   : value.data()!['user']['id1'],
               messages: listAllMessages,

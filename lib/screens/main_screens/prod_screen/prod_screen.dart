@@ -124,54 +124,50 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                         showModalBottomSheet(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return Container(
-                                                padding:
-                                                    EdgeInsets.all(mainPadding),
-                                                child: TextField(
-                                                  onChanged: (value) {
-                                                    context
-                                                        .read<MessageProvider>()
-                                                        .changeMessageText(
-                                                            value);
-                                                  },
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1,
-                                                  decoration: InputDecoration(
-                                                    floatingLabelBehavior:
-                                                        FloatingLabelBehavior
-                                                            .never,
-                                                    contentPadding:
-                                                        EdgeInsets.zero,
-                                                    filled: true,
-                                                    fillColor: Color.fromARGB(
-                                                        255, 255, 255, 255),
-                                                    prefixIcon: Icon(Icons.add),
-                                                    suffixIcon: InkWell(
-                                                      onTap: () {
-                                                        if (context
-                                                            .read<
-                                                                MessageProvider>()
-                                                            .messageTextLegal) {
-                                                          FocusScope.of(context)
-                                                              .unfocus();
-                                                          context
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: Container(
+                                                  padding: EdgeInsets.all(
+                                                      mainPadding),
+                                                  child: TextField(
+                                                    onChanged: (value) {
+                                                      context
+                                                          .read<
+                                                              MessageProvider>()
+                                                          .changeMessageText(
+                                                              value);
+                                                    },
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1,
+                                                    decoration: InputDecoration(
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .never,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      filled: true,
+                                                      fillColor: Color.fromARGB(
+                                                          255, 255, 255, 255),
+                                                      prefixIcon:
+                                                          Icon(Icons.add),
+                                                      suffixIcon: InkWell(
+                                                        onTap: () {
+                                                          if (context
                                                               .read<
-                                                                  ProdScreenProvider>()
-                                                              .setDialog(
-                                                                  context
-                                                                      .read<
-                                                                          MainProvider>()
-                                                                      .userId,
-                                                                  prod[0]
-                                                                      .idUser,
-                                                                  prod[0]
-                                                                      .nameUser)
-                                                              .then((value) {
+                                                                  MessageProvider>()
+                                                              .messageTextLegal) {
+                                                            FocusScope.of(
+                                                                    context)
+                                                                .unfocus();
                                                             context
                                                                 .read<
                                                                     ProdScreenProvider>()
-                                                                .checkDialog(
+                                                                .setDialog(
                                                                     context
                                                                         .read<
                                                                             MainProvider>()
@@ -183,94 +179,90 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                                                 .then((value) {
                                                               context
                                                                   .read<
-                                                                      MessageProvider>()
-                                                                  .getMessagesDB(
-                                                                      prod[0]
-                                                                          .idUser,
+                                                                      ProdScreenProvider>()
+                                                                  .checkDialog(
                                                                       context
                                                                           .read<
                                                                               MainProvider>()
-                                                                          .userId)
+                                                                          .userId,
+                                                                      prod[0]
+                                                                          .idUser,
+                                                                      prod[0]
+                                                                          .nameUser)
                                                                   .then(
                                                                       (value) {
+                                                                print(
+                                                                    '1111 ${prod[0].idUser}');
                                                                 context
                                                                     .read<
                                                                         MessageProvider>()
-                                                                    .setMessage();
-                                                                if (context
-                                                                        .read<
-                                                                            ProdScreenProvider>()
-                                                                        .dialogIsEnabled ==
-                                                                    2) {
+                                                                    .getMessagesDB(
+                                                                        '${context.read<MainProvider>().userId}-xl-' +
+                                                                            prod[0]
+                                                                                .idUser,
+                                                                        context
+                                                                            .read<
+                                                                                MainProvider>()
+                                                                            .userId)
+                                                                    .then(
+                                                                        (value) {
                                                                   context
                                                                       .read<
                                                                           MessageProvider>()
-                                                                      .getMessagesDB(
-                                                                          prod[0]
-                                                                              .idUser,
-                                                                          context
-                                                                              .read<
-                                                                                  MainProvider>()
-                                                                              .userId)
-                                                                      .then((value) =>
-                                                                          context
-                                                                              .go('/main/messages/${context.read<MainProvider>().userId}-xl-${prod[0].idUser}'));
-                                                                } else if (context
-                                                                        .read<
-                                                                            ProdScreenProvider>()
-                                                                        .dialogIsEnabled ==
-                                                                    1) {
-                                                                  context
-                                                                      .read<
-                                                                          MessageProvider>()
-                                                                      .getMessagesDB(
-                                                                          prod[0]
-                                                                              .idUser,
-                                                                          context
-                                                                              .read<
-                                                                                  MainProvider>()
-                                                                              .userId)
-                                                                      .then((value) =>
-                                                                          context
-                                                                              .go('/main/messages/${prod[0].idUser}-xl-${context.read<MainProvider>().userId}'));
-                                                                }
+                                                                      .setMessage();
+                                                                  if (context
+                                                                          .read<
+                                                                              ProdScreenProvider>()
+                                                                          .dialogIsEnabled ==
+                                                                      2) {
+                                                                    context.go(
+                                                                        '/main/messages/${context.read<MainProvider>().userId}-xl-${prod[0].idUser}');
+                                                                  } else if (context
+                                                                          .read<
+                                                                              ProdScreenProvider>()
+                                                                          .dialogIsEnabled ==
+                                                                      1) {
+                                                                    context.go(
+                                                                        '/main/messages/${prod[0].idUser}-xl-${context.read<MainProvider>().userId}');
+                                                                  }
+                                                                });
                                                               });
                                                             });
-                                                          });
-                                                        }
-                                                      },
-                                                      child: Icon(
-                                                        Icons.send_rounded,
+                                                          }
+                                                        },
+                                                        child: Icon(
+                                                          Icons.send_rounded,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    label: Text(
-                                                      'Написать сообщение',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1,
-                                                    ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      borderSide: BorderSide(
-                                                          // color: context
-                                                          //         .read<AccountProvider>()
-                                                          //         .nameIsLegal
-                                                          //     ? Colors.transparent
-                                                          //     : Colors.red,
-                                                          width: 0),
-                                                    ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: 0),
+                                                      label: Text(
+                                                        'Написать сообщение',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1,
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        borderSide: BorderSide(
+                                                            // color: context
+                                                            //         .read<AccountProvider>()
+                                                            //         .nameIsLegal
+                                                            //     ? Colors.transparent
+                                                            //     : Colors.red,
+                                                            width: 0),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                            width: 0),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

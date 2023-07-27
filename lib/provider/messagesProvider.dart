@@ -26,6 +26,9 @@ class MessagesProvider extends ChangeNotifier {
               id: (doc.id.contains(userId, 5))
                   ? value.data()!['user']['id1']
                   : value.data()!['user']['id2'],
+              id2: (doc.id.contains(userId, 5))
+                  ? value.data()!['user']['id2']
+                  : value.data()!['user']['id1'],
             ));
           });
         }
@@ -39,5 +42,6 @@ class MessagesProvider extends ChangeNotifier {
 class MessageBlock {
   String name;
   String id;
-  MessageBlock({required this.name, required this.id});
+  String id2;
+  MessageBlock({required this.name, required this.id, required this.id2});
 }

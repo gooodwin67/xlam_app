@@ -24,6 +24,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     context
         .read<MessageProvider>()
         .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
+    print('22222 ${widget.chatId}');
+
     super.initState();
   }
 
