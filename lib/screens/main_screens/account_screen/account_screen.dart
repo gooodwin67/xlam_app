@@ -77,6 +77,7 @@ class AccountScreenWidget extends StatelessWidget {
                         onTap: () async {
                           await FirebaseAuth.instance.signOut();
                           Future.delayed(Duration(milliseconds: 500), () {
+                            context.read<BottomBarProvider>().onItemTapped(0);
                             print('вышли');
                             context.go('/');
                           });
