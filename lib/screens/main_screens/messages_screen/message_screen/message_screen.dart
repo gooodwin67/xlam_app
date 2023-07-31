@@ -212,9 +212,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                             FocusScope.of(context).unfocus();
                             context.read<MessageProvider>().setMessage();
                             _controller.clear();
-                            context.read<MessageProvider>().getMessagesDB(
-                                widget.chatId,
-                                context.read<MainProvider>().userId);
                           }
                         },
                         child: Icon(
