@@ -9,9 +9,11 @@ class RegistrationScreenProvider extends ChangeNotifier {
   String password2 = '';
   bool passCorrect = false;
   bool isNameCorrect = false;
+  bool isCityCorrect = false;
   bool isRegistering = false;
   bool registerDone = false;
   int isRegisterError = 0;
+  String city = '';
 
   tryRegister() async {
     isRegisterError = 0;
@@ -38,6 +40,7 @@ class RegistrationScreenProvider extends ChangeNotifier {
             'id': user.uid,
             'name': name,
             'userProdInc': 0,
+            'city': city,
           });
         }
       });
@@ -76,6 +79,17 @@ class RegistrationScreenProvider extends ChangeNotifier {
     password2 != '' && password2 == password && login != ''
         ? passCorrect = true
         : passCorrect = false;
+    notifyListeners();
+  }
+
+  editCity(value) {
+    city = value;
+    isRegisterError = 0;
+    if (city != '')
+      isCityCorrect = true;
+    else
+      isCityCorrect = false;
+
     notifyListeners();
   }
 

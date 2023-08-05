@@ -20,35 +20,37 @@ final router = GoRouter(
       builder: (context, state) {
         return const LoginScreenWidget();
       },
-      redirect: (context, state) async {
-        await context.read<MainProvider>().isLogining();
-        if (context.read<MainProvider>().isLogin == true) {
-          print('userIsLogged');
-          return '/main';
-        } else {
-          print('notLogged');
-          return null;
-        }
-      },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'login',
-          builder: (BuildContext context, GoRouterState state) {
-            return const LoginPassEnterScreen();
-          },
-        ),
-        GoRoute(
-          path: 'registration',
-          builder: (BuildContext context, GoRouterState state) {
-            return const RegistrationScreen();
-          },
-        ),
-      ],
+      // redirect: (context, state) async {
+      //   await context.read<MainProvider>().isLogining();
+      //   // if (context.read<MainProvider>().isLogin == true) {
+      //   //   print('userIsLogged');
+      //   //   return '/main';
+      //   // } else {
+      //   //   print('notLogged');
+      //   //   return null;
+      //   // }
+      //   print('userIsLogged');
+      //   return '/main';
+      // },
+      routes: <RouteBase>[],
     ),
     GoRoute(
         path: '/main',
         builder: (context, state) => MainScreenWidget(),
         routes: [
+          GoRoute(
+              path: 'login',
+              builder: (BuildContext context, GoRouterState state) {
+                return const LoginPassEnterScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: 'registration',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const RegistrationScreen();
+                  },
+                ),
+              ]),
           GoRoute(
             path: 'account',
             builder: (BuildContext context, GoRouterState state) {

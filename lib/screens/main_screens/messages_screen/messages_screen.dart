@@ -78,12 +78,13 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                               .titleLarge!
                               .copyWith(fontSize: 25),
                         ),
-                        InkWell(
-                          child: Icon(
-                            Icons.power_settings_new,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        // InkWell(
+                        //   child: Icon(
+                        //     Icons.power_settings_new,
+                        //     color: Colors.grey,
+                        //   ),
+                        // ),
+                        SizedBox(width: 15),
                       ],
                     ),
                   ),

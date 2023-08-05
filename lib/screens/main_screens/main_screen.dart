@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
+import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
 import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
 import 'package:xlam_app/screens/main_screens/category_block.dart';
@@ -18,14 +19,12 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   void initState() {
-    context
-        .read<MainScreenProvider>()
-        .getAllDb(context.read<MainScreenProvider>().activeCategory);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    //context.read<BottomBarProvider>().onItemTapped(0);
     List productList = context.read<MainScreenProvider>().products;
     bool dataIsLoaded = context.watch<MainScreenProvider>().dataIsLoaded;
     String nameCategory = context.read<MainScreenProvider>().nameCategory;
@@ -75,13 +74,22 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                         ),
                         InkWell(
                           onTap: () {
-                            context.read<BottomBarProvider>().onItemTapped(2);
-                            context.go('/main/account');
+                            if (context.read<MainProvider>().isLogin == true) {
+                              context.read<BottomBarProvider>().onItemTapped(2);
+                              context.go('/main/account');
+                            } else {
+                              context.go('/main/login');
+                            }
                           },
-                          child: const Icon(
-                            Icons.manage_accounts_outlined,
-                            color: Colors.grey,
-                          ),
+                          child: context.read<MainProvider>().isLogin == true
+                              ? const Icon(
+                                  Icons.manage_accounts_outlined,
+                                  color: Colors.grey,
+                                )
+                              : const Icon(
+                                  Icons.person_add_alt_outlined,
+                                  color: Colors.grey,
+                                ),
                         ),
                       ],
                     ),

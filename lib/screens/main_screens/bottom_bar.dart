@@ -19,8 +19,12 @@ class BottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(
             icon: Icon(Icons.message_outlined), label: 'Messages'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined), label: 'Account'),
+        context.read<MainProvider>().isLogin == true
+            ? BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_outlined), label: 'Account')
+            : BottomNavigationBarItem(
+                icon: Icon(Icons.person_add_alt_outlined),
+                label: 'Login/Register'),
       ],
       currentIndex: selectedItem,
       onTap: ((value) {
@@ -32,16 +36,19 @@ class BottomNavBar extends StatelessWidget {
           context.go('/main');
         }
         if (value == 1) {
-          // context
-          //     .read<AccountProvider>()
-          //     .getDb(context.read<MainProvider>().userId);
-          context.go('/main/messages');
+          if (context.read<MainProvider>().isLogin == true) {
+            context.go('/main/messages');
+          } else {
+            context.go('/main/login');
+          }
         }
         if (value == 2) {
-          context
-              .read<AccountProvider>()
-              .getDb(context.read<MainProvider>().userId);
-          context.go('/main/account');
+          if (context.read<MainProvider>().isLogin == true) {
+            context.read<BottomBarProvider>().onItemTapped(2);
+            context.go('/main/account');
+          } else {
+            context.go('/main/login');
+          }
         }
       }),
     );

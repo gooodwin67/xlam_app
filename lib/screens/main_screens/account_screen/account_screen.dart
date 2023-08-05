@@ -22,6 +22,7 @@ class AccountScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
     String userName = context.read<AccountProvider>().userName;
+    String userCity = context.read<AccountProvider>().userCity;
 
     List productList = context.read<AccountProvider>().productsList;
     bool dataIsLoaded = context.watch<AccountProvider>().dataIsLoaded;
@@ -79,7 +80,8 @@ class AccountScreenWidget extends StatelessWidget {
                           Future.delayed(Duration(milliseconds: 500), () {
                             context.read<BottomBarProvider>().onItemTapped(0);
                             print('вышли');
-                            context.go('/');
+                            context.read<MainProvider>().isLogining();
+                            context.go('/main');
                           });
                         },
                         child: Icon(
@@ -95,7 +97,7 @@ class AccountScreenWidget extends StatelessWidget {
                 padding: EdgeInsets.only(
                     bottom: 10, left: mainPadding, right: mainPadding),
                 sliver: SliverAppBar(
-                  toolbarHeight: 90,
+                  toolbarHeight: 120,
                   elevation: 0,
                   floating: true,
                   pinned: false,
@@ -104,7 +106,7 @@ class AccountScreenWidget extends StatelessWidget {
                   automaticallyImplyLeading: false,
                   titleSpacing: 0,
                   title: Container(
-                    height: 100,
+                    height: 130,
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,6 +123,23 @@ class AccountScreenWidget extends StatelessWidget {
                                 child: Text(
                                   userName,
                                   style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                        SizedBox(height: 10),
+                        !dataIsLoaded
+                            ? Container(
+                                height: 30,
+                                child: SpinKitWave(
+                                    color: mainColor.withAlpha(100),
+                                    size: 30.0),
+                              )
+                            : Container(
+                                height: 30,
+                                child: Text(
+                                  userCity,
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 77, 77, 77),
+                                      fontSize: 15),
                                 ),
                               ),
                         AddProductButton(),

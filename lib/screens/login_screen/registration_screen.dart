@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
+import 'package:xlam_app/provider/bottomBarProvider.dart';
 
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({super.key});
@@ -14,6 +15,8 @@ class RegistrationScreen extends StatelessWidget {
     bool passCorrect = context.watch<RegistrationScreenProvider>().passCorrect;
     bool isNameCorrect =
         context.watch<RegistrationScreenProvider>().isNameCorrect;
+    bool isCityCorrect =
+        context.watch<RegistrationScreenProvider>().isCityCorrect;
     int isRegisterError =
         context.watch<RegistrationScreenProvider>().isRegisterError;
 
@@ -30,7 +33,7 @@ class RegistrationScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   children: [
                     InkWell(
-                      onTap: () => context.go('/'),
+                      onTap: () => context.pop(),
                       child: const Icon(
                         Icons.chevron_left,
                         color: Colors.white,
@@ -128,6 +131,44 @@ class RegistrationScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 15),
+                      DropdownButtonFormField(
+                        hint: Padding(
+                          padding: const EdgeInsets.only(left: 0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_city_outlined),
+                              Text('Выберите город',
+                                  style: Theme.of(context).textTheme.bodyText1),
+                            ],
+                          ),
+                        ),
+                        style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: Colors.black),
+                        items: cities
+                            .map((e) => DropdownMenuItem(
+                                  child: Text(
+                                    e,
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                  value: e,
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          context
+                              .read<RegistrationScreenProvider>()
+                              .editCity(value);
+                        },
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.only(top: 0, bottom: 0, left: 20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          filled: true,
+                        ),
+                      ),
+                      SizedBox(height: 15),
                       Container(
                         height: 43,
                         child: TextField(
@@ -209,7 +250,8 @@ class RegistrationScreen extends StatelessWidget {
                       ElevatedButton(
                         onPressed: RegisteringNow == false &&
                                 passCorrect == true &&
-                                isNameCorrect == true
+                                isNameCorrect == true &&
+                                isCityCorrect == true
                             ? () async {
                                 await context
                                     .read<RegistrationScreenProvider>()
@@ -232,8 +274,12 @@ class RegistrationScreen extends StatelessWidget {
                                                 'Вы успешно зарегистрировались в приложении'),
                                             actions: <Widget>[
                                               TextButton(
-                                                onPressed: () =>
-                                                    context.go('/main'),
+                                                onPressed: () {
+                                                  context
+                                                      .read<BottomBarProvider>()
+                                                      .onItemTapped(0);
+                                                  context.go('/main');
+                                                },
                                                 child: const Text('Продолжить'),
                                               ),
                                             ],
@@ -254,7 +300,8 @@ class RegistrationScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: RegisteringNow == false &&
                                     passCorrect == true &&
-                                    isNameCorrect == true
+                                    isNameCorrect == true &&
+                                    isCityCorrect == true
                                 ? const Text(
                                     'Зарегистрироваться',
                                     style:

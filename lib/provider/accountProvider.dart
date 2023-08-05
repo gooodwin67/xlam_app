@@ -14,6 +14,7 @@ class AccountProvider extends ChangeNotifier {
   bool nameIsLegal = false;
   bool categoryIsLegal = false;
   String userName = '';
+  String userCity = '';
   String userId = '';
   List productsList = <Product>[];
   bool imageLoaded = false;
@@ -92,6 +93,7 @@ class AccountProvider extends ChangeNotifier {
         if (doc.id == userId) {
           userName = doc.data()['name'];
           userId = doc.data()['id'];
+          userCity = doc.data()['city'];
         }
       }
     });

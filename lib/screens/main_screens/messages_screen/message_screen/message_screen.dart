@@ -24,7 +24,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     context
         .read<MessageProvider>()
         .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
-    print('22222 ${widget.chatId}');
 
     super.initState();
   }
@@ -67,12 +66,13 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                           .titleLarge!
                           .copyWith(fontSize: 20),
                     ),
-              InkWell(
-                child: Icon(
-                  Icons.power_settings_new,
-                  color: Colors.grey,
-                ),
-              ),
+              // InkWell(
+              //   child: Icon(
+              //     Icons.power_settings_new,
+              //     color: Colors.grey,
+              //   ),
+              // ),
+              SizedBox(width: 15),
             ],
           ),
         ),
