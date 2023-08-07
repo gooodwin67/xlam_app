@@ -51,7 +51,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                   context.read<BottomBarProvider>().onItemTapped(0);
                   context.read<MainScreenProvider>().getAllDb(
                       context.read<MainScreenProvider>().activeCategory);
-                  context.go('/main');
+                  //context.go('/main');
                   return Future((() => true));
                 },
                 child: SingleChildScrollView(
@@ -59,6 +59,12 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                     padding: EdgeInsets.all(mainPadding),
                     child: Column(
                       children: [
+                        InkWell(
+                          onTap: () {
+                            context.pop();
+                          },
+                          child: Icon(Icons.chevron_left),
+                        ),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),

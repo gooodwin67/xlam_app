@@ -21,36 +21,32 @@ class ProductBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () =>
-          dataIsLoaded ? context.go('/main/${productList[index].id}') : null,
-      child: Container(
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                height: 180,
-                color: const Color.fromARGB(255, 214, 214, 214),
-                width: double.infinity,
-                child: !dataIsLoaded
-                    ? SpinKitWave(color: mainColor.withAlpha(50), size: 50.0)
-                    : Image.network(
-                        productList[index].photoProd,
-                        fit: BoxFit.cover,
-                      ),
-              ),
+    return Container(
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Container(
+              height: 180,
+              color: const Color.fromARGB(255, 214, 214, 214),
+              width: double.infinity,
+              child: !dataIsLoaded
+                  ? SpinKitWave(color: mainColor.withAlpha(50), size: 50.0)
+                  : Image.network(
+                      productList[index].photoProd,
+                      fit: BoxFit.cover,
+                    ),
             ),
-            const SizedBox(height: 5),
-            !dataIsLoaded
-                ? SpinKitWave(color: mainColor.withAlpha(50), size: 20.0)
-                : Text(
-                    productList[index].nameProd,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 5),
+          !dataIsLoaded
+              ? SpinKitWave(color: mainColor.withAlpha(50), size: 20.0)
+              : Text(
+                  productList[index].nameProd,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+        ],
       ),
     );
   }

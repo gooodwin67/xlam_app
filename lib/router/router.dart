@@ -12,6 +12,7 @@ import 'package:xlam_app/screens/main_screens/messages_screen/message_screen/mes
 import 'package:xlam_app/screens/main_screens/messages_screen/messages_screen.dart';
 import 'package:xlam_app/screens/main_screens/prod_screen/prod_screen.dart';
 import 'package:xlam_app/screens/main_screens/main_screen.dart';
+import 'package:xlam_app/screens/main_screens/search_screen.dart';
 
 final router = GoRouter(
   routes: [
@@ -39,6 +40,21 @@ final router = GoRouter(
         builder: (context, state) => MainScreenWidget(),
         routes: [
           GoRoute(
+              path: 'search',
+              builder: (BuildContext context, GoRouterState state) {
+                return const SearchScreenWidget();
+              },
+              routes: [
+                GoRoute(
+                  path: ':prodId',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return ProdScreenWidget(
+                      prodId: state.pathParameters['prodId'],
+                    );
+                  },
+                ),
+              ]),
+          GoRoute(
               path: 'login',
               builder: (BuildContext context, GoRouterState state) {
                 return const LoginPassEnterScreen();
@@ -52,11 +68,20 @@ final router = GoRouter(
                 ),
               ]),
           GoRoute(
-            path: 'account',
-            builder: (BuildContext context, GoRouterState state) {
-              return const AccountScreenWidget();
-            },
-          ),
+              path: 'account',
+              builder: (BuildContext context, GoRouterState state) {
+                return const AccountScreenWidget();
+              },
+              routes: [
+                GoRoute(
+                  path: ':prodId',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return ProdScreenWidget(
+                      prodId: state.pathParameters['prodId'],
+                    );
+                  },
+                ),
+              ]),
           GoRoute(
               path: 'messages',
               builder: (BuildContext context, GoRouterState state) {

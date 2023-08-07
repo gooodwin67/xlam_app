@@ -59,7 +59,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            context.go('/main/search');
+                          },
                           child: const Icon(
                             Icons.search,
                             color: Colors.grey,
@@ -173,10 +175,15 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                     delegate: SliverChildBuilderDelegate(
                       childCount: !dataIsLoaded ? 4 : productList.length,
                       (context, index) {
-                        return ProductBlock(
-                            productList: productList,
-                            dataIsLoaded: dataIsLoaded,
-                            index: index);
+                        return InkWell(
+                          onTap: () => dataIsLoaded
+                              ? context.go('/main/${productList[index].id}')
+                              : null,
+                          child: ProductBlock(
+                              productList: productList,
+                              dataIsLoaded: dataIsLoaded,
+                              index: index),
+                        );
                       },
                     ),
                     gridDelegate:

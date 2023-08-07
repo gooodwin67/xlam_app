@@ -154,10 +154,15 @@ class AccountScreenWidget extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate(
                       childCount: !dataIsLoaded ? 4 : productList.length,
                       (context, index) {
-                    return ProductBlock(
-                        productList: productList,
-                        dataIsLoaded: dataIsLoaded,
-                        index: index);
+                    return InkWell(
+                      onTap: () => dataIsLoaded
+                          ? context.go('/main/account/${productList[index].id}')
+                          : null,
+                      child: ProductBlock(
+                          productList: productList,
+                          dataIsLoaded: dataIsLoaded,
+                          index: index),
+                    );
                   }),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200,

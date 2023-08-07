@@ -12,6 +12,7 @@ import 'package:xlam_app/provider/prodScreenProvider.dart';
 import 'package:xlam_app/router/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'provider/searchScreenProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => BottomBarProvider()),
       ChangeNotifierProvider(create: (_) => MessagesProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
+      ChangeNotifierProvider(create: (_) => SearchScreenProvider()),
     ],
     child: const MyApp(),
   ));
