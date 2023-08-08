@@ -32,7 +32,8 @@ class SearchScreenProvider extends ChangeNotifier {
             if (doc
                     .data()['name']
                     .toLowerCase()
-                    .contains(searchText.toLowerCase()) &&
+                    .replaceAll(' ', '')
+                    .contains(searchText.toLowerCase().replaceAll(' ', '')) &&
                 doc.data()['active'] == true) {
               products.add(
                 Prod(

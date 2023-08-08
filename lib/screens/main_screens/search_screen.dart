@@ -142,7 +142,7 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 19))
                             : Text(
-                                'Поиск: ${context.read<SearchScreenProvider>().searchText}',
+                                'Поиск: "${context.read<SearchScreenProvider>().searchText}"',
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 19),
                               ),
