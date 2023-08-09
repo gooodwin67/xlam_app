@@ -101,7 +101,7 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                             : InkWell(
                                 onTap: () {
                                   context.go(
-                                      '/main/messages/${messagesList[index].id}-xl-${messagesList[index].id2}');
+                                      '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(mainPadding),
@@ -110,7 +110,19 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                     color: mainColor.withAlpha(80),
                                     borderRadius: BorderRadius.circular(7),
                                   ),
-                                  child: Text(messagesList[index].name),
+                                  child: Row(
+                                    children: [
+                                      Text(messagesList[index].name),
+                                      Spacer(),
+                                      Text(messagesList[index].idProd),
+                                      Spacer(),
+                                      Text(
+                                        messagesList[index].price,
+                                        style: TextStyle(
+                                            color: Colors.red, fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                       },

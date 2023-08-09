@@ -9,7 +9,7 @@ class MessageProvider extends ChangeNotifier {
   List listHimMessages = [];
   bool messageDataIsLoaded = false;
   MessageWrapBlock message =
-      MessageWrapBlock(name: 'name', id: 'id', messages: []);
+      MessageWrapBlock(name: 'name', id: 'id', messages: [], price: '');
   String allChatId = '';
   String messageText = '';
   bool messageTextLegal = false;
@@ -42,8 +42,17 @@ class MessageProvider extends ChangeNotifier {
       await db.collection("messages").doc(allChatId).update({
         'secondMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
-        ])
+        ]),
       });
+
+      Map userData = {};
+
+      await db.collection("messages").doc(allChatId).get().then((value) {
+        userData = value.data()!['user'];
+        userData['active'] = true;
+      });
+
+      await db.collection("messages").doc(allChatId).update({'user': userData});
     }
     messageTextLegal = false;
     notifyListeners();
@@ -58,62 +67,107 @@ class MessageProvider extends ChangeNotifier {
     chatId.contains(myId, 5)
         ? himId = chatId.split('-')[0]
         : himId = chatId.split('-')[2];
-    print('3333 $chatId');
+    allChatId = chatId;
 
     var db = FirebaseFirestore.instance;
 
-    await db.collection("messages").get().then((value) async {
-      for (var doc in value.docs) {
-        if (doc.id.contains(himId) && doc.id.contains(myId)) {
-          allChatId = doc.id;
+    await db.collection('messages').doc(chatId).get().then((value) {
+      chatId.contains(myId, 5)
+          ? myMessagesFirst = false
+          : myMessagesFirst = true;
 
-          doc.id.contains(myId, 5)
-              ? myMessagesFirst = false
-              : myMessagesFirst = true;
+      if (!chatId.contains(himId, 5)) {
+        listMyMessages = value.data()!['secondMessages'].map((e) {
+          return MessageBlock(
+              text: e['text'], time: e['time'], myMessage: true);
+        }).toList();
 
-          await db.collection('messages').doc(doc.id).get().then((value) {
-            if (!doc.id.contains(himId, 5)) {
-              listMyMessages = value.data()!['secondMessages'].map((e) {
-                return MessageBlock(
-                    text: e['text'], time: e['time'], myMessage: true);
-              }).toList();
+        listHimMessages = value.data()!['firstMessages'].map((e) {
+          return MessageBlock(
+              text: e['text'], time: e['time'], myMessage: false);
+        }).toList();
+      } else {
+        listMyMessages = value.data()!['firstMessages'].map((e) {
+          return MessageBlock(
+              text: e['text'], time: e['time'], myMessage: true);
+        }).toList();
 
-              listHimMessages = value.data()!['firstMessages'].map((e) {
-                return MessageBlock(
-                    text: e['text'], time: e['time'], myMessage: false);
-              }).toList();
-            } else {
-              listMyMessages = value.data()!['firstMessages'].map((e) {
-                return MessageBlock(
-                    text: e['text'], time: e['time'], myMessage: true);
-              }).toList();
-
-              listHimMessages = value.data()!['secondMessages'].map((e) {
-                return MessageBlock(
-                    text: e['text'], time: e['time'], myMessage: false);
-              }).toList();
-            }
-
-            listAllMessages = listMyMessages + listHimMessages;
-
-            if (listAllMessages.length > 0) {
-              listAllMessages.sort(((a, b) {
-                return b.time.seconds - a.time.seconds;
-              }));
-            }
-
-            message = MessageWrapBlock(
-              name: doc.id.contains(himId, 5)
-                  ? value.data()!['user']['name2']
-                  : value.data()!['user']['name1'],
-              id: doc.id.contains(himId, 5)
-                  ? value.data()!['user']['id2']
-                  : value.data()!['user']['id1'],
-              messages: listAllMessages,
-            );
-          });
-        }
+        listHimMessages = value.data()!['secondMessages'].map((e) {
+          return MessageBlock(
+              text: e['text'], time: e['time'], myMessage: false);
+        }).toList();
       }
+
+      listAllMessages = listMyMessages + listHimMessages;
+
+      if (listAllMessages.length > 0) {
+        listAllMessages.sort(((a, b) {
+          return b.time.seconds - a.time.seconds;
+        }));
+      }
+
+      message = MessageWrapBlock(
+          name: chatId.contains(himId, 5)
+              ? value.data()!['user']['name2']
+              : value.data()!['user']['name1'],
+          id: chatId.contains(himId, 5)
+              ? value.data()!['user']['id2']
+              : value.data()!['user']['id1'],
+          messages: listAllMessages,
+          price: value.data()!['user']['price']);
+
+      // await db.collection("messages").get().then((value) async {
+      //   for (var doc in value.docs) {
+      //     if (doc.id.contains(himId) && doc.id.contains(myId)) {
+      //       allChatId = doc.id;
+
+      //       doc.id.contains(myId, 5)
+      //           ? myMessagesFirst = false
+      //           : myMessagesFirst = true;
+
+      //       await db.collection('messages').doc(doc.id).get().then((value) {
+      //         if (!doc.id.contains(himId, 5)) {
+      //           listMyMessages = value.data()!['secondMessages'].map((e) {
+      //             return MessageBlock(
+      //                 text: e['text'], time: e['time'], myMessage: true);
+      //           }).toList();
+
+      //           listHimMessages = value.data()!['firstMessages'].map((e) {
+      //             return MessageBlock(
+      //                 text: e['text'], time: e['time'], myMessage: false);
+      //           }).toList();
+      //         } else {
+      //           listMyMessages = value.data()!['firstMessages'].map((e) {
+      //             return MessageBlock(
+      //                 text: e['text'], time: e['time'], myMessage: true);
+      //           }).toList();
+
+      //           listHimMessages = value.data()!['secondMessages'].map((e) {
+      //             return MessageBlock(
+      //                 text: e['text'], time: e['time'], myMessage: false);
+      //           }).toList();
+      //         }
+
+      //         listAllMessages = listMyMessages + listHimMessages;
+
+      //         if (listAllMessages.length > 0) {
+      //           listAllMessages.sort(((a, b) {
+      //             return b.time.seconds - a.time.seconds;
+      //           }));
+      //         }
+
+      //         message = MessageWrapBlock(
+      //             name: doc.id.contains(himId, 5)
+      //                 ? value.data()!['user']['name2']
+      //                 : value.data()!['user']['name1'],
+      //             id: doc.id.contains(himId, 5)
+      //                 ? value.data()!['user']['id2']
+      //                 : value.data()!['user']['id1'],
+      //             messages: listAllMessages,
+      //             price: value.data()!['user']['price']);
+      //       });
+      //     }
+      //   }
 
       // var millis = listAllMessages[0].time.seconds * 1000;
       // var dt = DateTime.fromMillisecondsSinceEpoch(millis);
@@ -129,8 +183,12 @@ class MessageWrapBlock {
   String name;
   String id;
   List messages;
+  String price;
   MessageWrapBlock(
-      {required this.name, required this.id, required this.messages});
+      {required this.name,
+      required this.id,
+      required this.messages,
+      required this.price});
 }
 
 class MessageBlock {

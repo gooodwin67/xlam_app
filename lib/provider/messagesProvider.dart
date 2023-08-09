@@ -19,17 +19,16 @@ class MessagesProvider extends ChangeNotifier {
               : myMessagesFirst = true;
 
           await db.collection('messages').doc(doc.id).get().then((value) {
-            listChats.add(MessageBlock(
-              name: doc.id.contains(userId, 5)
-                  ? value.data()!['user']['name1']
-                  : value.data()!['user']['name2'],
-              id: (doc.id.contains(userId, 5))
-                  ? value.data()!['user']['id1']
-                  : value.data()!['user']['id2'],
-              id2: (doc.id.contains(userId, 5))
-                  ? value.data()!['user']['id2']
-                  : value.data()!['user']['id1'],
-            ));
+            if (!myMessagesFirst || value.data()!['user']['active'] == true) {
+              listChats.add(MessageBlock(
+                  name: doc.id.contains(userId, 5)
+                      ? value.data()!['user']['name1']
+                      : value.data()!['user']['name2'],
+                  id: value.data()!['user']['id2'],
+                  id2: value.data()!['user']['id1'],
+                  price: value.data()!['user']['price'] ?? '',
+                  idProd: value.data()!['user']['idProd']));
+            }
           });
         }
       }
@@ -43,5 +42,12 @@ class MessageBlock {
   String name;
   String id;
   String id2;
-  MessageBlock({required this.name, required this.id, required this.id2});
+  String price = '';
+  String idProd;
+  MessageBlock(
+      {required this.name,
+      required this.id,
+      required this.id2,
+      required this.price,
+      required this.idProd});
 }

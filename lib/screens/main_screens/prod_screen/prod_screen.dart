@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +27,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
     context
         .read<ProdScreenProvider>()
         .getAllProds(context.read<MainProvider>().userId, widget.prodId);
+    context.read<ProdScreenProvider>().clearData();
     super.initState();
   }
 
@@ -100,336 +102,255 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        // context.read<ProdScreenProvider>().myProd
-                        //     ? const SizedBox()
-                        //     : Container(
-                        //         width: double.infinity,
-                        //         height: 50,
-                        //         child: context.read<MainProvider>().isLogin ==
-                        //                 false
-                        //             ? TextButton(
-                        //                 onPressed: () =>
-                        //                     context.go('/main/login'),
-                        //                 child: Text(
-                        //                   'Войдите чтобы написать продавцу',
-                        //                   style: TextStyle(
-                        //                       fontSize: 17,
-                        //                       decoration:
-                        //                           TextDecoration.underline),
-                        //                 ))
-                        //             : ElevatedButton(
-                        //                 onPressed: () {
-                        //                   context
-                        //                       .read<ProdScreenProvider>()
-                        //                       .checkDialog(
-                        //                           context
-                        //                               .read<MainProvider>()
-                        //                               .userId,
-                        //                           prod[0].idUser,
-                        //                           prod[0].nameUser)
-                        //                       .then((value) {
-                        //                     if (context
-                        //                             .read<ProdScreenProvider>()
-                        //                             .dialogIsEnabled ==
-                        //                         2) {
-                        //                       context.go(
-                        //                           '/main/messages/${context.read<MainProvider>().userId}-xl-${prod[0].idUser}');
-                        //                     } else if (context
-                        //                             .read<ProdScreenProvider>()
-                        //                             .dialogIsEnabled ==
-                        //                         1) {
-                        //                       context.go(
-                        //                           '/main/messages/${prod[0].idUser}-xl-${context.read<MainProvider>().userId}');
-                        //                     } else {
-                        //                       showModalBottomSheet(
-                        //                           context: context,
-                        //                           builder:
-                        //                               (BuildContext context) {
-                        //                             return Padding(
-                        //                               padding: EdgeInsets.only(
-                        //                                   bottom: MediaQuery.of(
-                        //                                           context)
-                        //                                       .viewInsets
-                        //                                       .bottom),
-                        //                               child: Container(
-                        //                                 padding: EdgeInsets.all(
-                        //                                     mainPadding),
-                        //                                 child: TextField(
-                        //                                   onChanged: (value) {
-                        //                                     context
-                        //                                         .read<
-                        //                                             MessageProvider>()
-                        //                                         .changeMessageText(
-                        //                                             value);
-                        //                                   },
-                        //                                   style:
-                        //                                       Theme.of(context)
-                        //                                           .textTheme
-                        //                                           .bodyText1,
-                        //                                   decoration:
-                        //                                       InputDecoration(
-                        //                                     floatingLabelBehavior:
-                        //                                         FloatingLabelBehavior
-                        //                                             .never,
-                        //                                     contentPadding:
-                        //                                         EdgeInsets.zero,
-                        //                                     filled: true,
-                        //                                     fillColor:
-                        //                                         Color.fromARGB(
-                        //                                             255,
-                        //                                             255,
-                        //                                             255,
-                        //                                             255),
-                        //                                     prefixIcon:
-                        //                                         Icon(Icons.add),
-                        //                                     suffixIcon: InkWell(
-                        //                                       onTap: () {
-                        //                                         if (context
-                        //                                             .read<
-                        //                                                 MessageProvider>()
-                        //                                             .messageTextLegal) {
-                        //                                           FocusScope.of(
-                        //                                                   context)
-                        //                                               .unfocus();
-                        //                                           context
-                        //                                               .read<
-                        //                                                   ProdScreenProvider>()
-                        //                                               .setDialog(
-                        //                                                   context
-                        //                                                       .read<
-                        //                                                           MainProvider>()
-                        //                                                       .userId,
-                        //                                                   prod[0]
-                        //                                                       .idUser,
-                        //                                                   prod[0]
-                        //                                                       .nameUser)
-                        //                                               .then(
-                        //                                                   (value) {
-                        //                                             context
-                        //                                                 .read<
-                        //                                                     ProdScreenProvider>()
-                        //                                                 .checkDialog(
-                        //                                                     context.read<MainProvider>().userId,
-                        //                                                     prod[0].idUser,
-                        //                                                     prod[0].nameUser)
-                        //                                                 .then((value) {
-                        //                                               print(
-                        //                                                   '1111 ${prod[0].idUser}');
-                        //                                               context
-                        //                                                   .read<
-                        //                                                       MessageProvider>()
-                        //                                                   .getMessagesDB(
-                        //                                                       '${context.read<MainProvider>().userId}-xl-' + prod[0].idUser,
-                        //                                                       context.read<MainProvider>().userId)
-                        //                                                   .then((value) {
-                        //                                                 context
-                        //                                                     .read<MessageProvider>()
-                        //                                                     .setMessage();
-                        //                                                 if (context.read<ProdScreenProvider>().dialogIsEnabled ==
-                        //                                                     2) {
-                        //                                                   context
-                        //                                                       .go('/main/messages/${context.read<MainProvider>().userId}-xl-${prod[0].idUser}');
-                        //                                                 } else if (context.read<ProdScreenProvider>().dialogIsEnabled ==
-                        //                                                     1) {
-                        //                                                   context
-                        //                                                       .go('/main/messages/${prod[0].idUser}-xl-${context.read<MainProvider>().userId}');
-                        //                                                 }
-                        //                                               });
-                        //                                             });
-                        //                                           });
-                        //                                         }
-                        //                                       },
-                        //                                       child: Icon(
-                        //                                         Icons
-                        //                                             .send_rounded,
-                        //                                       ),
-                        //                                     ),
-                        //                                     label: Text(
-                        //                                       'Написать сообщение',
-                        //                                       style: Theme.of(
-                        //                                               context)
-                        //                                           .textTheme
-                        //                                           .bodyText1,
-                        //                                     ),
-                        //                                     enabledBorder:
-                        //                                         OutlineInputBorder(
-                        //                                       borderRadius:
-                        //                                           BorderRadius
-                        //                                               .circular(
-                        //                                                   50),
-                        //                                       borderSide: BorderSide(
-                        //                                           // color: context
-                        //                                           //         .read<AccountProvider>()
-                        //                                           //         .nameIsLegal
-                        //                                           //     ? Colors.transparent
-                        //                                           //     : Colors.red,
-                        //                                           width: 0),
-                        //                                     ),
-                        //                                     focusedBorder:
-                        //                                         OutlineInputBorder(
-                        //                                       borderRadius:
-                        //                                           BorderRadius
-                        //                                               .circular(
-                        //                                                   50),
-                        //                                       borderSide: BorderSide(
-                        //                                           color: Colors
-                        //                                               .transparent,
-                        //                                           width: 0),
-                        //                                     ),
-                        //                                   ),
-                        //                                 ),
-                        //                               ),
-                        //                             );
-                        //                           });
-                        //                     }
-                        //                   });
-
-                        //                 },
-                        //                 style: ButtonStyle(
-                        //                   backgroundColor:
-                        //                       MaterialStateProperty.all(
-                        //                           mainColor),
-                        //                   shape: MaterialStateProperty.all(
-                        //                     RoundedRectangleBorder(
-                        //                       borderRadius:
-                        //                           BorderRadius.circular(50),
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //                 child: const Text(
-                        //                   'Написать владельцу',
-                        //                   style: TextStyle(
-                        //                       fontSize: 16,
-                        //                       fontWeight: FontWeight.bold),
-                        //                 ),
-                        //               ),
-                        //       ),
-                        // const SizedBox(height: 10),
-                        Container(
-                          padding: EdgeInsets.all(mainPadding * 2),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey,
-                              )),
-                          child: context.read<MainProvider>().isLogin == false
-                              ? TextButton(
-                                  onPressed: () => context.go('/main/login'),
-                                  child: Text(
-                                    'Войдите чтобы написать продавцу',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        decoration: TextDecoration.underline),
-                                  ))
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextField(
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {},
-                                      textInputAction: TextInputAction.send,
-                                      onSubmitted: (value) {},
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                      decoration: InputDecoration(
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.never,
-                                        contentPadding: EdgeInsets.zero,
-                                        prefixIcon: Icon(Icons.currency_ruble),
-                                        label: Text(
-                                          'Предложить цену',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Color.fromARGB(
-                                                  255, 155, 155, 155)),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Color.fromARGB(
-                                                  255, 155, 155, 155)),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 15),
-                                    TextField(
-                                      onChanged: (value) {},
-                                      textInputAction: TextInputAction.send,
-                                      onSubmitted: (value) {},
-                                      maxLines: 4,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(10),
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.never,
-                                        prefixIcon: Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 52),
-                                          child: Icon(
-                                              Icons.insert_comment_outlined),
-                                        ),
-                                        label: Text(
-                                          'Оставить комментарий',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        alignLabelWithHint: true,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Color.fromARGB(
-                                                  255, 155, 155, 155)),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Color.fromARGB(
-                                                  255, 155, 155, 155)),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 15),
-                                    ElevatedButton(
-                                      onPressed: () {},
-                                      style: ButtonStyle(
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size(double.infinity, 45)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                mainColor),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
+                        context.read<ProdScreenProvider>().iLikedProd
+                            ? Text('Вы уже предложили цену')
+                            : context.read<ProdScreenProvider>().myProd
+                                ? SizedBox()
+                                : Container(
+                                    padding: EdgeInsets.all(mainPadding * 2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        )),
+                                    child: context
+                                                .read<MainProvider>()
+                                                .isLogin ==
+                                            false
+                                        ? TextButton(
+                                            onPressed: () =>
+                                                context.go('/main/login'),
+                                            child: const Text(
+                                              'Войдите чтобы написать продавцу',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  decoration:
+                                                      TextDecoration.underline),
+                                            ))
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextField(
+                                                // controller: TextEditingController()
+                                                //   ..text = context
+                                                //       .read<ProdScreenProvider>()
+                                                //       .price,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(r'[0-9]')),
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly
+                                                ],
+                                                onChanged: (value) {
+                                                  context
+                                                      .read<
+                                                          ProdScreenProvider>()
+                                                      .editPrice(value);
+                                                },
+                                                textInputAction:
+                                                    TextInputAction.send,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                                decoration: InputDecoration(
+                                                  floatingLabelBehavior:
+                                                      FloatingLabelBehavior
+                                                          .never,
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  prefixIcon: Icon(
+                                                      Icons.currency_ruble),
+                                                  label: Text(
+                                                    'Предложить цену',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1,
+                                                  ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    borderSide: BorderSide(
+                                                        width: 1,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            155,
+                                                            155,
+                                                            155)),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    borderSide: BorderSide(
+                                                        width: 1,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            155,
+                                                            155,
+                                                            155)),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              TextField(
+                                                onChanged: (value) {
+                                                  context
+                                                      .read<
+                                                          ProdScreenProvider>()
+                                                      .editComment(value);
+                                                },
+                                                textInputAction:
+                                                    TextInputAction.send,
+                                                maxLines: 4,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.all(10),
+                                                  floatingLabelBehavior:
+                                                      FloatingLabelBehavior
+                                                          .never,
+                                                  prefixIcon: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 52),
+                                                    child: Icon(Icons
+                                                        .insert_comment_outlined),
+                                                  ),
+                                                  label: Text(
+                                                    'Оставить комментарий',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1,
+                                                  ),
+                                                  alignLabelWithHint: true,
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    borderSide: BorderSide(
+                                                        width: 1,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            155,
+                                                            155,
+                                                            155)),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    borderSide: BorderSide(
+                                                        width: 1,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            155,
+                                                            155,
+                                                            155)),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              context
+                                                          .watch<
+                                                              ProdScreenProvider>()
+                                                          .price ==
+                                                      ''
+                                                  ? ElevatedButton(
+                                                      onPressed: () {},
+                                                      style: ButtonStyle(
+                                                        minimumSize:
+                                                            MaterialStateProperty
+                                                                .all(Size(
+                                                                    double
+                                                                        .infinity,
+                                                                    45)),
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(Colors
+                                                                    .grey),
+                                                        shape:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Отправить',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    )
+                                                  : ElevatedButton(
+                                                      onPressed: () {
+                                                        context
+                                                            .read<
+                                                                ProdScreenProvider>()
+                                                            .setDialog(
+                                                                context
+                                                                    .read<
+                                                                        MainProvider>()
+                                                                    .userId,
+                                                                prod[0].idUser,
+                                                                prod[0]
+                                                                    .nameUser,
+                                                                prod[0].id)
+                                                            .then((value) => context
+                                                                .read<
+                                                                    ProdScreenProvider>()
+                                                                .setFirstMessage());
+                                                      },
+                                                      style: ButtonStyle(
+                                                        minimumSize:
+                                                            MaterialStateProperty
+                                                                .all(Size(
+                                                                    double
+                                                                        .infinity,
+                                                                    45)),
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(mainColor),
+                                                        shape:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Отправить',
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    )
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Отправить',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                        ),
+                                  ),
                         const SizedBox(height: 10),
                         !context.read<ProdScreenProvider>().myProd
                             ? const SizedBox()

@@ -37,7 +37,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
-    bool myMessagesFirst = context.read<MessagesProvider>().myMessagesFirst;
 
     return Scaffold(
       appBar: AppBar(
@@ -183,6 +182,10 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                   ),
                 ],
               ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Text('Предложил ${message.price}'),
             ),
             Align(
               alignment: Alignment.bottomCenter,

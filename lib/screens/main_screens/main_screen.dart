@@ -36,9 +36,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           onWillPop: () => showExitPopup(context),
           child: RefreshIndicator(
             onRefresh: () {
-              context
-                  .read<MainScreenProvider>()
-                  .getAllDb(context.read<MainScreenProvider>().activeCategory);
+              if (dataIsLoaded) {
+                context.read<MainScreenProvider>().getAllDb(
+                    context.read<MainScreenProvider>().activeCategory);
+              }
               setState(() {});
               return Future((() => true));
             },

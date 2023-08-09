@@ -13,7 +13,32 @@ class ProdScreenProvider extends ChangeNotifier {
   String docName = '';
   bool myProd = false;
   String myName = '';
+  String myId = '';
   int dialogIsEnabled = 0;
+  String allChatId = '';
+
+  bool iLikedProd = false;
+
+  String price = '';
+  String comment = 'Не оставил комментарий';
+
+  editPrice(value) {
+    price = value;
+    notifyListeners();
+  }
+
+  editComment(value) {
+    if (value != '') {
+      comment = value;
+    } else {
+      comment = 'Не оставил комментарий';
+    }
+  }
+
+  clearData() {
+    price = '';
+    comment = 'Не оставил комментарий';
+  }
 
   Future checkDialog(id1, id2, name2) async {
     var db = FirebaseFirestore.instance;
@@ -32,31 +57,70 @@ class ProdScreenProvider extends ChangeNotifier {
     });
   }
 
-  Future setDialog(id1, id2, name2) async {
+  Future setDialog(id1, id2, name2, idProd) async {
     var db = FirebaseFirestore.instance;
 
     if (dialogIsEnabled == 0) {
       await db.collection("users").doc(id1).get().then((value) {
         myName = value.data()!['name'];
       });
-      await db.collection("messages").doc('$id1-xl-$id2').set(
+      allChatId = '$id1-xl-$id2-prod-$idProd';
+      await db.collection("messages").doc('$id1-xl-$id2-prod-$idProd').set(
         {
-          'user': {'id1': id1, 'id2': id2, 'name1': myName, 'name2': name2},
+          'user': {
+            'id1': id1,
+            'id2': id2,
+            'name1': myName,
+            'name2': name2,
+            'idProd': idProd,
+            'active': false,
+            'price': price
+          },
           'firstMessages': [],
           'secondMessages': [],
         },
       );
     } else {}
+
+    await db.collection("users").doc(myId).update({
+      'likeProds': FieldValue.arrayUnion([
+        {'idProd': idProd}
+      ])
+    });
+  }
+
+  Future setFirstMessage() async {
+    DateTime currentPhoneDate = DateTime.now(); //DateTime
+    Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
+    DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime
+
+    var db = FirebaseFirestore.instance;
+    await db.collection("messages").doc(allChatId).update({
+      'firstMessages': FieldValue.arrayUnion([
+        {'text': comment, 'time': myTimeStamp}
+      ])
+    });
+    notifyListeners();
   }
 
   Future getAllProds(userId, prodId) async {
     dataIsLoaded = false;
     listIds = [];
     products = [];
+    myId = userId;
     var db = FirebaseFirestore.instance;
     await db.collection("users").get().then((value) {
       for (var doc in value.docs) {
         listIds.add(doc['id']);
+      }
+    });
+
+    await db.collection("users").doc(userId).get().then((value) {
+      iLikedProd = false;
+      for (var i in value.data()!['likeProds']) {
+        if (i['idProd'] == prodId) {
+          iLikedProd = true;
+        }
       }
     });
 
