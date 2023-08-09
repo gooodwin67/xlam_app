@@ -24,9 +24,11 @@ class MessagesProvider extends ChangeNotifier {
                   name: doc.id.contains(userId, 5)
                       ? value.data()!['user']['name1']
                       : value.data()!['user']['name2'],
+                  myProd: doc.id.contains(userId, 5) ? true : false,
                   id: value.data()!['user']['id2'],
                   id2: value.data()!['user']['id1'],
                   price: value.data()!['user']['price'] ?? '',
+                  nameProd: value.data()!['user']['nameProd'] ?? '',
                   idProd: value.data()!['user']['idProd']));
             }
           });
@@ -44,10 +46,14 @@ class MessageBlock {
   String id2;
   String price = '';
   String idProd;
+  String nameProd;
+  bool myProd;
   MessageBlock(
       {required this.name,
       required this.id,
       required this.id2,
       required this.price,
-      required this.idProd});
+      required this.idProd,
+      required this.nameProd,
+      required this.myProd});
 }

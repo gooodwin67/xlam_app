@@ -74,7 +74,8 @@ class ProdScreenProvider extends ChangeNotifier {
             'name2': name2,
             'idProd': idProd,
             'active': false,
-            'price': price
+            'price': price,
+            'nameProd': docName
           },
           'firstMessages': [],
           'secondMessages': [],

@@ -103,26 +103,35 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                   context.go(
                                       '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
                                 },
-                                child: Container(
-                                  padding: EdgeInsets.all(mainPadding),
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  decoration: BoxDecoration(
-                                    color: mainColor.withAlpha(80),
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(messagesList[index].name),
-                                      Spacer(),
-                                      Text(messagesList[index].idProd),
-                                      Spacer(),
-                                      Text(
-                                        messagesList[index].price,
-                                        style: TextStyle(
-                                            color: Colors.red, fontSize: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(messagesList[index].nameProd),
+                                    Container(
+                                      padding: EdgeInsets.all(mainPadding),
+                                      margin: EdgeInsets.only(bottom: 5),
+                                      decoration: BoxDecoration(
+                                        color: messagesList[index].myProd
+                                            ? mainColor.withAlpha(80)
+                                            : mainColor.withAlpha(150),
+                                        borderRadius: BorderRadius.circular(7),
                                       ),
-                                    ],
-                                  ),
+                                      child: Row(
+                                        children: [
+                                          Text(messagesList[index].name),
+                                          Spacer(),
+                                          Text(messagesList[index].idProd),
+                                          Spacer(),
+                                          Text(
+                                            messagesList[index].price,
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                       },

@@ -8,8 +8,8 @@ class MessageProvider extends ChangeNotifier {
   List listMyMessages = [];
   List listHimMessages = [];
   bool messageDataIsLoaded = false;
-  MessageWrapBlock message =
-      MessageWrapBlock(name: 'name', id: 'id', messages: [], price: '');
+  MessageWrapBlock message = MessageWrapBlock(
+      name: 'name', id: 'id', messages: [], price: '', nameProd: '');
   String allChatId = '';
   String messageText = '';
   bool messageTextLegal = false;
@@ -107,14 +107,16 @@ class MessageProvider extends ChangeNotifier {
       }
 
       message = MessageWrapBlock(
-          name: chatId.contains(himId, 5)
-              ? value.data()!['user']['name2']
-              : value.data()!['user']['name1'],
-          id: chatId.contains(himId, 5)
-              ? value.data()!['user']['id2']
-              : value.data()!['user']['id1'],
-          messages: listAllMessages,
-          price: value.data()!['user']['price']);
+        name: chatId.contains(himId, 5)
+            ? value.data()!['user']['name2']
+            : value.data()!['user']['name1'],
+        id: chatId.contains(himId, 5)
+            ? value.data()!['user']['id2']
+            : value.data()!['user']['id1'],
+        messages: listAllMessages,
+        price: value.data()!['user']['price'],
+        nameProd: value.data()!['user']['nameProd'] ?? '',
+      );
 
       // await db.collection("messages").get().then((value) async {
       //   for (var doc in value.docs) {
@@ -184,11 +186,13 @@ class MessageWrapBlock {
   String id;
   List messages;
   String price;
+  String nameProd;
   MessageWrapBlock(
       {required this.name,
       required this.id,
       required this.messages,
-      required this.price});
+      required this.price,
+      required this.nameProd});
 }
 
 class MessageBlock {

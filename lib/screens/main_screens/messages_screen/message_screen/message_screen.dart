@@ -185,7 +185,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: Text('Предложил ${message.price}'),
+              child: Text('Предложил ${message.price} за ${message.nameProd}'),
             ),
             Align(
               alignment: Alignment.bottomCenter,
