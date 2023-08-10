@@ -98,40 +98,77 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                         return !dataIsLoaded
                             ? SpinKitWave(
                                 color: mainColor.withAlpha(50), size: 20.0)
-                            : InkWell(
-                                onTap: () {
-                                  context.go(
-                                      '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(messagesList[index].nameProd),
-                                    Container(
-                                      padding: EdgeInsets.all(mainPadding),
-                                      margin: EdgeInsets.only(bottom: 5),
-                                      decoration: BoxDecoration(
-                                        color: messagesList[index].myProd
-                                            ? mainColor.withAlpha(80)
-                                            : mainColor.withAlpha(150),
-                                        borderRadius: BorderRadius.circular(7),
-                                      ),
-                                      child: Row(
+                            : Padding(
+                                padding:
+                                    EdgeInsets.only(bottom: mainPadding * 2),
+                                child: InkWell(
+                                  onTap: () {
+                                    context.go(
+                                        '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
                                         children: [
-                                          Text(messagesList[index].name),
-                                          Spacer(),
-                                          Text(messagesList[index].idProd),
-                                          Spacer(),
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(7),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(7),
+                                              child: Image.network(
+                                                messagesList[index].photo,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
                                           Text(
-                                            messagesList[index].price,
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 20),
+                                            messagesList[index].nameProd,
+                                            style: TextStyle(fontSize: 18),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(height: 5),
+                                      Container(
+                                        padding: EdgeInsets.all(mainPadding),
+                                        margin: EdgeInsets.only(bottom: 5),
+                                        decoration: BoxDecoration(
+                                          color: messagesList[index].myProd
+                                              ? mainColor.withAlpha(80)
+                                              : mainColor.withAlpha(150),
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(messagesList[index].name),
+                                            Text('--'),
+                                            Text(messagesList[index]
+                                                .newMessages
+                                                .toString()),
+                                            Spacer(),
+                                            messagesList[index].myProd
+                                                ? Text('Предложил мне за')
+                                                : Text('Я предложил за'),
+                                            Spacer(),
+                                            Text(
+                                              '${messagesList[index].price} р.',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                       },

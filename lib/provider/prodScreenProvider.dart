@@ -75,7 +75,10 @@ class ProdScreenProvider extends ChangeNotifier {
             'idProd': idProd,
             'active': false,
             'price': price,
-            'nameProd': docName
+            'nameProd': docName,
+            'photo': docPhoto,
+            'id1new': 0,
+            'id2new': 1
           },
           'firstMessages': [],
           'secondMessages': [],
@@ -139,8 +142,8 @@ class ProdScreenProvider extends ChangeNotifier {
               }
               // NameUser = doc.data()['nameUser'].toString();
               docId = doc.data()['idProd'].toString();
-              // docPhoto = doc.data()['photo'].toString();
               docName = doc.data()['name'].toString();
+              docPhoto = doc.data()['photo'].toString();
               products.add(
                 Prod(
                     idUser: doc.data()['idUser'] ?? 'idUser',

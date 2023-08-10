@@ -32,12 +32,21 @@ class MessageProvider extends ChangeNotifier {
     DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime
 
     var db = FirebaseFirestore.instance;
+    Map userData = {};
     if (myMessagesFirst) {
       await db.collection("messages").doc(allChatId).update({
         'firstMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
         ])
       });
+
+      // await db.collection("messages").doc(allChatId).get().then((value) {
+      //   userData = value.data()!['user'];
+      //   userData['id1new'] += 1;
+      //   print(1);
+      // });
+
+      //await db.collection("messages").doc(allChatId).update({'user': userData});
     } else {
       await db.collection("messages").doc(allChatId).update({
         'secondMessages': FieldValue.arrayUnion([
@@ -45,14 +54,14 @@ class MessageProvider extends ChangeNotifier {
         ]),
       });
 
-      Map userData = {};
+      // await db.collection("messages").doc(allChatId).get().then((value) {
+      //   userData = value.data()!['user'];
+      //   userData['active'] = true;
+      //   userData['id2new'] += 1;
+      //   print(2);
+      // });
 
-      await db.collection("messages").doc(allChatId).get().then((value) {
-        userData = value.data()!['user'];
-        userData['active'] = true;
-      });
-
-      await db.collection("messages").doc(allChatId).update({'user': userData});
+      //await db.collection("messages").doc(allChatId).update({'user': userData});
     }
     messageTextLegal = false;
     notifyListeners();
@@ -71,10 +80,18 @@ class MessageProvider extends ChangeNotifier {
 
     var db = FirebaseFirestore.instance;
 
+    Map userData = {};
+
     await db.collection('messages').doc(chatId).get().then((value) {
-      chatId.contains(myId, 5)
-          ? myMessagesFirst = false
-          : myMessagesFirst = true;
+      if (chatId.contains(myId, 5)) {
+        myMessagesFirst = false;
+        userData = value.data()!['user'];
+        userData['id2new'] = 0;
+      } else {
+        myMessagesFirst = true;
+        userData = value.data()!['user'];
+        userData['id1new'] = 0;
+      }
 
       if (!chatId.contains(himId, 5)) {
         listMyMessages = value.data()!['secondMessages'].map((e) {
@@ -118,59 +135,6 @@ class MessageProvider extends ChangeNotifier {
         nameProd: value.data()!['user']['nameProd'] ?? '',
       );
 
-      // await db.collection("messages").get().then((value) async {
-      //   for (var doc in value.docs) {
-      //     if (doc.id.contains(himId) && doc.id.contains(myId)) {
-      //       allChatId = doc.id;
-
-      //       doc.id.contains(myId, 5)
-      //           ? myMessagesFirst = false
-      //           : myMessagesFirst = true;
-
-      //       await db.collection('messages').doc(doc.id).get().then((value) {
-      //         if (!doc.id.contains(himId, 5)) {
-      //           listMyMessages = value.data()!['secondMessages'].map((e) {
-      //             return MessageBlock(
-      //                 text: e['text'], time: e['time'], myMessage: true);
-      //           }).toList();
-
-      //           listHimMessages = value.data()!['firstMessages'].map((e) {
-      //             return MessageBlock(
-      //                 text: e['text'], time: e['time'], myMessage: false);
-      //           }).toList();
-      //         } else {
-      //           listMyMessages = value.data()!['firstMessages'].map((e) {
-      //             return MessageBlock(
-      //                 text: e['text'], time: e['time'], myMessage: true);
-      //           }).toList();
-
-      //           listHimMessages = value.data()!['secondMessages'].map((e) {
-      //             return MessageBlock(
-      //                 text: e['text'], time: e['time'], myMessage: false);
-      //           }).toList();
-      //         }
-
-      //         listAllMessages = listMyMessages + listHimMessages;
-
-      //         if (listAllMessages.length > 0) {
-      //           listAllMessages.sort(((a, b) {
-      //             return b.time.seconds - a.time.seconds;
-      //           }));
-      //         }
-
-      //         message = MessageWrapBlock(
-      //             name: doc.id.contains(himId, 5)
-      //                 ? value.data()!['user']['name2']
-      //                 : value.data()!['user']['name1'],
-      //             id: doc.id.contains(himId, 5)
-      //                 ? value.data()!['user']['id2']
-      //                 : value.data()!['user']['id1'],
-      //             messages: listAllMessages,
-      //             price: value.data()!['user']['price']);
-      //       });
-      //     }
-      //   }
-
       // var millis = listAllMessages[0].time.seconds * 1000;
       // var dt = DateTime.fromMillisecondsSinceEpoch(millis);
       // var d24 = DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
@@ -178,6 +142,8 @@ class MessageProvider extends ChangeNotifier {
       messageDataIsLoaded = true;
       notifyListeners();
     });
+
+    await db.collection('messages').doc(chatId).update({'user': userData});
   }
 }
 

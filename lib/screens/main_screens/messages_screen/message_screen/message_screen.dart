@@ -104,17 +104,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                 return const Text('Something went wrong');
                               }
 
-                              // if (snapshot.connectionState ==
-                              //     ConnectionState.waiting) {
-                              //   return const Text("Loading");
-                              // }
-                              // snapshot.data!.docs.map((e) {
-                              //   print(111);
-                              //   print(e);
-                              // });
-                              context.read<MessageProvider>().getMessagesDB(
-                                  widget.chatId,
-                                  context.read<MainProvider>().userId);
+                              // context.read<MessageProvider>().getMessagesDB(
+                              //     widget.chatId,
+                              //     context.read<MainProvider>().userId);
                               return Padding(
                                 padding: EdgeInsets.all(mainPadding),
                                 child: Row(
