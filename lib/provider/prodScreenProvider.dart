@@ -76,12 +76,12 @@ class ProdScreenProvider extends ChangeNotifier {
             'active': false,
             'price': price,
             'nameProd': docName,
-            'photo': docPhoto,
-            'id1new': 0,
-            'id2new': 1
+            'photo': docPhoto
           },
           'firstMessages': [],
           'secondMessages': [],
+          'id1new': 0,
+          'id2new': 1
         },
       );
     } else {}

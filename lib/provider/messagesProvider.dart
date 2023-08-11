@@ -32,8 +32,8 @@ class MessagesProvider extends ChangeNotifier {
                 photo: value.data()!['user']['photo'] ?? '',
                 idProd: value.data()!['user']['idProd'],
                 newMessages: doc.id.contains(userId, 5)
-                    ? value.data()!['user']['id2new']
-                    : value.data()!['user']['id1new'],
+                    ? value.data()!['id2new']
+                    : value.data()!['id1new'],
               ));
             }
           });

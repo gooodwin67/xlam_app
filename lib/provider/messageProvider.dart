@@ -15,6 +15,9 @@ class MessageProvider extends ChangeNotifier {
   bool messageTextLegal = false;
   bool myMessagesFirst = false;
 
+  int id1new = 0;
+  int id2new = 0;
+
   changeMessageText(value) {
     if (value != '') {
       messageTextLegal = true;
@@ -34,34 +37,34 @@ class MessageProvider extends ChangeNotifier {
     var db = FirebaseFirestore.instance;
     Map userData = {};
     if (myMessagesFirst) {
+      await db.collection("messages").doc(allChatId).get().then((value) {
+        id2new = value.data()!['id2new'] + 1;
+      });
       await db.collection("messages").doc(allChatId).update({
         'firstMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
-        ])
+        ]),
+        'id2new': id2new
+      });
+    } else {
+      await db.collection("messages").doc(allChatId).get().then((value) {
+        id1new = value.data()!['id1new'] + 1;
       });
 
-      // await db.collection("messages").doc(allChatId).get().then((value) {
-      //   userData = value.data()!['user'];
-      //   userData['id1new'] += 1;
-      //   print(1);
-      // });
-
-      //await db.collection("messages").doc(allChatId).update({'user': userData});
-    } else {
       await db.collection("messages").doc(allChatId).update({
         'secondMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
         ]),
+        'id1new': id1new
       });
 
-      // await db.collection("messages").doc(allChatId).get().then((value) {
-      //   userData = value.data()!['user'];
-      //   userData['active'] = true;
-      //   userData['id2new'] += 1;
-      //   print(2);
-      // });
-
-      //await db.collection("messages").doc(allChatId).update({'user': userData});
+      await db.collection("messages").doc(allChatId).get().then((value) {
+        if (value.data()!['user']['active'] == false) {
+          userData = value.data()!['user'];
+          userData['active'] = true;
+          db.collection("messages").doc(allChatId).update({'user': userData});
+        }
+      });
     }
     messageTextLegal = false;
     notifyListeners();
@@ -80,17 +83,21 @@ class MessageProvider extends ChangeNotifier {
 
     var db = FirebaseFirestore.instance;
 
-    Map userData = {};
-
     await db.collection('messages').doc(chatId).get().then((value) {
       if (chatId.contains(myId, 5)) {
         myMessagesFirst = false;
-        userData = value.data()!['user'];
-        userData['id2new'] = 0;
+        if (value.data()!['id2new'] > 0) {
+          id2new = 0;
+          print('aaaaaa');
+          db.collection('messages').doc(chatId).update({'id2new': id2new});
+        }
       } else {
         myMessagesFirst = true;
-        userData = value.data()!['user'];
-        userData['id1new'] = 0;
+        if (value.data()!['id1new'] > 0) {
+          id1new = 0;
+          print('bbbbbb');
+          db.collection('messages').doc(chatId).update({'id1new': id1new});
+        }
       }
 
       if (!chatId.contains(himId, 5)) {
@@ -142,8 +149,6 @@ class MessageProvider extends ChangeNotifier {
       messageDataIsLoaded = true;
       notifyListeners();
     });
-
-    await db.collection('messages').doc(chatId).update({'user': userData});
   }
 }
 
