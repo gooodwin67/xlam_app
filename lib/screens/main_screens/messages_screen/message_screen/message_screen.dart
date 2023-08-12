@@ -77,173 +77,161 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(),
-      body: RefreshIndicator(
-        onRefresh: () {
-          context.read<MessageProvider>().getMessagesDB(
-              widget.chatId, context.read<MainProvider>().userId);
-          setState(() {});
-          return Future((() => true));
-        },
-        child: SafeArea(
-            child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 70),
-              child: CustomScrollView(
-                reverse: true,
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      childCount: !dataIsLoaded ? 15 : message.messages.length,
-                      ((context, index) {
-                        return StreamBuilder(
-                            stream: _usersStream,
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.hasError) {
-                                return const Text('Something went wrong');
-                              }
+      body: SafeArea(
+          child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 70),
+            child: CustomScrollView(
+              reverse: true,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: !dataIsLoaded ? 15 : message.messages.length,
+                    ((context, index) {
+                      return StreamBuilder(
+                          stream: _usersStream,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Something went wrong');
+                            }
 
-                              context.read<MessageProvider>().getMessagesDB(
-                                  widget.chatId,
-                                  context.read<MainProvider>().userId);
-                              return Padding(
-                                padding: EdgeInsets.all(mainPadding),
-                                child: Row(
-                                  mainAxisAlignment: dataIsLoaded
-                                      ? message.messages[index].myMessage ==
-                                              true
-                                          ? MainAxisAlignment.end
-                                          : MainAxisAlignment.start
-                                      : MainAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: dataIsLoaded
-                                          ? message.messages[index].myMessage ==
-                                                  true
-                                              ? CrossAxisAlignment.end
-                                              : CrossAxisAlignment.start
-                                          : CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding:
-                                              EdgeInsets.all(mainPadding * 2),
-                                          margin: EdgeInsets.only(bottom: 5),
-                                          decoration: BoxDecoration(
-                                            color: dataIsLoaded
-                                                ? message.messages[index]
-                                                            .myMessage ==
-                                                        true
-                                                    ? mainColor.withAlpha(100)
-                                                    : Color.fromARGB(
-                                                        255, 233, 233, 233)
-                                                : Color.fromARGB(
-                                                    255, 221, 221, 221),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: !dataIsLoaded
-                                              ? SpinKitWave(
-                                                  color:
-                                                      mainColor.withAlpha(50),
-                                                  size: 20.0)
-                                              : Text(
-                                                  message.messages[index].text),
+                            context.read<MessageProvider>().getMessagesDB(
+                                widget.chatId,
+                                context.read<MainProvider>().userId);
+                            return Padding(
+                              padding: EdgeInsets.all(mainPadding),
+                              child: Row(
+                                mainAxisAlignment: dataIsLoaded
+                                    ? message.messages[index].myMessage == true
+                                        ? MainAxisAlignment.end
+                                        : MainAxisAlignment.start
+                                    : MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: dataIsLoaded
+                                        ? message.messages[index].myMessage ==
+                                                true
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.all(mainPadding * 2),
+                                        margin: EdgeInsets.only(bottom: 5),
+                                        decoration: BoxDecoration(
+                                          color: dataIsLoaded
+                                              ? message.messages[index]
+                                                          .myMessage ==
+                                                      true
+                                                  ? mainColor.withAlpha(100)
+                                                  : Color.fromARGB(
+                                                      255, 233, 233, 233)
+                                              : Color.fromARGB(
+                                                  255, 221, 221, 221),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                         ),
-                                        !dataIsLoaded
+                                        child: !dataIsLoaded
                                             ? SpinKitWave(
                                                 color: mainColor.withAlpha(50),
-                                                size: 5.0)
+                                                size: 20.0)
                                             : Text(
-                                                DateFormat(
-                                                        "dd. MM. yyyy HH:mm:ss")
-                                                    .format(message
-                                                        .messages[index].time
-                                                        .toDate())
-                                                    .toString(),
-                                                style: TextStyle(fontSize: 12),
-                                              )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                      }),
-                    ),
+                                                message.messages[index].text),
+                                      ),
+                                      !dataIsLoaded
+                                          ? SpinKitWave(
+                                              color: mainColor.withAlpha(50),
+                                              size: 5.0)
+                                          : Text(
+                                              DateFormat(
+                                                      "dd. MM. yyyy HH:mm:ss")
+                                                  .format(message
+                                                      .messages[index].time
+                                                      .toDate())
+                                                  .toString(),
+                                              style: TextStyle(fontSize: 12),
+                                            )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                    }),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text('Предложил ${message.price} за ${message.nameProd}'),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(top: mainPadding),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(mainPadding),
-                  color: mainColor,
-                  child: TextField(
-                    onChanged: (value) {
-                      context.read<MessageProvider>().changeMessageText(value);
-                    },
-                    controller: _controller,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      contentPadding: EdgeInsets.zero,
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 255, 255, 255),
-                      prefixIcon: Icon(Icons.add),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          if (context
-                              .read<MessageProvider>()
-                              .messageTextLegal) {
-                            FocusScope.of(context).unfocus();
-                            context.read<MessageProvider>().setMessage();
-                            _controller.clear();
-                          }
-                        },
-                        child: Icon(
-                          Icons.send_rounded,
-                          color:
-                              !context.watch<MessageProvider>().messageTextLegal
-                                  ? Colors.grey
-                                  : mainColor,
-                        ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text('Предложил ${message.price} за ${message.nameProd}'),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: mainPadding),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(mainPadding),
+                color: mainColor,
+                child: TextField(
+                  onChanged: (value) {
+                    context.read<MessageProvider>().changeMessageText(value);
+                  },
+                  controller: _controller,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    contentPadding: EdgeInsets.zero,
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 255, 255, 255),
+                    prefixIcon: Icon(Icons.add),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        if (context.read<MessageProvider>().messageTextLegal) {
+                          FocusScope.of(context).unfocus();
+                          context.read<MessageProvider>().setMessage();
+                          _controller.clear();
+                        }
+                      },
+                      child: Icon(
+                        Icons.send_rounded,
+                        color:
+                            !context.watch<MessageProvider>().messageTextLegal
+                                ? Colors.grey
+                                : mainColor,
                       ),
-                      label: Text(
-                        'Написать сообщение',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                        borderSide: BorderSide(
-                            // color: context
-                            //         .read<AccountProvider>()
-                            //         .nameIsLegal
-                            //     ? Colors.transparent
-                            //     : Colors.red,
-                            width: 0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                        borderSide:
-                            BorderSide(color: Colors.transparent, width: 0),
-                      ),
+                    ),
+                    label: Text(
+                      'Написать сообщение',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                      borderSide: BorderSide(
+                          // color: context
+                          //         .read<AccountProvider>()
+                          //         .nameIsLegal
+                          //     ? Colors.transparent
+                          //     : Colors.red,
+                          width: 0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                      borderSide:
+                          BorderSide(color: Colors.transparent, width: 0),
                     ),
                   ),
                 ),
               ),
             ),
-          ],
-        )),
-      ),
+          ),
+        ],
+      )),
     );
   }
 }

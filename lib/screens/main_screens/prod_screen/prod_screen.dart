@@ -103,7 +103,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                         ),
                         const SizedBox(height: 10),
                         context.read<ProdScreenProvider>().iLikedProd
-                            ? Text('Вы уже предложили цену')
+                            ? Text('Вы предложили цену')
                             : context.read<ProdScreenProvider>().myProd
                                 ? SizedBox()
                                 : Container(
@@ -316,7 +316,39 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                                             .then((value) => context
                                                                 .read<
                                                                     ProdScreenProvider>()
-                                                                .setFirstMessage());
+                                                                .setFirstMessage())
+                                                            .then((value) {
+                                                          context
+                                                              .read<
+                                                                  ProdScreenProvider>()
+                                                              .getAllProds(
+                                                                  context
+                                                                      .read<
+                                                                          MainProvider>()
+                                                                      .userId,
+                                                                  widget
+                                                                      .prodId);
+                                                          context
+                                                              .read<
+                                                                  ProdScreenProvider>()
+                                                              .clearData();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            backgroundColor:
+                                                                mainColor,
+                                                            content: const Text(
+                                                              'Продавцу отправлено ваше предложение!',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 4),
+                                                          ));
+                                                        });
                                                       },
                                                       style: ButtonStyle(
                                                         minimumSize:
@@ -371,7 +403,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                         'Товар удален',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      duration: const Duration(seconds: 2),
+                                      duration: const Duration(seconds: 4),
                                     ));
                                     context.read<MainScreenProvider>().getAllDb(
                                         context

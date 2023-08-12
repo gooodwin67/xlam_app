@@ -124,6 +124,7 @@ class ProdScreenProvider extends ChangeNotifier {
       for (var i in value.data()!['likeProds']) {
         if (i['idProd'] == prodId) {
           iLikedProd = true;
+          print(iLikedProd);
         }
       }
     });
