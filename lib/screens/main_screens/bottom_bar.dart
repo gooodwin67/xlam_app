@@ -6,6 +6,7 @@ import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/provider/messagesProvider.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
