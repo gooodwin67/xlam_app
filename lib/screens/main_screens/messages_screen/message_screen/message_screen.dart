@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/messageProvider.dart';
 import 'package:xlam_app/provider/messagesProvider.dart';
@@ -24,7 +25,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
     context
         .read<MessageProvider>()
         .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
-
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => context.read<BottomBarProvider>().setNotifyTrue());
     super.initState();
   }
 

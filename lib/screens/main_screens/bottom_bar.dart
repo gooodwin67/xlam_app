@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     int selectedItem = context.watch<BottomBarProvider>().selectedItem;
     int newMessages = 0;
     String userId = context.read<MainProvider>().userId;
+    bool canNotify = context.read<BottomBarProvider>().canNotify;
 
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
@@ -34,7 +36,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-
         newMessages = 0;
         for (var doc in snapshot.data!.docs) {
           if (doc.id.contains(userId, 5)) {
@@ -43,6 +44,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
             newMessages += int.parse(doc.get('id1new').toString());
           }
         }
+
+        if (newMessages == 1 && canNotify == true) {
+          AwesomeNotifications().createNotification(
+              content: NotificationContent(
+            id: 10,
+            channelKey: 'basic_channel',
+            title: 'Simple Notif',
+            body: 'Simple Button',
+          ));
+          context.read<BottomBarProvider>().setNotifyFalse();
+        }
+
+        // AwesomeNotifications().createNotification(
+        //     content: NotificationContent(
+        //   id: 10,
+        //   channelKey: 'basic_channel',
+        //   title: 'Simple Notif',
+        //   body: 'Simple Button',
+        // ));
 
         return BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),
