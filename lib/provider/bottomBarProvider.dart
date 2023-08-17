@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 
 class BottomBarProvider extends ChangeNotifier {
   int selectedItem = 0;
-  bool canNotify = true;
+  //bool canNotify = true;
 
   onItemTapped(int index) {
     selectedItem = index;
     notifyListeners();
   }
 
-  setNotifyTrue() {
-    canNotify = true;
-  }
+  // setNotifyTrue() {
+  //   canNotify = true;
+  // }
 
-  setNotifyFalse() {
-    canNotify = false;
-  }
+  // setNotifyFalse() {
+  //   canNotify = false;
+  // }
 }

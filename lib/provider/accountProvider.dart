@@ -35,6 +35,7 @@ class AccountProvider extends ChangeNotifier {
       nameUser: 'nameUser',
       category: 0,
       nameProd: '',
+      descProd: '',
       photoProd: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
@@ -74,6 +75,7 @@ class AccountProvider extends ChangeNotifier {
       'idUser': userId,
       'nameUser': userName,
       'name': newProduct.nameProd,
+      'description': newProduct.descProd,
       'category': newProduct.category,
       'photo': linkProd
     });
@@ -114,6 +116,7 @@ class AccountProvider extends ChangeNotifier {
               nameUser: doc.data()['nameUser'],
               category: doc.data()['category'],
               nameProd: doc.data()['name'],
+              descProd: doc.data()['description'],
               active: doc.data()['active'],
               photoProd: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
             ),
@@ -136,6 +139,10 @@ class AccountProvider extends ChangeNotifier {
       nameIsLegal = false;
       notifyListeners();
     }
+  }
+
+  getDesc(text) {
+    newProduct.descProd = text;
   }
 
   changeCategory(value) {
@@ -170,6 +177,7 @@ class Product {
   num category;
   String nameProd;
   String photoProd;
+  String descProd;
   bool active;
   Product({
     required this.id,
@@ -178,6 +186,7 @@ class Product {
     required this.category,
     required this.nameProd,
     required this.photoProd,
+    required this.descProd,
     required this.active,
   });
 }

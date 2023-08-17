@@ -4,6 +4,8 @@ Color mainColor = const Color(0xFF744CBD);
 
 double mainPadding = 10;
 
+String nameApp = 'Name App';
+
 List cities = [
   "Абаза",
   "Абакан",

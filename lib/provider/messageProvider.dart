@@ -82,6 +82,7 @@ class MessageProvider extends ChangeNotifier {
     allChatId = chatId;
 
     var db = FirebaseFirestore.instance;
+    print('getMessage');
 
     await db.collection('messages').doc(chatId).get().then((value) {
       if (chatId.contains(myId, 5)) {

@@ -75,7 +75,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                           ),
                         ),
                         Text(
-                          'Жалко выкинуть',
+                          nameApp,
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!

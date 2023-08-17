@@ -22,11 +22,8 @@ class MessageScreenWidget extends StatefulWidget {
 class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   @override
   void initState() {
-    context
-        .read<MessageProvider>()
-        .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => context.read<BottomBarProvider>().setNotifyTrue());
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //     (_) => context.read<BottomBarProvider>().setNotifyTrue());
     super.initState();
   }
 
@@ -39,6 +36,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
+    context
+        .read<MessageProvider>()
+        .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
 
     return Scaffold(
       appBar: AppBar(
@@ -92,16 +92,18 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                     childCount: !dataIsLoaded ? 15 : message.messages.length,
                     ((context, index) {
                       return StreamBuilder(
-                          stream: _usersStream,
+                          stream: FirebaseFirestore.instance
+                              .collection('messages')
+                              .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.hasError) {
                               return const Text('Something went wrong');
                             }
 
-                            context.read<MessageProvider>().getMessagesDB(
-                                widget.chatId,
-                                context.read<MainProvider>().userId);
+                            // context.read<MessageProvider>().getMessagesDB(
+                            //     widget.chatId,
+                            //     context.read<MainProvider>().userId);
                             return Padding(
                               padding: EdgeInsets.all(mainPadding),
                               child: Row(

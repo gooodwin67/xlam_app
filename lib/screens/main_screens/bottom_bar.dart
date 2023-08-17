@@ -24,7 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     int selectedItem = context.watch<BottomBarProvider>().selectedItem;
     int newMessages = 0;
     String userId = context.read<MainProvider>().userId;
-    bool canNotify = context.read<BottomBarProvider>().canNotify;
+    //bool canNotify = context.read<BottomBarProvider>().canNotify;
 
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
@@ -36,25 +36,26 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-        newMessages = 0;
+        //newMessages = 0;
         for (var doc in snapshot.data!.docs) {
           if (doc.id.contains(userId, 5)) {
             newMessages += int.parse(doc.get('id2new').toString());
+            print(newMessages);
           } else if (doc.id.contains(userId)) {
             newMessages += int.parse(doc.get('id1new').toString());
           }
         }
 
-        if (newMessages == 1 && canNotify == true) {
-          AwesomeNotifications().createNotification(
-              content: NotificationContent(
-            id: 10,
-            channelKey: 'basic_channel',
-            title: 'Simple Notif',
-            body: 'Simple Button',
-          ));
-          context.read<BottomBarProvider>().setNotifyFalse();
-        }
+        // if (newMessages == 1 && canNotify == true) {
+        //   AwesomeNotifications().createNotification(
+        //       content: NotificationContent(
+        //     id: 10,
+        //     channelKey: 'basic_channel',
+        //     title: 'Simple Notif',
+        //     body: 'Simple Button',
+        //   ));
+        //   context.read<BottomBarProvider>().setNotifyFalse();
+        // }
 
         // AwesomeNotifications().createNotification(
         //     content: NotificationContent(
@@ -68,7 +69,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),
           items: [
             const BottomNavigationBarItem(
-                icon: Icon(Icons.home), label: 'Home'),
+                icon: Icon(Icons.home), label: 'Главная'),
             BottomNavigationBarItem(
                 icon: Stack(
                   children: [
@@ -92,13 +93,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     ),
                   ],
                 ),
-                label: 'Messages'),
+                label: 'Сообщения'),
             context.read<MainProvider>().isLogin == true
                 ? const BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle_outlined), label: 'Account')
+                    icon: Icon(Icons.account_circle_outlined), label: 'Аккаунт')
                 : const BottomNavigationBarItem(
                     icon: Icon(Icons.person_add_alt_outlined),
-                    label: 'Login/Register'),
+                    label: 'Войти/Регистрация'),
           ],
           currentIndex: selectedItem,
           onTap: ((value) {

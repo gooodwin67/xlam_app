@@ -61,12 +61,24 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                     padding: EdgeInsets.all(mainPadding),
                     child: Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            context.pop();
-                          },
-                          child: Icon(Icons.chevron_left),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(vertical: 8),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () {
+                        //           context.pop();
+                        //         },
+                        //         child: Icon(Icons.chevron_left),
+                        //       ),
+                        //       const InkWell(
+                        //         child: Icon(Icons.favorite_border_rounded),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        SizedBox(height: 5),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -93,14 +105,46 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                         ),
                         const SizedBox(height: 10),
                         Container(
-                          child: Text(
-                            prod[0].nameUser.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(fontSize: 20),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Продавец: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontSize: 15),
+                              ),
+                              Text(
+                                prod[0].nameUser.toString(),
+                              ),
+                            ],
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        prod[0].descProd == ''
+                            ? SizedBox()
+                            : Container(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Описание: ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(fontSize: 15),
+                                      ),
+                                      SizedBox(height: 3),
+                                      Text(
+                                        prod[0].descProd.toString(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                         const SizedBox(height: 10),
                         context.read<ProdScreenProvider>().iLikedProd
                             ? Text('Вы предложили цену')

@@ -48,11 +48,12 @@ class MainLoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 40),
-                Text('Жалко выкинуть',
+                Text(nameApp,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge),
                 SizedBox(height: 10),
-                Text('Сервис продажи и дарения ненужных вещей',
+                Text(
+                    'Приложение с объявлениями, где покупатель предлагает цену',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium),
                 SizedBox(height: 40),

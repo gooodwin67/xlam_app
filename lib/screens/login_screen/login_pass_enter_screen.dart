@@ -42,7 +42,7 @@ class LoginPassEnterScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Жалко выкинуть',
+                          Text(nameApp,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge

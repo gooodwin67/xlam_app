@@ -62,6 +62,36 @@ class AddProductButton extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
+                        TextField(
+                          onChanged: (value) {
+                            context.read<AccountProvider>().getDesc(value);
+                          },
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          style: Theme.of(context).textTheme.bodyText1,
+                          decoration: InputDecoration(
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            contentPadding: EdgeInsets.zero,
+                            filled: true,
+                            fillColor: Color(0xffF2F0F7),
+                            prefixIcon: Icon(Icons.description_outlined),
+                            label: Text(
+                              'Описание товара',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         DropdownButtonFormField(
                           hint: Padding(
                             padding: const EdgeInsets.only(left: 20),

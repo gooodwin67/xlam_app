@@ -51,18 +51,29 @@ class MainScreenProvider extends ChangeNotifier {
         nameCategory: 'Последние', iconCategory: Icons.star, numCategory: 0),
     Category(
         nameCategory: 'Одежда и обувь',
-        iconCategory: Icons.settings,
+        iconCategory: Icons.checkroom_outlined,
         numCategory: 1),
     Category(
         nameCategory: 'Электроника',
-        iconCategory: Icons.settings,
+        iconCategory: Icons.dvr_outlined,
         numCategory: 2),
     Category(
-        nameCategory: 'Для дома', iconCategory: Icons.settings, numCategory: 3),
+      nameCategory: 'Для дома',
+      iconCategory: Icons.home_outlined,
+      numCategory: 3,
+    ),
     Category(
         nameCategory: 'Для детей',
-        iconCategory: Icons.settings,
+        iconCategory: Icons.child_care_outlined,
         numCategory: 4),
+    Category(
+        nameCategory: 'Хобби и отдых',
+        iconCategory: Icons.sports_baseball_outlined,
+        numCategory: 5),
+    Category(
+        nameCategory: 'Красота и здоровье',
+        iconCategory: Icons.healing_outlined,
+        numCategory: 6),
   ];
 }
 

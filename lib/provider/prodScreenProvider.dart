@@ -76,7 +76,7 @@ class ProdScreenProvider extends ChangeNotifier {
             'active': false,
             'price': price,
             'nameProd': docName,
-            'photo': docPhoto
+            'photo': docPhoto,
           },
           'firstMessages': [],
           'secondMessages': [],
@@ -147,11 +147,13 @@ class ProdScreenProvider extends ChangeNotifier {
               docPhoto = doc.data()['photo'].toString();
               products.add(
                 Prod(
-                    idUser: doc.data()['idUser'] ?? 'idUser',
-                    nameUser: doc.data()['nameUser'] ?? 'nameUser',
-                    id: doc.data()['idProd'],
-                    nameProd: doc.data()['name'],
-                    photoProd: doc.data()['photo']),
+                  idUser: doc.data()['idUser'] ?? 'idUser',
+                  nameUser: doc.data()['nameUser'] ?? 'nameUser',
+                  id: doc.data()['idProd'],
+                  nameProd: doc.data()['name'],
+                  photoProd: doc.data()['photo'],
+                  descProd: doc.data()['description'] ?? '',
+                ),
               );
             }
           }
@@ -200,11 +202,13 @@ class Prod {
   String id;
   String nameProd;
   String photoProd;
+  String descProd;
   Prod({
     required this.idUser,
     required this.nameUser,
     required this.id,
     required this.nameProd,
     required this.photoProd,
+    required this.descProd,
   });
 }
