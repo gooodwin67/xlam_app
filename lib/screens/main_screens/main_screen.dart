@@ -25,6 +25,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
+    // print('Город ${context.read<MainProvider>().userCity}');
+    // context
+    //     .read<MainScreenProvider>()
+    //     .changeActieCity(context.read<MainProvider>().userCity); //Автоматический выбор города пользователя
     super.initState();
   }
 
@@ -43,8 +47,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           child: RefreshIndicator(
             onRefresh: () {
               if (dataIsLoaded) {
-                context.read<MainScreenProvider>().getAllDb(
-                    context.read<MainScreenProvider>().activeCategory);
+                context.read<MainScreenProvider>().getAllDb();
               }
               setState(() {});
               return Future((() => true));
@@ -126,11 +129,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              context.read<MainScreenProvider>().getAllDb(
-                                  context
-                                      .read<MainScreenProvider>()
-                                      .Categories[index]
-                                      .numCategory);
+                              context.read<MainScreenProvider>().getAllDb();
 
                               context
                                   .read<MainScreenProvider>()
@@ -168,11 +167,48 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                   titleSpacing: 0,
                   backgroundColor: Colors.white,
                   automaticallyImplyLeading: false,
-                  expandedHeight: 20,
-                  title: Center(
-                    child: Text(
-                      nameCategory,
-                      style: const TextStyle(color: Colors.black),
+                  expandedHeight: 80,
+                  title: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          nameCategory,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 22),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 38,
+                          child: DropdownButtonFormField(
+                            isExpanded: true,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black),
+                            items: cities
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(
+                                        e,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              context
+                                  .read<MainScreenProvider>()
+                                  .changeActieCity(value);
+                              context.read<MainScreenProvider>().getAllDb();
+                            },
+                            value: 'Все города',
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.only(top: 0, bottom: 0, left: 0),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),

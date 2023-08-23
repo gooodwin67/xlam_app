@@ -7,9 +7,11 @@ class MainScreenProvider extends ChangeNotifier {
   List listIds = [];
   String nameCategory = 'Последние';
   num activeCategory = 0;
+  String activeCity = 'Все города';
 
-  Future getAllDb(category) async {
+  Future getAllDb() async {
     dataIsLoaded = false;
+    notifyListeners();
     listIds = [];
     products = [];
     var db = FirebaseFirestore.instance;
@@ -24,13 +26,19 @@ class MainScreenProvider extends ChangeNotifier {
         (value) {
           for (var doc in value.docs) {
             if (doc.data()['active'] == true &&
-                (doc.data()['category'] == category || category == 0)) {
+                (doc.data()['city'] == activeCity ||
+                    activeCity == 'Все города') &&
+                (doc.data()['category'] == activeCategory ||
+                    activeCategory == 0)) {
+              print(activeCategory);
               products.add(
                 Prod(
-                    id: doc.data()['idProd'],
-                    category: doc.data()['category'],
-                    nameProd: doc.data()['name'],
-                    photoProd: doc.data()['photo']),
+                  id: doc.data()['idProd'],
+                  category: doc.data()['category'],
+                  nameProd: doc.data()['name'],
+                  photoProd: doc.data()['photo'],
+                  city: doc.data()['city'] ?? '',
+                ),
               );
             }
           }
@@ -44,6 +52,10 @@ class MainScreenProvider extends ChangeNotifier {
   changeName(index) {
     nameCategory = Categories[index].nameCategory;
     activeCategory = index;
+  }
+
+  changeActieCity(city) {
+    activeCity = city;
   }
 
   List Categories = [
@@ -93,10 +105,12 @@ class Prod {
   num category;
   String nameProd;
   String photoProd;
+  String city;
   Prod({
     required this.id,
     required this.category,
     required this.nameProd,
     required this.photoProd,
+    required this.city,
   });
 }

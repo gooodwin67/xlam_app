@@ -27,7 +27,7 @@ class ProductBlock extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Container(
-              height: 180,
+              height: 160,
               color: const Color.fromARGB(255, 214, 214, 214),
               width: double.infinity,
               child: !dataIsLoaded
@@ -41,10 +41,20 @@ class ProductBlock extends StatelessWidget {
           const SizedBox(height: 5),
           !dataIsLoaded
               ? SpinKitWave(color: mainColor.withAlpha(50), size: 20.0)
-              : Text(
-                  productList[index].nameProd,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              : Column(
+                  children: [
+                    Text(
+                      productList[index].nameProd,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      productList[index].city ?? '',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
         ],
       ),

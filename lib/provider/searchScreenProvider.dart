@@ -37,10 +37,12 @@ class SearchScreenProvider extends ChangeNotifier {
                 doc.data()['active'] == true) {
               products.add(
                 Prod(
-                    id: doc.data()['idProd'],
-                    category: doc.data()['category'],
-                    nameProd: doc.data()['name'],
-                    photoProd: doc.data()['photo']),
+                  id: doc.data()['idProd'],
+                  category: doc.data()['category'],
+                  nameProd: doc.data()['name'],
+                  photoProd: doc.data()['photo'],
+                  city: doc.data()['city'],
+                ),
               );
             }
           }
@@ -62,10 +64,12 @@ class Prod {
   num category;
   String nameProd;
   String photoProd;
+  String city;
   Prod({
     required this.id,
     required this.category,
     required this.nameProd,
     required this.photoProd,
+    required this.city,
   });
 }

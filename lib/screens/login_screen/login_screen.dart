@@ -17,9 +17,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
   void initState() {
     context.read<MainProvider>().isLogining();
     Future.delayed(const Duration(milliseconds: 300), () {
-      context
-          .read<MainScreenProvider>()
-          .getAllDb(context.read<MainScreenProvider>().activeCategory);
+      context.read<MainScreenProvider>().getAllDb();
       WidgetsBinding.instance.addPostFrameCallback((_) => context.go('/main'));
     });
 

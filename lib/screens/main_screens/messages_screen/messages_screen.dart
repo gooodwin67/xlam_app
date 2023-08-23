@@ -36,9 +36,8 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
         child: WillPopScope(
             onWillPop: () {
               context.read<BottomBarProvider>().onItemTapped(0);
-              context
-                  .read<MainScreenProvider>()
-                  .getAllDb(context.read<MainScreenProvider>().activeCategory);
+              context.read<MainScreenProvider>().getAllDb();
+              ;
               context.go('/main');
               return Future((() => true));
             },
@@ -61,9 +60,8 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                         InkWell(
                           onTap: () {
                             context.read<BottomBarProvider>().onItemTapped(0);
-                            context.read<MainScreenProvider>().getAllDb(context
-                                .read<MainScreenProvider>()
-                                .activeCategory);
+                            context.read<MainScreenProvider>().getAllDb();
+                            ;
                             context.go('/main');
                           },
                           child: Icon(

@@ -51,8 +51,8 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
             : WillPopScope(
                 onWillPop: () {
                   context.read<BottomBarProvider>().onItemTapped(0);
-                  context.read<MainScreenProvider>().getAllDb(
-                      context.read<MainScreenProvider>().activeCategory);
+                  context.read<MainScreenProvider>().getAllDb();
+                  ;
                   //context.go('/main');
                   return Future((() => true));
                 },
@@ -466,10 +466,10 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                                       ),
                                       duration: const Duration(seconds: 4),
                                     ));
-                                    context.read<MainScreenProvider>().getAllDb(
-                                        context
-                                            .read<MainScreenProvider>()
-                                            .activeCategory);
+                                    context
+                                        .read<MainScreenProvider>()
+                                        .getAllDb();
+                                    ;
                                   });
                                 },
                                 child: const Text(

@@ -104,9 +104,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
           onTap: ((value) {
             context.read<BottomBarProvider>().onItemTapped(value);
             if (value == 0) {
-              context
-                  .read<MainScreenProvider>()
-                  .getAllDb(context.read<MainScreenProvider>().activeCategory);
+              context.read<MainScreenProvider>().getAllDb();
+              ;
               context.go('/main');
             }
             if (value == 1) {
