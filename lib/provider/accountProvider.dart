@@ -36,6 +36,7 @@ class AccountProvider extends ChangeNotifier {
       category: 0,
       nameProd: '',
       descProd: '',
+      city: '',
       photoProd: 'assets/images/prod1.jpg');
 
   Future setDb(userId) async {
@@ -77,7 +78,8 @@ class AccountProvider extends ChangeNotifier {
       'name': newProduct.nameProd,
       'description': newProduct.descProd,
       'category': newProduct.category,
-      'photo': linkProd
+      'photo': linkProd,
+      'city': newProduct.city,
     });
 
     newProduct.nameProd = '';
@@ -118,6 +120,7 @@ class AccountProvider extends ChangeNotifier {
               nameProd: doc.data()['name'],
               descProd: doc.data()['description'],
               active: doc.data()['active'],
+              city: doc.data()['city'],
               photoProd: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
             ),
           );
@@ -151,6 +154,10 @@ class AccountProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  changeCity(value) {
+    newProduct.city = value;
+  }
+
   XFile? image;
 
   Future getImage(ImageSource media) async {
@@ -179,6 +186,7 @@ class Product {
   String photoProd;
   String descProd;
   bool active;
+  String city;
   Product({
     required this.id,
     required this.idUser,
@@ -188,5 +196,6 @@ class Product {
     required this.photoProd,
     required this.descProd,
     required this.active,
+    required this.city,
   });
 }

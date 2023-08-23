@@ -132,6 +132,33 @@ class AddProductButton extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
+                        DropdownButtonFormField(
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.black),
+                          items: cities
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(
+                                      e,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            context.read<AccountProvider>().changeCity(value);
+                          },
+                          value: context.read<AccountProvider>().userCity,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(top: 0, bottom: 0, left: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            filled: true,
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         Text('Добавьте фотографию'),
                         SizedBox(height: 5),
                         Row(

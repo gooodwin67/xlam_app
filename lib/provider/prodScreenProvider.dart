@@ -153,6 +153,7 @@ class ProdScreenProvider extends ChangeNotifier {
                   nameProd: doc.data()['name'],
                   photoProd: doc.data()['photo'],
                   descProd: doc.data()['description'] ?? '',
+                  city: doc.data()['city'] ?? '',
                 ),
               );
             }
@@ -203,6 +204,7 @@ class Prod {
   String nameProd;
   String photoProd;
   String descProd;
+  String city;
   Prod({
     required this.idUser,
     required this.nameUser,
@@ -210,5 +212,6 @@ class Prod {
     required this.nameProd,
     required this.photoProd,
     required this.descProd,
+    required this.city,
   });
 }

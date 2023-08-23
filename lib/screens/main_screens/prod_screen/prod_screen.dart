@@ -121,6 +121,23 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                           ),
                         ),
                         const SizedBox(height: 10),
+                        Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                'Город: ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontSize: 15),
+                              ),
+                              Text(
+                                prod[0].city.toString(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         prod[0].descProd == ''
                             ? SizedBox()
                             : Container(
