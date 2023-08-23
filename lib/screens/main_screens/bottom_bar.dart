@@ -36,11 +36,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-        //newMessages = 0;
+        newMessages = 0;
         for (var doc in snapshot.data!.docs) {
           if (doc.id.contains(userId, 5)) {
             newMessages += int.parse(doc.get('id2new').toString());
-            print(newMessages);
           } else if (doc.id.contains(userId)) {
             newMessages += int.parse(doc.get('id1new').toString());
           }
@@ -99,7 +98,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     icon: Icon(Icons.account_circle_outlined), label: 'Аккаунт')
                 : const BottomNavigationBarItem(
                     icon: Icon(Icons.person_add_alt_outlined),
-                    label: 'Войти/Регистрация'),
+                    label: 'Вход/Рег'),
           ],
           currentIndex: selectedItem,
           onTap: ((value) {
