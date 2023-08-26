@@ -11,7 +11,7 @@ class MainScreenProvider extends ChangeNotifier {
 
   Future getAllDb() async {
     dataIsLoaded = false;
-    notifyListeners();
+
     listIds = [];
     products = [];
     var db = FirebaseFirestore.instance;

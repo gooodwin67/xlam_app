@@ -16,14 +16,14 @@ class MainProvider extends ChangeNotifier {
       }
     });
 
-    var db = FirebaseFirestore.instance;
+    // var db = FirebaseFirestore.instance;
 
-    await db.collection("users").get().then((event) {
-      for (var doc in event.docs) {
-        if (doc.id == userId) {
-          userCity = doc.data()['city'];
-        }
-      }
-    });
+    // await db.collection("users").get().then((event) {
+    //   for (var doc in event.docs) {
+    //     if (doc.id == userId) {
+    //       userCity = doc.data()['city'];
+    //     }
+    //   }
+    // });
   }
 }

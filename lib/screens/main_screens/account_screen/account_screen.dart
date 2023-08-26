@@ -15,12 +15,22 @@ import 'package:xlam_app/screens/main_screens/account_screen/addProductWidget.da
 import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
 import 'package:xlam_app/screens/main_screens/product_block.dart';
 
-class AccountScreenWidget extends StatelessWidget {
+class AccountScreenWidget extends StatefulWidget {
   const AccountScreenWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<AccountScreenWidget> createState() => _AccountScreenWidgetState();
+}
+
+class _AccountScreenWidgetState extends State<AccountScreenWidget> {
+  @override
+  void initState() {
     context.read<AccountProvider>().getDb(context.read<MainProvider>().userId);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     String userName = context.read<AccountProvider>().userName;
     String userCity = context.read<AccountProvider>().userCity;
 
@@ -33,7 +43,6 @@ class AccountScreenWidget extends StatelessWidget {
           onWillPop: () {
             context.read<BottomBarProvider>().onItemTapped(0);
             context.read<MainScreenProvider>().getAllDb();
-            ;
             context.go('/main');
             return Future((() => true));
           },

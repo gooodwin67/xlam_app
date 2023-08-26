@@ -113,21 +113,20 @@ class AccountProvider extends ChangeNotifier {
         if (doc.data()['active']) {
           productsList.add(
             Product(
-              id: doc.data()['idProd'],
-              idUser: doc.data()['idUser'],
-              nameUser: doc.data()['nameUser'],
+              id: doc.data()['idProd'] ?? '',
+              idUser: doc.data()['idUser'] ?? '',
+              nameUser: doc.data()['nameUser'] ?? '',
               category: doc.data()['category'],
-              nameProd: doc.data()['name'],
-              descProd: doc.data()['description'],
+              nameProd: doc.data()['name'] ?? '',
+              descProd: doc.data()['description'] ?? '',
               active: doc.data()['active'],
-              city: doc.data()['city'],
+              city: doc.data()['city'] ?? '',
               photoProd: doc.data()['photo'] ?? 'assets/images/prod1.jpg',
             ),
           );
         }
       }
     });
-
     dataIsLoaded = true;
 
     notifyListeners();
@@ -173,8 +172,6 @@ class AccountProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  notifyListeners();
 }
 
 class Product {
