@@ -39,9 +39,9 @@ class SearchScreenProvider extends ChangeNotifier {
                 Prod(
                   id: doc.data()['idProd'],
                   category: doc.data()['category'],
-                  nameProd: doc.data()['name'],
-                  photoProd: doc.data()['photo'],
-                  city: doc.data()['city'],
+                  nameProd: doc.data()['name'] ?? '',
+                  photoProd: doc.data()['photo'] ?? '',
+                  city: doc.data()['city'] ?? '',
                 ),
               );
             }

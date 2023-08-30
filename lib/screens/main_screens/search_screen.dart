@@ -106,6 +106,7 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> {
                             prefixIcon: Icon(Icons.search),
                             suffixIcon: InkWell(
                               onTap: () {
+                                FocusScope.of(context).unfocus();
                                 context
                                     .read<SearchScreenProvider>()
                                     .startSearching();
