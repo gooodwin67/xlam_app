@@ -1,8 +1,8 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/constants/constants.dart';
+import 'package:xlam_app/main.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
@@ -20,11 +20,6 @@ class MainScreenWidget extends StatefulWidget {
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   void initState() {
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
     // print('Город ${context.read<MainProvider>().userCity}');
     // context
     //     .read<MainScreenProvider>()
@@ -77,12 +72,23 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                             color: Colors.grey,
                           ),
                         ),
-                        Text(
-                          nameApp,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(fontSize: 25),
+                        // Text(
+                        //   nameApp,
+                        //   style: Theme.of(context)
+                        //       .textTheme
+                        //       .titleLarge!
+                        //       .copyWith(fontSize: 25),
+                        // ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Future.delayed(Duration(seconds: 7), () {
+                              Noti.showBigTextNotification(
+                                  title: 'Title',
+                                  body: 'TextBody',
+                                  fln: flutterLocalNotificationsPlugin);
+                            });
+                          },
+                          child: Text('run'),
                         ),
                         InkWell(
                           onTap: () {

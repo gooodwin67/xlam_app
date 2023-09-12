@@ -1,8 +1,8 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:xlam_app/main.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
@@ -24,7 +24,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     int selectedItem = context.watch<BottomBarProvider>().selectedItem;
     int newMessages = 0;
     String userId = context.read<MainProvider>().userId;
-    //bool canNotify = context.read<BottomBarProvider>().canNotify;
 
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
@@ -36,34 +35,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-        newMessages = 0;
-        for (var doc in snapshot.data!.docs) {
-          if (doc.id.contains(userId, 5)) {
-            newMessages += int.parse(doc.get('id2new').toString());
-          } else if (doc.id.contains(userId)) {
-            newMessages += int.parse(doc.get('id1new').toString());
-          }
-        }
-
-        // if (newMessages == 1 && canNotify == true) {
-        //   AwesomeNotifications().createNotification(
-        //       content: NotificationContent(
-        //     id: 10,
-        //     channelKey: 'basic_channel',
-        //     title: 'Simple Notif',
-        //     body: 'Simple Button',
-        //   ));
-        //   context.read<BottomBarProvider>().setNotifyFalse();
+        // for (var change in snapshot.data!.docChanges) {
+        //   print(change.doc.data());
         // }
 
-        // AwesomeNotifications().createNotification(
-        //     content: NotificationContent(
-        //   id: 10,
-        //   channelKey: 'basic_channel',
-        //   title: 'Simple Notif',
-        //   body: 'Simple Button',
-        // ));
-
+        for (var doc in snapshot.data!.docs) {
+          if (doc.id.indexOf(userId) > 5 && doc.get('id2new') > 0) {
+            newMessages += int.parse(doc.get('id2new').toString());
+            // Noti.showBigTextNotification(
+            //     title: 'Title',
+            //     body: 'TextBody',
+            //     fln: flutterLocalNotificationsPlugin);
+            print('aaaaaa1 ${doc.id}');
+          } else if (doc.id.indexOf(userId) < 5 && doc.get('id1new') > 0) {
+            newMessages += int.parse(doc.get('id1new').toString());
+            print('bbbbbbb2 ${doc.id}');
+          }
+        }
         return BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 240, 240, 240),
           items: [

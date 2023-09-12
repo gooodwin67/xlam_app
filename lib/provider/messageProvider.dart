@@ -44,7 +44,7 @@ class MessageProvider extends ChangeNotifier {
         'firstMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
         ]),
-        'id2new': id2new
+        'id2new': id2new,
       });
     } else {
       await db.collection("messages").doc(allChatId).get().then((value) {
@@ -55,7 +55,7 @@ class MessageProvider extends ChangeNotifier {
         'secondMessages': FieldValue.arrayUnion([
           {'text': messageText, 'time': myTimeStamp}
         ]),
-        'id1new': id1new
+        'id1new': id1new,
       });
 
       await db.collection("messages").doc(allChatId).get().then((value) {
@@ -85,6 +85,8 @@ class MessageProvider extends ChangeNotifier {
     print('getMessage');
 
     await db.collection('messages').doc(chatId).get().then((value) {
+      print(chatId);
+      print(myId);
       if (chatId.contains(myId, 5)) {
         myMessagesFirst = false;
         if (value.data()!['id2new'] > 0) {

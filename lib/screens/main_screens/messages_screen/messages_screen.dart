@@ -6,6 +6,7 @@ import 'package:xlam_app/constants/constants.dart';
 import 'package:xlam_app/provider/bottomBarProvider.dart';
 import 'package:xlam_app/provider/mainProvider.dart';
 import 'package:xlam_app/provider/mainScreenProvider.dart';
+import 'package:xlam_app/provider/messageProvider.dart';
 import 'package:xlam_app/provider/messagesProvider.dart';
 import 'package:xlam_app/screens/main_screens/bottom_bar.dart';
 
@@ -61,7 +62,6 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                           onTap: () {
                             context.read<BottomBarProvider>().onItemTapped(0);
                             context.read<MainScreenProvider>().getAllDb();
-                            ;
                             context.go('/main');
                           },
                           child: Icon(
@@ -101,8 +101,15 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                     EdgeInsets.only(bottom: mainPadding * 2),
                                 child: InkWell(
                                   onTap: () {
-                                    context.go(
-                                        '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
+                                    context
+                                        .read<MessageProvider>()
+                                        .getMessagesDB(
+                                            '${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}',
+                                            context.read<MainProvider>().userId)
+                                        .then((value) {
+                                      context.go(
+                                          '/main/messages/${messagesList[index].id2}-xl-${messagesList[index].id}-prod-${messagesList[index].idProd}');
+                                    });
                                   },
                                   child: Column(
                                     crossAxisAlignment:

@@ -1,5 +1,5 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:xlam_app/provider/RegistrationScreenProvider.dart';
 import 'package:xlam_app/provider/accountProvider.dart';
@@ -37,31 +37,22 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // AwesomeNotifications().initialize(
-    //     // set the icon to null if you want to use the default app icon
-    //     null,
-    //     [
-    //       NotificationChannel(
-    //           channelGroupKey: 'basic_channel_group',
-    //           channelKey: 'basic_channel',
-    //           channelName: 'Basic notifications',
-    //           channelDescription: 'Notification channel for basic tests',
-    //           defaultColor: Color(0xFF9D50DD),
-    //           ledColor: Colors.white)
-    //     ],
-    //     // Channel groups are only visual and are not required
-    //     // channelGroups: [
-    //     //   NotificationChannelGroup(
-    //     //       channelGroupKey: 'basic_channel_group',
-    //     //       channelGroupName: 'Basic group')
-    //     // ],
-    //     debug: true);
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    Noti.initiaslize(flutterLocalNotificationsPlugin);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
       debugShowCheckedModeBanner: false,
@@ -74,5 +65,36 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+class Noti {
+  static Future initiaslize(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+    var androidInitialize = AndroidInitializationSettings('mipmap/ic_launcher');
+    var initializationsSettings =
+        InitializationSettings(android: androidInitialize);
+    await flutterLocalNotificationsPlugin.initialize(initializationsSettings);
+  }
+
+  static Future showBigTextNotification(
+      {var id = 0,
+      required String title,
+      required String body,
+      var payload,
+      required FlutterLocalNotificationsPlugin fln}) async {
+    AndroidNotificationDetails androidPlatformChannelSprcifics =
+        AndroidNotificationDetails(
+      'name',
+      'chanel_name',
+      playSound: true,
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    var not = NotificationDetails(android: androidPlatformChannelSprcifics);
+    await fln.show(0, title, body, not);
   }
 }

@@ -24,6 +24,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   void initState() {
     // WidgetsBinding.instance.addPostFrameCallback(
     //     (_) => context.read<BottomBarProvider>().setNotifyTrue());
+    context
+        .read<MessageProvider>()
+        .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
     super.initState();
   }
 
@@ -36,9 +39,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
-    context
-        .read<MessageProvider>()
-        .getMessagesDB(widget.chatId, context.read<MainProvider>().userId);
 
     return Scaffold(
       appBar: AppBar(
@@ -100,6 +100,14 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                             if (snapshot.hasError) {
                               return const Text('Something went wrong');
                             }
+
+                            // if (snapshot.data != null) {
+                            //   if (snapshot.data!.docs.first.get('id2new') > 0) {
+                            //     context.read<MessageProvider>().getMessagesDB(
+                            //         widget.chatId,
+                            //         context.read<MainProvider>().userId);
+                            //   }
+                            // }
 
                             // context.read<MessageProvider>().getMessagesDB(
                             //     widget.chatId,
@@ -198,7 +206,14 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                       onTap: () {
                         if (context.read<MessageProvider>().messageTextLegal) {
                           FocusScope.of(context).unfocus();
-                          context.read<MessageProvider>().setMessage();
+                          context
+                              .read<MessageProvider>()
+                              .setMessage()
+                              .then((value) {
+                            context.read<MessageProvider>().getMessagesDB(
+                                widget.chatId,
+                                context.read<MainProvider>().userId);
+                          });
                           _controller.clear();
                         }
                       },
