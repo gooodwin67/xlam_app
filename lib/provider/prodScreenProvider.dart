@@ -149,9 +149,9 @@ class ProdScreenProvider extends ChangeNotifier {
                 Prod(
                   idUser: doc.data()['idUser'] ?? 'idUser',
                   nameUser: doc.data()['nameUser'] ?? 'nameUser',
-                  id: doc.data()['idProd'],
-                  nameProd: doc.data()['name'],
-                  photoProd: doc.data()['photo'],
+                  id: doc.data()['idProd'] ?? '',
+                  nameProd: doc.data()['name'] ?? '',
+                  photoProd: doc.data()['photo'] ?? '',
                   descProd: doc.data()['description'] ?? '',
                   city: doc.data()['city'] ?? '',
                 ),

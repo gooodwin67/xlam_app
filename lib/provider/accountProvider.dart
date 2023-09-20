@@ -21,7 +21,6 @@ class AccountProvider extends ChangeNotifier {
   var linkProd = '';
 
   clearDataFromBottomSheet() {
-    dataIsLoaded = false;
     nameIsLegal = false;
     categoryIsLegal = false;
     imageLoaded = false;
@@ -87,6 +86,7 @@ class AccountProvider extends ChangeNotifier {
     image = null;
     imageLoaded = false;
     categoryIsLegal = false;
+    dataIsLoaded = false;
   }
 
   Future getDb(userId) async {

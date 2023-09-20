@@ -35,11 +35,28 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<ProdScreenProvider>().dataIsLoaded;
     List prod = context.read<ProdScreenProvider>().products;
+    Future.delayed(Duration(seconds: 1), () {
+      if (dataIsLoaded && prod.isEmpty) {
+        context.read<BottomBarProvider>().onItemTapped(0);
+        context
+            .read<MainScreenProvider>()
+            .getAllDb()
+            .then((value) => Navigator.pop(context));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: mainColor,
+          content: const Text(
+            'Товар был удален',
+            style: TextStyle(color: Colors.white),
+          ),
+          duration: const Duration(seconds: 4),
+        ));
+      }
+    });
 
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: SafeArea(
-        child: !dataIsLoaded
+        child: !dataIsLoaded || prod.isEmpty
             ? Container(
                 color:
                     const Color.fromARGB(255, 255, 255, 255).withOpacity(0.9),
@@ -52,7 +69,7 @@ class _ProdScreenWidgetState extends State<ProdScreenWidget> {
                 onWillPop: () {
                   context.read<BottomBarProvider>().onItemTapped(0);
                   context.read<MainScreenProvider>().getAllDb();
-                  ;
+
                   //context.go('/main');
                   return Future((() => true));
                 },

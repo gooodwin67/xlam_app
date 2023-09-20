@@ -216,9 +216,11 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                       childCount: !dataIsLoaded ? 4 : productList.length,
                       (context, index) {
                         return InkWell(
-                          onTap: () => dataIsLoaded
-                              ? context.go('/main/${productList[index].id}')
-                              : null,
+                          onTap: () {
+                            dataIsLoaded
+                                ? context.go('/main/${productList[index].id}')
+                                : null;
+                          },
                           child: ProductBlock(
                               productList: productList,
                               dataIsLoaded: dataIsLoaded,
