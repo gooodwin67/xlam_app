@@ -39,6 +39,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
   Widget build(BuildContext context) {
     bool dataIsLoaded = context.watch<MessageProvider>().messageDataIsLoaded;
     MessageWrapBlock message = context.watch<MessageProvider>().message;
+    bool myMessagesFirst = context.read<MessagesProvider>().myMessagesFirst;
+
+    bool canSnapshot = true;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,22 +95,34 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                     childCount: !dataIsLoaded ? 15 : message.messages.length,
                     ((context, index) {
                       return StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('messages')
-                              .snapshots(),
+                          stream: _usersStream,
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.hasError) {
                               return const Text('Something went wrong');
                             }
 
-                            // if (snapshot.data != null) {
-                            //   if (snapshot.data!.docs.first.get('id2new') > 0) {
-                            //     context.read<MessageProvider>().getMessagesDB(
-                            //         widget.chatId,
-                            //         context.read<MainProvider>().userId);
-                            //   }
-                            // }
+                            if (snapshot.data != null) {
+                              if (!myMessagesFirst) {
+                                if (snapshot.data!.docs.first.get('id2new') >
+                                        0 &&
+                                    canSnapshot) {
+                                  canSnapshot = false;
+                                  context.read<MessageProvider>().getMessagesDB(
+                                      widget.chatId,
+                                      context.read<MainProvider>().userId);
+                                }
+                              } else {
+                                if (snapshot.data!.docs.first.get('id1new') >
+                                        0 &&
+                                    canSnapshot) {
+                                  canSnapshot = false;
+                                  context.read<MessageProvider>().getMessagesDB(
+                                      widget.chatId,
+                                      context.read<MainProvider>().userId);
+                                }
+                              }
+                            }
 
                             // context.read<MessageProvider>().getMessagesDB(
                             //     widget.chatId,

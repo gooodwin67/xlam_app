@@ -72,23 +72,12 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                             color: Colors.grey,
                           ),
                         ),
-                        // Text(
-                        //   nameApp,
-                        //   style: Theme.of(context)
-                        //       .textTheme
-                        //       .titleLarge!
-                        //       .copyWith(fontSize: 25),
-                        // ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Future.delayed(Duration(seconds: 7), () {
-                              Noti.showBigTextNotification(
-                                  title: 'Title',
-                                  body: 'TextBody',
-                                  fln: flutterLocalNotificationsPlugin);
-                            });
-                          },
-                          child: Text('run'),
+                        Text(
+                          nameApp,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(fontSize: 25),
                         ),
                         InkWell(
                           onTap: () {

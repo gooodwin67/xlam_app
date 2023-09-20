@@ -90,7 +90,7 @@ class MessageProvider extends ChangeNotifier {
       if (chatId.contains(myId, 5)) {
         myMessagesFirst = false;
         if (value.data()!['id2new'] > 0) {
-          id2new = 0;
+          //id2new = 0;
           print('aaaaaa');
           db.collection('messages').doc(chatId).update({'id2new': id2new});
         }

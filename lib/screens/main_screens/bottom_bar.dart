@@ -16,9 +16,31 @@ class BottomNavBar extends StatefulWidget {
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends State<BottomNavBar>
+    with WidgetsBindingObserver {
+  bool _isInForeground = true;
+
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('messages').snapshots();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    _isInForeground = state == AppLifecycleState.resumed;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     int selectedItem = context.watch<BottomBarProvider>().selectedItem;
@@ -35,21 +57,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading");
         }
-        // for (var change in snapshot.data!.docChanges) {
-        //   print(change.doc.data());
-        // }
 
         for (var doc in snapshot.data!.docs) {
           if (doc.id.indexOf(userId) > 5 && doc.get('id2new') > 0) {
-            newMessages += int.parse(doc.get('id2new').toString());
-            // Noti.showBigTextNotification(
-            //     title: 'Title',
-            //     body: 'TextBody',
-            //     fln: flutterLocalNotificationsPlugin);
-            print('aaaaaa1 ${doc.id}');
+            newMessages = int.parse(doc.get('id2new').toString());
+            if (!_isInForeground && newMessages > 0) {
+              Noti.showBigTextNotification(
+                  title: 'Title',
+                  body: 'TextBody',
+                  fln: flutterLocalNotificationsPlugin);
+            }
           } else if (doc.id.indexOf(userId) < 5 && doc.get('id1new') > 0) {
-            newMessages += int.parse(doc.get('id1new').toString());
-            print('bbbbbbb2 ${doc.id}');
+            newMessages = int.parse(doc.get('id1new').toString());
+            if (!_isInForeground) {
+              Noti.showBigTextNotification(
+                  title: 'Title',
+                  body: 'TextBody',
+                  fln: flutterLocalNotificationsPlugin);
+            }
           }
         }
         return BottomNavigationBar(
