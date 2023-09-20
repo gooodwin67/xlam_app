@@ -191,6 +191,8 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
                                     ))
                                 .toList(),
                             onChanged: (value) {
+                              dataIsLoaded = false;
+                              setState(() {});
                               context
                                   .read<MainScreenProvider>()
                                   .changeActieCity(value);
