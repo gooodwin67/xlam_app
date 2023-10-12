@@ -175,14 +175,19 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                             ],
                                           ),
                                           SizedBox(height: 15),
+                                          Divider(
+                                            color: Colors.black,
+                                          ),
                                           Container(
-                                            padding:
-                                                EdgeInsets.all(mainPadding),
+                                            padding: EdgeInsets.only(
+                                                left: mainPadding,
+                                                right: mainPadding,
+                                                top: mainPadding),
                                             margin: EdgeInsets.only(bottom: 5),
                                             decoration: BoxDecoration(
-                                              color: messagesList[index].myProd
-                                                  ? mainColor.withAlpha(80)
-                                                  : mainColor.withAlpha(150),
+                                              // color: messagesList[index].myProd
+                                              //     ? mainColor.withAlpha(80)
+                                              //     : mainColor.withAlpha(150),
                                               borderRadius:
                                                   BorderRadius.circular(7),
                                             ),
@@ -206,9 +211,16 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                                           textAlign:
                                                               TextAlign.center,
                                                         )
-                                                      : Text('Я предложил за',
+                                                      : Text(
+                                                          'Я предложил за',
                                                           textAlign:
-                                                              TextAlign.center),
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: mainColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                 ),
                                                 SizedBox(width: 5),
                                                 Text(
