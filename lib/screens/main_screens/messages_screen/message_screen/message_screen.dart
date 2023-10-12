@@ -145,6 +145,9 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                         : CrossAxisAlignment.start,
                                     children: [
                                       Container(
+                                        constraints: BoxConstraints(
+                                          minWidth: 150,
+                                        ),
                                         padding:
                                             EdgeInsets.all(mainPadding * 2),
                                         margin: EdgeInsets.only(bottom: 5),
@@ -158,8 +161,21 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                                       255, 233, 233, 233)
                                               : Color.fromARGB(
                                                   255, 221, 221, 221),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          borderRadius: message.messages[index]
+                                                      .myMessage ==
+                                                  true
+                                              ? const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                )
+                                              : const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
                                         ),
                                         child: !dataIsLoaded
                                             ? SpinKitWave(
@@ -179,7 +195,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                                                       .messages[index].time
                                                       .toDate())
                                                   .toString(),
-                                              style: TextStyle(fontSize: 12),
+                                              style: TextStyle(fontSize: 11),
                                             )
                                     ],
                                   ),
@@ -195,7 +211,14 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
           ),
           Align(
             alignment: Alignment.topCenter,
-            child: Text('Предложил ${message.price} за ${message.nameProd}'),
+            child: Container(
+                width: double.infinity,
+                height: 40,
+                padding: EdgeInsets.symmetric(horizontal: mainPadding),
+                alignment: Alignment.center,
+                color: Color.fromARGB(255, 80, 255, 124),
+                child:
+                    Text('Предложил ${message.price} за ${message.nameProd}')),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -204,7 +227,6 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(mainPadding),
-                color: mainColor,
                 child: TextField(
                   onChanged: (value) {
                     context.read<MessageProvider>().changeMessageText(value);
@@ -215,7 +237,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     contentPadding: EdgeInsets.zero,
                     filled: true,
-                    fillColor: Color.fromARGB(255, 255, 255, 255),
+                    fillColor: Color(0xFFF6F6F6),
                     prefixIcon: Icon(Icons.add),
                     suffixIcon: InkWell(
                       onTap: () {
@@ -246,13 +268,8 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
-                      borderSide: BorderSide(
-                          // color: context
-                          //         .read<AccountProvider>()
-                          //         .nameIsLegal
-                          //     ? Colors.transparent
-                          //     : Colors.red,
-                          width: 0),
+                      borderSide:
+                          BorderSide(color: Colors.transparent, width: 0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
