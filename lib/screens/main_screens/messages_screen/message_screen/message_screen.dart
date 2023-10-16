@@ -49,35 +49,48 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
         titleSpacing: 0,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: Padding(
-          padding: EdgeInsets.all(mainPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () => context.pop(),
-                child: Icon(
-                  Icons.chevron_left,
-                  color: Colors.grey,
+        title: WillPopScope(
+          onWillPop: () {
+            context
+                .read<MessagesProvider>()
+                .getChatsDB(context.read<MainProvider>().userId);
+            return Future((() => true));
+          },
+          child: Padding(
+            padding: EdgeInsets.all(mainPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    context
+                        .read<MessagesProvider>()
+                        .getChatsDB(context.read<MainProvider>().userId);
+                    context.pop();
+                  },
+                  child: Icon(
+                    Icons.chevron_left,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              !dataIsLoaded
-                  ? Text('')
-                  : Text(
-                      'Переписка с ${message.name} ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 20),
-                    ),
-              // InkWell(
-              //   child: Icon(
-              //     Icons.power_settings_new,
-              //     color: Colors.grey,
-              //   ),
-              // ),
-              SizedBox(width: 15),
-            ],
+                !dataIsLoaded
+                    ? Text('')
+                    : Text(
+                        'Переписка с ${message.name} ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(fontSize: 20),
+                      ),
+                // InkWell(
+                //   child: Icon(
+                //     Icons.power_settings_new,
+                //     color: Colors.grey,
+                //   ),
+                // ),
+                SizedBox(width: 15),
+              ],
+            ),
           ),
         ),
       ),
@@ -92,7 +105,7 @@ class _MessageScreenWidgetState extends State<MessageScreenWidget> {
               slivers: [
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    childCount: !dataIsLoaded ? 15 : message.messages.length,
+                    childCount: !dataIsLoaded ? 0 : message.messages.length,
                     ((context, index) {
                       return StreamBuilder(
                           stream: _usersStream,

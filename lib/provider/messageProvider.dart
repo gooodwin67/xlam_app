@@ -30,6 +30,7 @@ class MessageProvider extends ChangeNotifier {
 
   Future setMessage() async {
     //print(myMessagesFirst);
+
     DateTime currentPhoneDate = DateTime.now(); //DateTime
     Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate); //To TimeStamp
     DateTime myDateTime = myTimeStamp.toDate(); // TimeStamp to DateTime
@@ -75,18 +76,18 @@ class MessageProvider extends ChangeNotifier {
     listMyMessages = [];
     listHimMessages = [];
     messageDataIsLoaded = false;
+    var prodId = '';
     String himId = '';
     chatId.contains(myId, 5)
         ? himId = chatId.split('-')[0]
         : himId = chatId.split('-')[2];
     allChatId = chatId;
+    prodId = chatId.split('-')[4] + '-' + chatId.split('-')[5];
 
     var db = FirebaseFirestore.instance;
-    print('getMessage');
+    print(chatId);
 
     await db.collection('messages').doc(chatId).get().then((value) {
-      print(chatId);
-      print(myId);
       if (chatId.contains(myId, 5)) {
         myMessagesFirst = false;
         if (value.data()!['id2new'] > 0) {

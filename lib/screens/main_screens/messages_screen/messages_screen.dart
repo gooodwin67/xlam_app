@@ -28,9 +28,10 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List messagesList = context.read<MessagesProvider>().listChats;
+    List messagesList = [];
+    messagesList = context.read<MessagesProvider>().listChats;
     bool dataIsLoaded = context.watch<MessagesProvider>().messagesDataIsLoaded;
-
+    print(messagesList.length);
     return Scaffold(
       bottomNavigationBar: BottomNavBar(),
       body: SafeArea(

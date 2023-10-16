@@ -61,20 +61,8 @@ class _BottomNavBarState extends State<BottomNavBar>
         for (var doc in snapshot.data!.docs) {
           if (doc.id.indexOf(userId) > 5 && doc.get('id2new') > 0) {
             newMessages = int.parse(doc.get('id2new').toString());
-            if (!_isInForeground && newMessages > 0) {
-              Noti.showBigTextNotification(
-                  title: 'Title',
-                  body: 'TextBody',
-                  fln: flutterLocalNotificationsPlugin);
-            }
           } else if (doc.id.indexOf(userId) < 5 && doc.get('id1new') > 0) {
             newMessages = int.parse(doc.get('id1new').toString());
-            if (!_isInForeground) {
-              Noti.showBigTextNotification(
-                  title: 'Title',
-                  body: 'TextBody',
-                  fln: flutterLocalNotificationsPlugin);
-            }
           }
         }
         return BottomNavigationBar(
