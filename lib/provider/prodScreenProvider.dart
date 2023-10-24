@@ -169,9 +169,28 @@ class ProdScreenProvider extends ChangeNotifier {
     dataIsLoaded = false;
     notifyListeners();
     var db = FirebaseFirestore.instance;
-    await db.collection("users").get().then((value) {
+
+    await db.collection("users").get().then((value) async {
       for (var doc in value.docs) {
         listIds.add(doc['id']);
+        var newLikeProds = [];
+        var addList = false;
+        //print(doc['likeProds']);
+        doc['likeProds'].forEach((el) {
+          if (el['idProd'] == prodId) {
+            addList = true;
+            false;
+          } else {
+            newLikeProds.add(el);
+          }
+        });
+        if (addList) {
+          await db
+              .collection("users")
+              .doc(doc['id'])
+              .update({'likeProds': newLikeProds});
+          print(newLikeProds);
+        }
       }
     });
 

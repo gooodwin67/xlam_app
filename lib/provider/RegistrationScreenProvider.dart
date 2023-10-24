@@ -41,6 +41,7 @@ class RegistrationScreenProvider extends ChangeNotifier {
             'name': name,
             'userProdInc': 0,
             'city': city,
+            'likeProds': [],
           });
         }
       });

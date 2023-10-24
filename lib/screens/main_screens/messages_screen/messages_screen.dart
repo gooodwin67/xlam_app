@@ -228,7 +228,7 @@ class _MessagesScreenWidgetState extends State<MessagesScreenWidget> {
                                                   '${messagesList[index].price} р.',
                                                   style: TextStyle(
                                                       color: Colors.red,
-                                                      fontSize: 20),
+                                                      fontSize: 15),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
